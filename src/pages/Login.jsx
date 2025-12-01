@@ -190,7 +190,7 @@ function Login() {
                   {/* Logo */}
                   <div>
                     <img 
-                      src="/src/assets/shopify-logo.svg" 
+                      src="/logos/shopify-logo.svg" 
                       alt="Shopify" 
                       style={{ height: '28px', width: 'auto' }}
                     />
@@ -395,7 +395,7 @@ function Login() {
                   {/* Logo */}
                   <div>
                     <img 
-                      src="/src/assets/shopify-logo.svg" 
+                      src="/logos/shopify-logo.svg" 
                       alt="Shopify" 
                       style={{ height: '28px', width: 'auto' }}
                     />

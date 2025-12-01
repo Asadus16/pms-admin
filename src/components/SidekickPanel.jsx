@@ -390,7 +390,7 @@ function SidekickPanel({ isOpen, onClose, userName = 'Shafeen', onExpandedChange
         <div className="sidekick-content">
           {/* Mascot - Reference to asset */}
           <div className="sidekick-mascot">
-            <img src="/src/assets/sidekick.svg" alt="Sidekick" />
+            <img src="/logos/sidekick.svg" alt="Sidekick" />
           </div>
           
           {/* Greeting */}
