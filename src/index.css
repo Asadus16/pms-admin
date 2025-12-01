@@ -1,0 +1,73 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ========================================
+   Global Polaris Overrides
+   ======================================== */
+
+/* Ensure frame doesn't add its own background colors that override our layout */
+.Polaris-Frame {
+  background: transparent !important;
+}
+
+/* Remove any default Frame backgrounds */
+.Polaris-Frame__Main {
+  background: transparent !important;
+}
+
+/* Navigation background - matches our content area */
+.Polaris-Frame__Navigation {
+  background: #f6f6f7 !important;
+}
+
+.Polaris-Navigation {
+  background: #f6f6f7 !important;
+}
+
+/* Content scrolling area */
+.Polaris-Frame__Content {
+  background: #f6f6f7 !important;
+}
+
+/* ========================================
+   Z-Index Layering System
+   ======================================== */
+/*
+  Layer hierarchy (higher = on top):
+  - Header:           520
+  - Mobile Nav:       515
+  - Nav Dismiss:      510
+  - Sidekick:         505
+  - Desktop Nav:      100
+  - Content:          1
+*/
+
+/* Ensure Polaris modals/popovers appear above everything */
+.Polaris-Popover {
+  z-index: 600 !important;
+}
+
+.Polaris-Modal-Dialog {
+  z-index: 600 !important;
+}
+
+.Polaris-Backdrop {
+  z-index: 599 !important;
+}
