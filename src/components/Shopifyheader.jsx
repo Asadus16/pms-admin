@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, memo } from 'react';
 import {
     Icon,
     Button,
@@ -351,6 +351,14 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
           align-items: center;
           gap: 8px;
           min-width: 120px;
+        }
+        
+        .logo-section img {
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: crisp-edges;
+          backface-visibility: hidden;
+          transform: translateZ(0);
+          will-change: auto;
         }
         
         /* ========================================
@@ -919,6 +927,8 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
                         src="/logos/shopify-logo-mono.svg"
                         alt="Shopify"
                         style={{ height: '24px', width: 'auto' }}
+                        loading="eager"
+                        key="shopify-logo-header"
                     />
                 </div>
 
@@ -1197,4 +1207,4 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     );
 }
 
-export default ShopifyHeader;
+export default memo(ShopifyHeader);
