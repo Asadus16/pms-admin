@@ -42,6 +42,7 @@ import ShopifyHeader from '../components/Shopifyheader'
 import CustomersPage from '../components/CustomersPage'
 import AnalyticsPage from '../components/AnalyticsPage'
 import SidekickPanel from '../components/SidekickPanel'
+import AddCustomer from '../components/AddCustomer'
 
 // Custom icons for navigation
 const ContentIcon = () => (
@@ -93,6 +94,7 @@ function Dashboard() {
   const getSelectedFromPath = () => {
     const path = location.pathname.replace('/dashboard', '').replace(/^\//, '') || 'home'
     if (path === '') return 'home'
+    if (path === 'customers/new' || path.startsWith('customers/new')) return 'customers/new'
     if (path === 'customers/segments' || path.startsWith('customers/segments')) return 'segments'
     if (path === 'analytics/reports' || path.startsWith('analytics/reports')) return 'reports'
     if (path === 'analytics/live-view' || path.startsWith('analytics/live-view')) return 'live-view'
@@ -296,6 +298,11 @@ function Dashboard() {
   // For analytics page, we render AnalyticsPage directly
   // For other pages, we wrap content in Page component
   const renderContent = () => {
+    // Check for customers/new route
+    if (selected === 'customers/new' || location.pathname.includes('/customers/new')) {
+      return <AddCustomer onClose={() => navigate('/dashboard/customers')} />
+    }
+
     if (selected === 'customers') {
       return <CustomersPage />
     }

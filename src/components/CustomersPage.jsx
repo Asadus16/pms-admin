@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Page,
   Card,
@@ -23,8 +24,8 @@ import {
   Link,
   Checkbox,
 } from '@shopify/polaris';
-import { 
-  SearchIcon, 
+import {
+  SearchIcon,
   PersonIcon,
   LayoutColumns3Icon,
   SortIcon,
@@ -32,7 +33,6 @@ import {
   HideIcon,
   PlusIcon,
 } from '@shopify/polaris-icons';
-import AddCustomer from './AddCustomer';
 
 // Extended customer data with all fields from screenshots
 const customersData = [
@@ -381,6 +381,98 @@ const customersData = [
     customerAddedDate: 'Yesterday at 4:19 pm',
     dateCustomerUpdated: 'Yesterday at 4:19 pm',
   },
+  {
+    id: '16',
+    name: 'Priya Sharma',
+    note: '',
+    emailSubscription: 'subscribed',
+    location: 'Mumbai MH, India',
+    orders: 2,
+    amountSpent: 1599.00,
+    currency: '₹',
+    odooId: '9450874601517',
+    firstName: 'Priya',
+    lastName: 'Sharma',
+    email: 'priyasharma123@gmail.com',
+    phone: '+91 98765 43210',
+    smsSubscription: false,
+    postalCode: '400001',
+    taxExempt: false,
+    mergeable: true,
+    deletable: false,
+    customerLanguage: 'en',
+    customerAddedDate: 'Yesterday at 3:45 pm',
+    dateCustomerUpdated: 'Yesterday at 3:45 pm',
+  },
+  {
+    id: '17',
+    name: 'Amit Kumar',
+    note: '',
+    emailSubscription: 'not_subscribed',
+    location: 'Delhi DL, India',
+    orders: 1,
+    amountSpent: 899.50,
+    currency: '₹',
+    odooId: '9450874601518',
+    firstName: 'Amit',
+    lastName: 'Kumar',
+    email: 'amitkumar456@gmail.com',
+    phone: '+91 91234 56789',
+    smsSubscription: false,
+    postalCode: '110001',
+    taxExempt: false,
+    mergeable: true,
+    deletable: false,
+    customerLanguage: 'en',
+    customerAddedDate: 'Yesterday at 2:30 pm',
+    dateCustomerUpdated: 'Yesterday at 2:30 pm',
+  },
+  {
+    id: '18',
+    name: 'Kavita Patel',
+    note: '',
+    emailSubscription: 'subscribed',
+    location: 'Ahmedabad GJ, India',
+    orders: 3,
+    amountSpent: 2345.75,
+    currency: '₹',
+    odooId: '9450874601519',
+    firstName: 'Kavita',
+    lastName: 'Patel',
+    email: 'kavitapatel789@gmail.com',
+    phone: '+91 99887 66554',
+    smsSubscription: false,
+    postalCode: '380001',
+    taxExempt: false,
+    mergeable: true,
+    deletable: false,
+    customerLanguage: 'en',
+    customerAddedDate: 'Yesterday at 1:15 pm',
+    dateCustomerUpdated: 'Yesterday at 1:15 pm',
+  },
+  {
+    id: '19',
+    name: 'Rahul Singh',
+    note: '',
+    emailSubscription: 'subscribed',
+    location: 'Pune MH, India',
+    orders: 5,
+    amountSpent: 4567.25,
+    currency: '₹',
+    odooId: '9450874601520',
+    firstName: 'Rahul',
+    lastName: 'Singh',
+    email: 'rahulsingh321@gmail.com',
+    phone: '+91 88776 55443',
+    smsSubscription: false,
+    postalCode: '411001',
+    taxExempt: false,
+    mergeable: true,
+    deletable: false,
+    customerLanguage: 'en',
+    customerAddedDate: 'Yesterday at 12:00 pm',
+    dateCustomerUpdated: 'Yesterday at 12:00 pm',
+  },
 ];
 
 // All available columns
@@ -457,29 +549,29 @@ const getStoredSort = () => {
 };
 
 function CustomersPage() {
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortPopoverActive, setSortPopoverActive] = useState(false);
   const [editColumnsMode, setEditColumnsMode] = useState(false);
-  
+
   // Modal states
   const [exportModalOpen, setExportModalOpen] = useState(false);
   const [importModalOpen, setImportModalOpen] = useState(false);
-  const [addCustomerOpen, setAddCustomerOpen] = useState(false);
   const [exportOption, setExportOption] = useState(['all']);
   const [exportFormat, setExportFormat] = useState(['csv_excel']);
   const [importFile, setImportFile] = useState(null);
   const [includeCustomerTags, setIncludeCustomerTags] = useState(true);
   const [includeCustomerMetafields, setIncludeCustomerMetafields] = useState(true);
-  
+
   // Initialize sort from localStorage
   const storedSort = getStoredSort();
   const [selectedSort, setSelectedSort] = useState(storedSort.sortBy);
   const [sortDirection, setSortDirection] = useState(storedSort.sortDirection);
-  
+
   // Default visible columns (name is always visible)
   const defaultColumns = allColumns.filter(col => col.default).map(col => col.id);
-  
+
   // Initialize visible columns from localStorage or use defaults
   const [visibleColumns, setVisibleColumns] = useState(() => {
     const stored = getStoredColumns();
@@ -489,9 +581,9 @@ function CustomersPage() {
     const stored = getStoredColumns();
     return stored || defaultColumns;
   });
-  
+
   const itemsPerPage = 50;
-  
+
   const resourceName = {
     singular: 'customer',
     plural: 'customers',
@@ -536,7 +628,7 @@ function CustomersPage() {
   const toggleColumnVisibility = useCallback((columnId) => {
     // Don't allow toggling 'name' column - it's always visible
     if (columnId === 'name') return;
-    
+
     setTempVisibleColumns(prev => {
       if (prev.includes(columnId)) {
         return prev.filter(id => id !== columnId);
@@ -584,11 +676,11 @@ function CustomersPage() {
   }, []);
 
   const handleExport = useCallback(() => {
-    console.log('Exporting:', { 
-      option: exportOption[0], 
+    console.log('Exporting:', {
+      option: exportOption[0],
       format: exportFormat[0],
       includeCustomerTags,
-      includeCustomerMetafields 
+      includeCustomerMetafields
     });
     setExportModalOpen(false);
   }, [exportOption, exportFormat, includeCustomerTags, includeCustomerMetafields]);
@@ -785,7 +877,7 @@ function CustomersPage() {
       {currentVisibleColumns.map((column) => (
         <IndexTable.Cell key={column.id}>
           {renderCellContent(customer, column.id)}
-      </IndexTable.Cell>
+        </IndexTable.Cell>
       ))}
     </IndexTable.Row>
   ));
@@ -794,9 +886,9 @@ function CustomersPage() {
   const renderColumnBlock = (column) => {
     const isVisible = tempVisibleColumns.includes(column.id);
     const isNameColumn = column.id === 'name';
-    
+
     return (
-      <div 
+      <div
         key={column.id}
         style={{
           minWidth: 'fit-content',
@@ -843,7 +935,7 @@ function CustomersPage() {
             </button>
           )}
         </div>
-        
+
         {/* Column Data */}
         <div style={{ backgroundColor: isVisible ? 'white' : '#f9fafb' }}>
           {sortedCustomers.slice(0, 15).map((customer, index) => (
@@ -875,32 +967,57 @@ function CustomersPage() {
     />
   );
 
-  // If AddCustomer is open, show it instead of the customers list
-  if (addCustomerOpen) {
-    return (
-      <>
-        <style>{`
-          .customers-page-wrapper .Polaris-Page {
-            max-width: 100% !important;
-            width: 100% !important;
-          }
-        `}</style>
-        <div className="customers-page-wrapper" style={{ width: '100%' }}>
-          <AddCustomer onClose={() => setAddCustomerOpen(false)} />
-        </div>
-      </>
-    );
-  }
-
   return (
     <>
       <style>{`
+
+.customers-page-wrapper .Polaris-Page > .Polaris-Box:first-child {
+  padding-top: 15px !important;
+  padding-bottom: 12px !important;
+}
+
+        /* Style Customers heading */
+        .customers-page-wrapper .customers-page-title {
+          font-size: 18px !important;
+          font-weight: 600 !important;
+        }
+        
+        .customers-page-wrapper .Polaris-Page__Title .customers-page-title {
+          font-size: 18px !important;
+          font-weight: 600 !important;
+        }
+        
+        /* Set customer stats card height to 48px */
+        .customers-page-wrapper .customer-stats-card,
+        .customers-page-wrapper .customer-stats-box .Polaris-Card {
+          height: 48px !important;
+          min-height: 48px !important;
+          max-height: 48px !important;
+        }
+        
+        .customers-page-wrapper .customer-stats-card .Polaris-InlineStack {
+          height: 100% !important;
+          align-items: center !important;
+        }
+        
+        /* Add gap between customer stats bar and table */
+        .customers-page-wrapper .customer-stats-box {
+          margin-bottom: 18px !important;
+          padding-bottom: 0 !important;
+        }
+        
+        .customers-page-wrapper .customer-stats-box + .Polaris-Card {
+          margin-top: 0 !important;
+        }
+
         /* Fix modal backdrop and dialog styling */
         .Polaris-Backdrop {
           background-color: rgba(0, 0, 0, 0.5) !important;
           z-index: 599 !important;
         }
         
+  
+      
         .Polaris-Modal-Dialog {
           z-index: 600 !important;
           position: relative !important;
@@ -944,7 +1061,7 @@ function CustomersPage() {
         
         /* Add scrolling to the table wrapper - only vertical scroll in table */
         .customers-page-wrapper .table-scroll-container {
-          max-height: 600px;
+          max-height: 550px;
           overflow-y: auto !important;
           overflow-x: auto !important;
         }
@@ -1005,62 +1122,62 @@ function CustomersPage() {
         }
       `}</style>
       <div className="customers-page-wrapper" style={{ width: '100%' }}>
-    <Page
+        <Page
           title={
             <InlineStack gap="200" blockAlign="center">
               <Icon source={PersonIcon} />
-              <span>Customers</span>
+              <span className="customers-page-title">Customers</span>
             </InlineStack>
           }
-      primaryAction={{
-        content: 'Add customer',
-            onAction: () => setAddCustomerOpen(true),
-      }}
-      secondaryActions={[
-        {
-          content: 'Export',
-          onAction: handleExportModalOpen,
-        },
-        {
-          content: 'Import',
-          onAction: handleImportModalOpen,
-        },
-      ]}
-    >
-      {/* Customer count stats bar */}
-      <Box paddingBlockEnd="400">
-        <Card padding="400">
-          <InlineStack gap="200" align="start">
-            <Text variant="bodyMd" as="span" fontWeight="semibold">
-              {totalCustomers.toLocaleString()} customers
-            </Text>
-            <Text variant="bodyMd" as="span" tone="subdued">
-              |
-            </Text>
-            <Text variant="bodyMd" as="span" tone="subdued">
-              100% of your customer base
-            </Text>
-          </InlineStack>
-        </Card>
-      </Box>
+          primaryAction={{
+            content: 'Add customer',
+            onAction: () => navigate('/dashboard/customers/new'),
+          }}
+          secondaryActions={[
+            {
+              content: 'Export',
+              onAction: handleExportModalOpen,
+            },
+            {
+              content: 'Import',
+              onAction: handleImportModalOpen,
+            },
+          ]}
+        >
+          {/* Customer count stats bar */}
+          <Box paddingBlockEnd="600" className="customer-stats-box">
+            <Card padding="400" className="customer-stats-card">
+              <InlineStack gap="200" align="start">
+                <Text variant="bodyMd" as="span" fontWeight="semibold">
+                  {totalCustomers.toLocaleString()} customers
+                </Text>
+                <Text variant="bodyMd" as="span" tone="subdued">
+                  |
+                </Text>
+                <Text variant="bodyMd" as="span" tone="subdued">
+                  100% of your customer base
+                </Text>
+              </InlineStack>
+            </Card>
+          </Box>
 
-      {/* Main table card */}
-      <Card padding="0">
+          {/* Main table card */}
+          <Card padding="0">
             {/* Search bar with Edit Columns and Sort buttons */}
-            <Box padding="400" paddingBlockEnd="200">
+            <Box padding="200" paddingBlockEnd="200">
               <InlineStack align="space-between" blockAlign="center">
-                <div style={{ flex: 1, maxWidth: editColumnsMode ? '100%' : '400px' }}>
-          <TextField
-            placeholder="Search customers"
-            value={searchValue}
-            onChange={handleSearchChange}
-            clearButton
-            onClearButtonClick={handleSearchClear}
+                <div style={{ flex: 1, maxWidth: '93%' }}>
+                  <TextField
+                    placeholder="Search customers"
+                    value={searchValue}
+                    onChange={handleSearchChange}
+                    clearButton
+                    onClearButtonClick={handleSearchClear}
                     prefix={<Icon source={SearchIcon} tone="subdued" />}
-            autoComplete="off"
-          />
+                    autoComplete="off"
+                  />
                 </div>
-                
+
                 <InlineStack gap="200" blockAlign="center">
                   {editColumnsMode ? (
                     <ButtonGroup>
@@ -1075,7 +1192,7 @@ function CustomersPage() {
                         onClick={handleEditColumnsClick}
                         accessibilityLabel="Edit columns"
                       />
-                      
+
                       {/* Sort Button with Popover */}
                       <Popover
                         active={sortPopoverActive}
@@ -1090,7 +1207,7 @@ function CustomersPage() {
                               Sort by
                             </Text>
                           </Box>
-                          
+
                           {/* Sort by options using ChoiceList for radio buttons */}
                           <Box paddingInline="100">
                             <ChoiceList
@@ -1099,10 +1216,10 @@ function CustomersPage() {
                               onChange={handleSortChange}
                             />
                           </Box>
-                          
+
                           <Box paddingInline="300" paddingBlock="150">
                             <Divider />
-        </Box>
+                          </Box>
 
                           {/* Sort Direction Options - plain clickable items */}
                           <div style={{ paddingBottom: '8px' }}>
@@ -1134,10 +1251,10 @@ function CustomersPage() {
             {/* Index Table or Edit Columns View */}
             {editColumnsMode ? (
               // Edit Columns Mode - Show columns as separate blocks
-              <div 
-                style={{ 
-                  display: 'flex', 
-                  gap: '12px', 
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '12px',
                   overflowX: 'auto',
                   padding: '16px',
                   paddingTop: '16px',
@@ -1149,45 +1266,45 @@ function CustomersPage() {
             ) : (
               // Normal Mode - Show regular IndexTable
               <div className="table-scroll-container">
-        <IndexTable
-          resourceName={resourceName}
+                <IndexTable
+                  resourceName={resourceName}
                   itemCount={sortedCustomers.length}
-          selectedItemsCount={
-            allResourcesSelected ? 'All' : selectedResources.length
-          }
-          onSelectionChange={handleSelectionChange}
+                  selectedItemsCount={
+                    allResourcesSelected ? 'All' : selectedResources.length
+                  }
+                  onSelectionChange={handleSelectionChange}
                   headings={currentVisibleColumns.map((column) => ({
                     title: column.title,
                     alignment: column.alignment || 'start',
                   }))}
-          selectable
-        >
-          {rowMarkup}
-        </IndexTable>
+                  selectable
+                >
+                  {rowMarkup}
+                </IndexTable>
               </div>
             )}
 
             {/* Pagination - Hide in edit mode */}
             {!editColumnsMode && (
-        <Box padding="400" borderBlockStartWidth="025" borderColor="border">
-          <InlineStack align="space-between" blockAlign="center">
-            <Pagination
-              hasPrevious={currentPage > 1}
-              onPrevious={() => setCurrentPage(currentPage - 1)}
-              hasNext={currentPage * itemsPerPage < totalCustomers}
-              onNext={() => setCurrentPage(currentPage + 1)}
-            />
-            <Text variant="bodySm" as="span" tone="subdued">
-              {`${(currentPage - 1) * itemsPerPage + 1}-${Math.min(
-                currentPage * itemsPerPage,
-                totalCustomers
-              )}`}
-            </Text>
-          </InlineStack>
-        </Box>
+              <Box padding="400" borderBlockStartWidth="025" borderColor="border">
+                <InlineStack align="space-between" blockAlign="center">
+                  <Pagination
+                    hasPrevious={currentPage > 1}
+                    onPrevious={() => setCurrentPage(currentPage - 1)}
+                    hasNext={currentPage * itemsPerPage < totalCustomers}
+                    onNext={() => setCurrentPage(currentPage + 1)}
+                  />
+                  <Text variant="bodySm" as="span" tone="subdued">
+                    {`${(currentPage - 1) * itemsPerPage + 1}-${Math.min(
+                      currentPage * itemsPerPage,
+                      totalCustomers
+                    )}`}
+                  </Text>
+                </InlineStack>
+              </Box>
             )}
-      </Card>
-    </Page>
+          </Card>
+        </Page>
 
         {/* Export Modal */}
         <Modal
@@ -1221,7 +1338,7 @@ function CustomersPage() {
                   onChange={handleExportOptionChange}
                 />
               </BlockStack>
-              
+
               {/* Fields included section */}
               <BlockStack gap="300">
                 <Text variant="headingSm" as="h3">
@@ -1243,7 +1360,7 @@ function CustomersPage() {
                   />
                 </BlockStack>
               </BlockStack>
-              
+
               {/* File format section */}
               <BlockStack gap="300">
                 <Text variant="headingSm" as="h3">
