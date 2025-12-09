@@ -1,0 +1,250 @@
+/**
+ * CustomersPage Component Styles
+ */
+
+.customers-page-wrapper .Polaris-Page > .Polaris-Box:first-child {
+  padding-top: 15px !important;
+  padding-bottom: var(--spacing-sm) !important;
+}
+
+/* Style Customers heading */
+.customers-page-wrapper .customers-page-title {
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+.customers-page-wrapper .Polaris-Page__Title .customers-page-title {
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+/* Set customer stats card height to 48px */
+.customers-page-wrapper .customer-stats-card,
+.customers-page-wrapper .customer-stats-box .Polaris-Card {
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+}
+
+.customers-page-wrapper .customer-stats-card .Polaris-InlineStack {
+  height: 100% !important;
+  align-items: center !important;
+}
+
+/* Add gap between customer stats bar and table */
+.customers-page-wrapper .customer-stats-box {
+  margin-bottom: 18px !important;
+  padding-bottom: 0 !important;
+}
+
+.customers-page-wrapper .customer-stats-box + .Polaris-Card {
+  margin-top: 0 !important;
+}
+
+/* Fix modal backdrop and dialog styling */
+.Polaris-Backdrop {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  z-index: var(--z-modal-backdrop) !important;
+}
+
+.Polaris-Modal-Dialog {
+  z-index: var(--z-modal) !important;
+  position: relative !important;
+}
+
+.Polaris-Modal-Dialog__Container {
+  z-index: var(--z-modal) !important;
+}
+
+.customers-page-wrapper .Polaris-Page {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.customers-page-wrapper .Polaris-Page__Content {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.customers-page-wrapper .Polaris-Card {
+  width: 100% !important;
+}
+
+.customers-page-wrapper .Polaris-TextField__Backdrop {
+  border: none !important;
+  background: transparent !important;
+}
+
+.customers-page-wrapper .Polaris-TextField:focus-within .Polaris-TextField__Backdrop {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.customers-page-wrapper .Polaris-IndexTable__Table thead {
+  border-top: 1px solid var(--color-border-light) !important;
+}
+
+.customers-page-wrapper .Polaris-IndexTable-ScrollContainer {
+  overflow-x: auto !important;
+}
+
+/* Add scrolling to the table wrapper - only vertical scroll in table */
+.customers-page-wrapper .table-scroll-container {
+  max-height: 550px;
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+}
+
+/* Edit columns mode scrollbar */
+.customers-page-wrapper ::-webkit-scrollbar {
+  height: var(--spacing-sm);
+}
+
+.customers-page-wrapper ::-webkit-scrollbar-track {
+  background: var(--color-bg-hover);
+  border-radius: var(--radius-sm);
+}
+
+.customers-page-wrapper ::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-300);
+  border-radius: var(--radius-sm);
+}
+
+.customers-page-wrapper ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-400);
+}
+
+/* Remove title from ChoiceList */
+.sort-popover-content .Polaris-ChoiceList__Title {
+  display: none;
+}
+
+/* Style the ChoiceList items with reduced padding */
+.sort-popover-content .Polaris-ChoiceList {
+  padding: 0;
+}
+
+.sort-popover-content .Polaris-ChoiceList__Choices {
+  padding: 0;
+}
+
+.sort-popover-content .Polaris-Choice {
+  padding: 6px var(--spacing-md);
+}
+
+.sort-popover-content .Polaris-Choice:hover {
+  background-color: var(--color-bg-hover);
+}
+
+/* Sort direction items */
+.sort-direction-item {
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+}
+
+.sort-direction-item:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.sort-direction-item.selected {
+  background-color: var(--color-bg-active);
+}
+
+/* Utility classes for inline styles */
+.width-full {
+  width: 100%;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.max-width-93 {
+  max-width: 93%;
+}
+
+.width-220 {
+  width: 220px;
+}
+
+.padding-bottom-8 {
+  padding-bottom: 8px;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-f9fafb {
+  background-color: #f9fafb;
+}
+
+/* Edit columns mode styles */
+.edit-column-item {
+  min-width: fit-content;
+  transition: opacity 0.2s ease;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.edit-column-item.hidden {
+  opacity: 0.4;
+}
+
+.edit-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-bg-hover);
+  border-bottom: 1px solid var(--color-border-light);
+  white-space: nowrap;
+}
+
+.edit-column-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-neutral-500);
+}
+
+.edit-column-toggle-btn.hidden {
+  color: var(--color-text-tertiary);
+}
+
+.edit-column-data {
+  background-color: white;
+}
+
+.edit-column-data.hidden {
+  background-color: #f9fafb;
+}
+
+.edit-column-row {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid #f1f1f1;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.edit-column-row:last-child {
+  border-bottom: none;
+}
+
+.edit-columns-container {
+  display: flex;
+  gap: var(--spacing-sm);
+  overflow-x: auto;
+  padding: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  background-color: var(--color-bg-hover);
+}
+

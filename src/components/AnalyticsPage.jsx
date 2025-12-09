@@ -14,6 +14,7 @@ import {
     MaximizeIcon,
     EditIcon,
     CalendarIcon,
+    ChartVerticalIcon,
 } from '@shopify/polaris-icons';
 
 // Import components
@@ -39,6 +40,7 @@ import SalesAttributedToMarketing from './Analytics/cards/SalesAttributedToMarke
 import SessionsByReferrer from './Analytics/cards/SessionsByReferrer';
 import ProductsBySellThroughRate from './Analytics/cards/ProductsBySellThroughRate';
 import NoDataPlaceholder from './Analytics/cards/NoDataPlaceholder';
+import '../pages/Analytics/analytics.css';
 
 function AnalyticsPage() {
     const [dateModalOpen, setDateModalOpen] = useState(false);
@@ -60,132 +62,12 @@ function AnalyticsPage() {
 
     return (
         <>
-            <style>{`
-      .analytics-page {
-  padding: 0 20px 40px 20px;
-  max-width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-        
-        .analytics-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 16px 0 8px 0;
-        }
-        
-        .analytics-header-actions .Polaris-Button {
-          background: #e3e3e3 !important;
-          border: none !important;
-          box-shadow: none !important;
-        }
-        
-        .analytics-header-actions .Polaris-Button:hover {
-          background: #d4d4d4 !important;
-          border: none !important;
-          box-shadow: none !important;
-        }
-        
-        .analytics-title {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        
-        .analytics-title-icon {
-          width: 20px;
-          height: 20px;
-        }
-        
-        .analytics-filters {
-          display: flex;
-          gap: 8px;
-          margin-bottom: 16px;
-          align-items: center;
-        }
-        
-       .analytics-grid {
-  display: grid;
-  gap: 16px;
-  max-width: 100%;
-  overflow: hidden;
-}
-        
-.analytics-row-4 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  min-width: 0;
-}
-
-.analytics-row-2-1 {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 16px;
-  min-width: 0;
-}
-
-.analytics-row-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  min-width: 0;
-}
-        
-        .analytics-card {
-          background: white;
-          border-radius: 12px;
-          padding: 20px;
-          border: 1px solid #e3e3e3;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-  min-width: 0;
-
-        }
-        
-        .chart-legend {
-          display: flex;
-          gap: 16px;
-          justify-content: center;
-          margin-top: 12px;
-        }
-        
-        .legend-item {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-        
-        .legend-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-        }
-        
-        @media (max-width: 1200px) {
-          .analytics-row-4 {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          
-          .analytics-row-2-1 {
-            grid-template-columns: 1fr;
-          }
-          
-          .analytics-row-3 {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
-
             <div className="analytics-page">
                 {/* Header */}
                 <div className="analytics-header">
                     <div className="analytics-title">
-                        <svg className="analytics-title-icon" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M3 11h2v6H3v-6zm4-4h2v10H7V7zm4-4h2v14h-2V3zm4 6h2v8h-2V9z" />
-                        </svg>
-                        <Text variant="headingLg" as="h1">Analytics</Text>
+                        <Icon source={ChartVerticalIcon} tone="base" />
+                        <Text variant="headingLg" as="h1">Dashboard</Text>
                         <Text variant="bodySm" as="span" tone="subdued">Last refreshed: 5:00 PM</Text>
                     </div>
                     <InlineStack gap="200">

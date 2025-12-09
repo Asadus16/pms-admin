@@ -33,6 +33,7 @@ import {
   HideIcon,
   PlusIcon,
 } from '@shopify/polaris-icons';
+import './styles/CustomersPage.css';
 
 // Extended customer data with all fields from screenshots
 const customersData = [
@@ -890,45 +891,17 @@ function CustomersPage() {
     return (
       <div
         key={column.id}
-        style={{
-          minWidth: 'fit-content',
-          opacity: isVisible ? 1 : 0.4,
-          transition: 'opacity 0.2s ease',
-          border: '1px solid #e1e3e5',
-          borderRadius: '8px',
-          overflow: 'hidden',
-        }}
+        className={`edit-column-item ${!isVisible ? 'hidden' : ''}`}
       >
         {/* Column Header */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '12px',
-            padding: '12px 16px',
-            backgroundColor: '#f6f6f7',
-            borderBottom: '1px solid #e1e3e5',
-            whiteSpace: 'nowrap',
-          }}
-        >
+        <div className="edit-column-header">
           <Text variant="bodySm" as="span" fontWeight="medium">
             {column.title}
           </Text>
           {!isNameColumn && (
             <button
               onClick={() => toggleColumnVisibility(column.id)}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '4px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: '4px',
-                color: isVisible ? '#5c5f62' : '#8c9196',
-              }}
+              className={`edit-column-toggle-btn ${!isVisible ? 'hidden' : ''}`}
               aria-label={isVisible ? `Hide ${column.title}` : `Show ${column.title}`}
             >
               <Icon source={isVisible ? ViewIcon : HideIcon} tone="subdued" />
@@ -937,17 +910,13 @@ function CustomersPage() {
         </div>
 
         {/* Column Data */}
-        <div style={{ backgroundColor: isVisible ? 'white' : '#f9fafb' }}>
+        <div className={`edit-column-data ${!isVisible ? 'hidden' : ''}`}>
           {sortedCustomers.slice(0, 15).map((customer, index) => (
             <div
               key={customer.id}
+              className="edit-column-row"
               style={{
-                padding: '12px 16px',
                 borderBottom: index < 14 ? '1px solid #f1f1f1' : 'none',
-                minHeight: '44px',
-                display: 'flex',
-                alignItems: 'center',
-                whiteSpace: 'nowrap',
               }}
             >
               {renderCellContent(customer, column.id)}
@@ -969,159 +938,7 @@ function CustomersPage() {
 
   return (
     <>
-      <style>{`
-
-.customers-page-wrapper .Polaris-Page > .Polaris-Box:first-child {
-  padding-top: 15px !important;
-  padding-bottom: 12px !important;
-}
-
-        /* Style Customers heading */
-        .customers-page-wrapper .customers-page-title {
-          font-size: 18px !important;
-          font-weight: 600 !important;
-        }
-        
-        .customers-page-wrapper .Polaris-Page__Title .customers-page-title {
-          font-size: 18px !important;
-          font-weight: 600 !important;
-        }
-        
-        /* Set customer stats card height to 48px */
-        .customers-page-wrapper .customer-stats-card,
-        .customers-page-wrapper .customer-stats-box .Polaris-Card {
-          height: 48px !important;
-          min-height: 48px !important;
-          max-height: 48px !important;
-        }
-        
-        .customers-page-wrapper .customer-stats-card .Polaris-InlineStack {
-          height: 100% !important;
-          align-items: center !important;
-        }
-        
-        /* Add gap between customer stats bar and table */
-        .customers-page-wrapper .customer-stats-box {
-          margin-bottom: 18px !important;
-          padding-bottom: 0 !important;
-        }
-        
-        .customers-page-wrapper .customer-stats-box + .Polaris-Card {
-          margin-top: 0 !important;
-        }
-
-        /* Fix modal backdrop and dialog styling */
-        .Polaris-Backdrop {
-          background-color: rgba(0, 0, 0, 0.5) !important;
-          z-index: 599 !important;
-        }
-        
-  
-      
-        .Polaris-Modal-Dialog {
-          z-index: 600 !important;
-          position: relative !important;
-        }
-        
-        .Polaris-Modal-Dialog__Container {
-          z-index: 600 !important;
-        }
-        
-        .customers-page-wrapper .Polaris-Page {
-          max-width: 100% !important;
-          width: 100% !important;
-        }
-        
-        .customers-page-wrapper .Polaris-Page__Content {
-          max-width: 100% !important;
-          width: 100% !important;
-        }
-        
-        .customers-page-wrapper .Polaris-Card {
-          width: 100% !important;
-        }
-        
-        .customers-page-wrapper .Polaris-TextField__Backdrop {
-          border: none !important;
-          background: transparent !important;
-        }
-        
-        .customers-page-wrapper .Polaris-TextField:focus-within .Polaris-TextField__Backdrop {
-          border: none !important;
-          box-shadow: none !important;
-        }
-        
-        .customers-page-wrapper .Polaris-IndexTable__Table thead {
-          border-top: 1px solid #e1e3e5 !important;
-        }
-        
-        .customers-page-wrapper .Polaris-IndexTable-ScrollContainer {
-          overflow-x: auto !important;
-        }
-        
-        /* Add scrolling to the table wrapper - only vertical scroll in table */
-        .customers-page-wrapper .table-scroll-container {
-          max-height: 550px;
-          overflow-y: auto !important;
-          overflow-x: auto !important;
-        }
-        
-        /* Edit columns mode scrollbar */
-        .customers-page-wrapper ::-webkit-scrollbar {
-          height: 8px;
-        }
-        
-        .customers-page-wrapper ::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 4px;
-        }
-        
-        .customers-page-wrapper ::-webkit-scrollbar-thumb {
-          background: #c1c1c1;
-          border-radius: 4px;
-        }
-        
-        .customers-page-wrapper ::-webkit-scrollbar-thumb:hover {
-          background: #a1a1a1;
-        }
-        
-        /* Remove title from ChoiceList */
-        .sort-popover-content .Polaris-ChoiceList__Title {
-          display: none;
-        }
-        
-        /* Style the ChoiceList items with reduced padding */
-        .sort-popover-content .Polaris-ChoiceList {
-          padding: 0;
-        }
-        
-        .sort-popover-content .Polaris-ChoiceList__Choices {
-          padding: 0;
-        }
-        
-        .sort-popover-content .Polaris-Choice {
-          padding: 6px 16px;
-        }
-        
-        .sort-popover-content .Polaris-Choice:hover {
-          background-color: #f6f6f7;
-        }
-        
-        /* Sort direction items */
-        .sort-direction-item {
-          padding: 8px 16px;
-          cursor: pointer;
-        }
-        
-        .sort-direction-item:hover {
-          background-color: #f6f6f7;
-        }
-        
-        .sort-direction-item.selected {
-          background-color: #f1f1f1;
-        }
-      `}</style>
-      <div className="customers-page-wrapper" style={{ width: '100%' }}>
+      <div className="customers-page-wrapper width-full">
         <Page
           title={
             <InlineStack gap="200" blockAlign="center">
@@ -1166,7 +983,7 @@ function CustomersPage() {
             {/* Search bar with Edit Columns and Sort buttons */}
             <Box padding="200" paddingBlockEnd="200">
               <InlineStack align="space-between" blockAlign="center">
-                <div style={{ flex: 1, maxWidth: '93%' }}>
+                <div className="flex-1 max-width-93">
                   <TextField
                     placeholder="Search customers"
                     value={searchValue}
@@ -1201,7 +1018,7 @@ function CustomersPage() {
                         preferredAlignment="right"
                         preferredPosition="below"
                       >
-                        <div className="sort-popover-content" style={{ width: '220px' }}>
+                        <div className="sort-popover-content width-220">
                           <Box padding="300" paddingBlockEnd="100">
                             <Text variant="headingSm" as="h3">
                               Sort by
@@ -1222,7 +1039,7 @@ function CustomersPage() {
                           </Box>
 
                           {/* Sort Direction Options - plain clickable items */}
-                          <div style={{ paddingBottom: '8px' }}>
+                          <div className="padding-bottom-8">
                             <div
                               className={`sort-direction-item ${sortDirection === 'asc' ? 'selected' : ''}`}
                               onClick={() => handleSortDirectionChange(['asc'])}
@@ -1251,16 +1068,7 @@ function CustomersPage() {
             {/* Index Table or Edit Columns View */}
             {editColumnsMode ? (
               // Edit Columns Mode - Show columns as separate blocks
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '12px',
-                  overflowX: 'auto',
-                  padding: '16px',
-                  paddingTop: '16px',
-                  backgroundColor: '#f6f6f7',
-                }}
-              >
+              <div className="edit-columns-container">
                 {allColumns.map((column) => renderColumnBlock(column))}
               </div>
             ) : (

@@ -1,0 +1,30 @@
+/**
+ * Customers Page Styles
+ */
+
+.customers-page {
+  padding: var(--spacing-md);
+}
+
+.customers-page__header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.customers-page__filters {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  align-items: center;
+}
+
+.customers-page__table {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.customers-page__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+

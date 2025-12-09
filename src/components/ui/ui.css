@@ -1,0 +1,200 @@
+/**
+ * UI Components Styles
+ * Styles for reusable UI components
+ */
+
+/* Custom Button */
+.custom-button {
+  transition: var(--transition);
+}
+
+.custom-button--small {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+}
+
+.custom-button--large {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-lg);
+}
+
+.custom-button--full-width {
+  width: 100%;
+}
+
+/* Custom Card */
+.custom-card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.custom-card--padding-xs {
+  padding: var(--spacing-xs);
+}
+
+.custom-card--padding-sm {
+  padding: var(--spacing-sm);
+}
+
+.custom-card--padding-md {
+  padding: var(--spacing-md);
+}
+
+.custom-card--padding-lg {
+  padding: var(--spacing-lg);
+}
+
+.custom-card--padding-xl {
+  padding: var(--spacing-xl);
+}
+
+.custom-card--shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.custom-card--shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.custom-card--shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.custom-card--shadow-none {
+  box-shadow: var(--shadow-none);
+}
+
+/* Custom Modal */
+.custom-modal {
+  border-radius: var(--radius-xl);
+}
+
+.custom-modal--small {
+  max-width: 400px;
+}
+
+.custom-modal--large {
+  max-width: 800px;
+}
+
+.custom-modal--full-width {
+  max-width: 95vw;
+}
+
+/* Custom Text Field */
+.custom-text-field {
+  margin-bottom: var(--spacing-md);
+}
+
+.custom-text-field .Polaris-TextField__Input {
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.custom-text-field .Polaris-TextField__Input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+/* Custom Select */
+.custom-select {
+  margin-bottom: var(--spacing-md);
+}
+
+.custom-select .Polaris-Select__Input {
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.custom-select .Polaris-Select__Input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+/* Custom Checkbox */
+.custom-checkbox {
+  margin-bottom: var(--spacing-sm);
+}
+
+.custom-checkbox .Polaris-Checkbox__Input {
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.custom-checkbox .Polaris-Checkbox__Input:checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* Tag Badge */
+.tag-badge {
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition);
+}
+
+.tag-badge--small {
+  font-size: var(--font-size-xs);
+  padding: 2px var(--spacing-xs);
+}
+
+.tag-badge--large {
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+/* Phone Input */
+.phone-input {
+  margin-bottom: var(--spacing-md);
+}
+
+.phone-input__country-code {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.phone-input__country-code:hover {
+  border-color: var(--color-border-dark);
+}
+
+.phone-input__country-code:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+/* Page Layout */
+.page-layout {
+  padding: var(--spacing-md);
+}
+
+.page-layout--full-width {
+  padding: 0;
+}
+
+/* Form Section */
+.form-section {
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+}
+
+.form-section__content {
+  padding-top: var(--spacing-md);
+}
+
+/* Action Header */
+.action-header {
+  padding: var(--spacing-md) 0;
+  margin-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.action-header__breadcrumbs {
+  margin-bottom: var(--spacing-xs);
+}
+

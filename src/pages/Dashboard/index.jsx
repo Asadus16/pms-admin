@@ -37,37 +37,16 @@ import {
   LogoGoogleIcon,
   PinIcon,
   ViewIcon,
+  TransactionIcon,
+  InventoryIcon,
+  ChartLineIcon,
 } from '@shopify/polaris-icons'
-import ShopifyHeader from '../components/Shopifyheader'
-import CustomersPage from '../components/CustomersPage'
-import AnalyticsPage from '../components/AnalyticsPage'
-import SidekickPanel from '../components/SidekickPanel'
-import AddCustomer from '../components/AddCustomer'
-
-// Custom icons for navigation
-const ContentIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-    <path d="M3 3h14v14H3V3zm1 1v12h12V4H4z" />
-    <path d="M6 6h8v1H6V6zm0 3h8v1H6V9zm0 3h5v1H6v-1z" />
-  </svg>
-)
-
-const MarketsIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-    <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" fill="none" />
-    <path d="M10 2v4M10 14v4M2 10h4M14 10h4" stroke="currentColor" strokeWidth="1.5" />
-  </svg>
-)
-
-const DiscountIconCustom = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-    <path d="M10 2L3 7v11h14V7L10 2zm0 2.5l5.5 4v8.5h-11V8.5L10 4.5z" />
-    <circle cx="7" cy="9" r="1" />
-    <circle cx="13" cy="13" r="1" />
-    <path d="M7 13l6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-  </svg>
-)
-
+import ShopifyHeader from '../../components/Shopifyheader'
+import CustomersPage from '../../components/CustomersPage'
+import AnalyticsPage from '../../components/AnalyticsPage'
+import SidekickPanel from '../../components/SidekickPanel'
+import AddCustomer from '../../components/AddCustomer'
+import SettingsPage from '../Settings/SettingsPage'
 
 // Robot icon for TinySEO
 const RobotIcon = () => (
@@ -92,8 +71,8 @@ function Dashboard() {
 
   // Get selected page from URL path
   const getSelectedFromPath = () => {
-    const path = location.pathname.replace('/dashboard', '').replace(/^\//, '') || 'home'
-    if (path === '') return 'home'
+    const path = location.pathname.replace('/dashboard', '').replace(/^\//, '') || 'dashboard'
+    if (path === '') return 'dashboard'
     if (path === 'customers/new' || path.startsWith('customers/new')) return 'customers/new'
     if (path === 'customers/segments' || path.startsWith('customers/segments')) return 'segments'
     if (path === 'analytics/reports' || path.startsWith('analytics/reports')) return 'reports'
@@ -131,7 +110,7 @@ function Dashboard() {
 
   const handleNavigation = useCallback((page) => {
     setSelected(page)
-    if (page === 'home') {
+    if (page === 'dashboard') {
       navigate('/dashboard')
     } else if (page === 'segments') {
       navigate('/dashboard/customers/segments')
@@ -152,90 +131,60 @@ function Dashboard() {
       <Navigation.Section
         items={[
           {
-            label: 'Home',
-            icon: selected === 'home' ? HomeIcon : HomeFilledIcon,
-            onClick: () => handleNavigation('home'),
+            label: 'Dashboard',
+            icon: selected === 'dashboard' ? ChartVerticalIcon : ChartVerticalFilledIcon,
+            onClick: () => handleNavigation('dashboard'),
             url: '/dashboard',
-            selected: selected === 'home',
+            selected: selected === 'dashboard',
           },
           {
-            label: 'Orders',
-            icon: selected === 'orders' ? OrderIcon : OrderFilledIcon,
-            onClick: () => handleNavigation('orders'),
-            url: '/dashboard/orders',
-            selected: selected === 'orders',
-            badge: '1,930',
+            label: 'Properties',
+            icon: selected === 'properties' ? HomeIcon : HomeFilledIcon,
+            onClick: () => handleNavigation('properties'),
+            url: '/dashboard/properties',
+            selected: selected === 'properties',
           },
           {
-            label: 'Products',
-            icon: selected === 'products' ? ProductIcon : ProductFilledIcon,
-            onClick: () => handleNavigation('products'),
-            url: '/dashboard/products',
-            selected: selected === 'products',
+            label: 'Bookings',
+            icon: selected === 'bookings' ? OrderIcon : OrderFilledIcon,
+            onClick: () => handleNavigation('bookings'),
+            url: '/dashboard/bookings',
+            selected: selected === 'bookings',
           },
           {
-            label: 'Customers',
-            icon: selected === 'customers' || selected === 'segments' ? PersonIcon : PersonFilledIcon,
-            onClick: () => handleNavigation('customers'),
-            url: '/dashboard/customers',
-            selected: selected === 'customers' || selected === 'segments',
-            subNavigationItems: [
-              {
-                label: 'Segments',
-                url: '/dashboard/customers/segments',
-                onClick: () => handleNavigation('segments'),
-                selected: selected === 'segments',
-              },
-            ],
+            label: 'Owner',
+            icon: selected === 'owner' ? PersonIcon : PersonFilledIcon,
+            onClick: () => handleNavigation('owner'),
+            url: '/dashboard/owner',
+            selected: selected === 'owner',
           },
           {
-            label: 'Marketing',
-            icon: selected === 'marketing' ? MegaphoneIcon : MegaphoneFilledIcon,
-            onClick: () => handleNavigation('marketing'),
-            url: '/dashboard/marketing',
-            selected: selected === 'marketing',
+            label: 'Guests',
+            icon: selected === 'guests' ? PersonIcon : PersonFilledIcon,
+            onClick: () => handleNavigation('guests'),
+            url: '/dashboard/guests',
+            selected: selected === 'guests',
           },
           {
-            label: 'Discounts',
-            icon: selected === 'discounts' ? DiscountIconCustom : DiscountFilledIcon,
-            onClick: () => handleNavigation('discounts'),
-            url: '/dashboard/discounts',
-            selected: selected === 'discounts',
+            label: 'Transactions',
+            icon: TransactionIcon,
+            onClick: () => handleNavigation('transactions'),
+            url: '/dashboard/transactions',
+            selected: selected === 'transactions',
           },
           {
-            label: 'Content',
-            icon: selected === 'content' ? ContentIcon : ContentFilledIcon,
-            onClick: () => handleNavigation('content'),
-            url: '/dashboard/content',
-            selected: selected === 'content',
+            label: 'Inventory',
+            icon: InventoryIcon,
+            onClick: () => handleNavigation('inventory'),
+            url: '/dashboard/inventory',
+            selected: selected === 'inventory',
           },
           {
-            label: 'Markets',
-            icon: selected === 'markets' ? MarketsIcon : MarketsFilledIcon,
-            onClick: () => handleNavigation('markets'),
-            url: '/dashboard/markets',
-            selected: selected === 'markets',
-          },
-          {
-            label: 'Analytics',
-            icon: isAnalyticsSelected ? ChartVerticalIcon : ChartVerticalFilledIcon,
-            onClick: () => handleNavigation('analytics'),
-            url: '/dashboard/analytics',
-            selected: isAnalyticsSelected,
-            subNavigationItems: [
-              {
-                label: 'Reports',
-                url: '/dashboard/analytics/reports',
-                onClick: () => handleNavigation('reports'),
-                selected: selected === 'reports',
-              },
-              {
-                label: 'Live View',
-                url: '/dashboard/analytics/live-view',
-                onClick: () => handleNavigation('live-view'),
-                selected: selected === 'live-view',
-              },
-            ],
+            label: 'Reports',
+            icon: ChartLineIcon,
+            onClick: () => handleNavigation('reports'),
+            url: '/dashboard/reports',
+            selected: selected === 'reports',
           },
         ]}
       />
@@ -290,6 +239,17 @@ function Dashboard() {
           },
         ]}
       />
+      <Navigation.Section
+        items={[
+          {
+            label: 'Settings',
+            icon: selected === 'settings' ? SettingsIcon : SettingsFilledIcon,
+            onClick: () => handleNavigation('settings'),
+            url: '/dashboard/settings',
+            selected: selected === 'settings',
+          },
+        ]}
+      />
 
     </Navigation>
   )
@@ -303,7 +263,13 @@ function Dashboard() {
       return <AddCustomer onClose={() => navigate('/dashboard/customers')} />
     }
 
-    if (selected === 'customers') {
+    // Dashboard shows AnalyticsPage
+    if (selected === 'dashboard') {
+      return <AnalyticsPage />
+    }
+
+    // Owner and Guests show CustomersPage
+    if (selected === 'owner' || selected === 'guests') {
       return <CustomersPage />
     }
 
@@ -312,16 +278,21 @@ function Dashboard() {
       return <AnalyticsPage />
     }
 
+    // Render SettingsPage for settings
+    if (selected === 'settings') {
+      return <SettingsPage />
+    }
+
     const pageTitle = {
-      home: 'Dashboard',
-      products: 'Products',
-      orders: 'Orders',
+      dashboard: 'Dashboard',
+      properties: 'Properties',
+      bookings: 'Bookings',
+      owner: 'Owner',
+      guests: 'Guests',
+      transactions: 'Transactions',
+      inventory: 'Inventory',
+      reports: 'Reports',
       settings: 'Settings',
-      marketing: 'Marketing',
-      discounts: 'Discounts',
-      content: 'Content',
-      markets: 'Markets',
-      segments: 'Segments',
       'sales-channels': 'Sales channels',
       apps: 'Apps',
       'google-youtube': 'Google & YouTube',
@@ -330,166 +301,68 @@ function Dashboard() {
     }[selected] || 'Dashboard'
 
     const pageContent = {
-      home: (
-        <BlockStack gap="500">
-          <Card>
-            <BlockStack gap="200">
-              <Text variant="headingMd" as="h2">
-                Welcome to Shopify Admin Dashboard
-              </Text>
-              <Text as="p" tone="subdued">
-                This is your main dashboard. Use the navigation to explore different sections.
-              </Text>
-            </BlockStack>
-          </Card>
-          <Card>
-            <BlockStack gap="200">
-              <Text variant="headingMd" as="h2">
-                Quick Stats
-              </Text>
-              <InlineStack gap="400" wrap={false}>
-                <div className="flex-1">
-                  <Card>
-                    <BlockStack gap="200">
-                      <Text variant="headingSm" as="h3">
-                        Total Orders
-                      </Text>
-                      <Text variant="heading2xl" as="p">
-                        1,234
-                      </Text>
-                    </BlockStack>
-                  </Card>
-                </div>
-                <div className="flex-1">
-                  <Card>
-                    <BlockStack gap="200">
-                      <Text variant="headingSm" as="h3">
-                        Total Revenue
-                      </Text>
-                      <Text variant="heading2xl" as="p">
-                        $45,678
-                      </Text>
-                    </BlockStack>
-                  </Card>
-                </div>
-                <div className="flex-1">
-                  <Card>
-                    <BlockStack gap="200">
-                      <Text variant="headingSm" as="h3">
-                        Customers
-                      </Text>
-                      <Text variant="heading2xl" as="p">
-                        567
-                      </Text>
-                    </BlockStack>
-                  </Card>
-                </div>
-              </InlineStack>
-            </BlockStack>
-          </Card>
-        </BlockStack>
-      ),
-      products: (
+      properties: (
         <Card>
           <BlockStack gap="200">
             <Text variant="headingMd" as="h2">
-              Products
+              Properties
             </Text>
             <Text as="p" tone="subdued">
-              Manage your product catalog here.
+              Manage your properties.
             </Text>
-            <Button variant="primary">Add Product</Button>
+            <Button variant="primary">Add Property</Button>
           </BlockStack>
         </Card>
       ),
-      orders: (
+      bookings: (
         <Card>
           <BlockStack gap="200">
             <Text variant="headingMd" as="h2">
-              Orders
+              Bookings
             </Text>
             <Text as="p" tone="subdued">
-              View and manage customer orders.
+              View and manage bookings.
             </Text>
-            <Button variant="primary">View All Orders</Button>
+            <Button variant="primary">View All Bookings</Button>
           </BlockStack>
         </Card>
       ),
-      settings: (
+      transactions: (
         <Card>
           <BlockStack gap="200">
             <Text variant="headingMd" as="h2">
-              Settings
+              Transactions
             </Text>
             <Text as="p" tone="subdued">
-              Configure your store settings.
+              View and manage transactions.
             </Text>
-            <Button variant="primary">Edit Settings</Button>
+            <Button variant="primary">View All Transactions</Button>
           </BlockStack>
         </Card>
       ),
-      marketing: (
+      inventory: (
         <Card>
           <BlockStack gap="200">
             <Text variant="headingMd" as="h2">
-              Marketing
+              Inventory
             </Text>
             <Text as="p" tone="subdued">
-              Manage your marketing campaigns and promotions.
+              Manage your inventory.
             </Text>
-            <Button variant="primary">Create Campaign</Button>
+            <Button variant="primary">Manage Inventory</Button>
           </BlockStack>
         </Card>
       ),
-      discounts: (
+      reports: (
         <Card>
           <BlockStack gap="200">
             <Text variant="headingMd" as="h2">
-              Discounts
+              Reports
             </Text>
             <Text as="p" tone="subdued">
-              Create and manage discount codes.
+              View and generate reports.
             </Text>
-            <Button variant="primary">Create Discount</Button>
-          </BlockStack>
-        </Card>
-      ),
-      content: (
-        <Card>
-          <BlockStack gap="200">
-            <Text variant="headingMd" as="h2">
-              Content
-            </Text>
-            <Text as="p" tone="subdued">
-              Manage your store content and media.
-            </Text>
-            <Button variant="primary">Add Content</Button>
-          </BlockStack>
-        </Card>
-      ),
-      markets: (
-        <Card>
-          <BlockStack gap="200">
-            <Text variant="headingMd" as="h2">
-              Markets
-            </Text>
-            <Text as="p" tone="subdued">
-              Manage your markets and international settings.
-            </Text>
-            <Button variant="primary">Manage Markets</Button>
-          </BlockStack>
-        </Card>
-      ),
-      segments: (
-        <Card>
-          <BlockStack gap="200">
-            <Text variant="headingMd" as="h2">
-              Customer Segments
-            </Text>
-            <Text as="p" tone="subdued">
-              Create and manage customer segments for targeted marketing.
-            </Text>
-            <Button variant="primary">Create Segment</Button>
+            <Button variant="primary">Generate Report</Button>
           </BlockStack>
         </Card>
       ),
@@ -560,10 +433,15 @@ function Dashboard() {
       ),
     }
 
+    // If dashboard is selected, don't wrap in Page component
+    if (selected === 'dashboard') {
+      return <AnalyticsPage />
+    }
+
     return (
       <Page title={pageTitle}>
         <Layout>
-          <Layout.Section>{pageContent[selected] || pageContent.home}</Layout.Section>
+          <Layout.Section>{pageContent[selected] || <AnalyticsPage />}</Layout.Section>
         </Layout>
       </Page>
     )
@@ -663,6 +541,15 @@ function Dashboard() {
           background: #ebebeb !important;
           padding-top: 0 !important;
           margin-top: 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          height: 100% !important;
+        }
+        
+        /* Position Settings section at the bottom */
+        .dashboard-main .Polaris-Navigation__Section:last-child {
+          margin-top: auto !important;
+          padding-top: 16px !important;
         }
         
         /* Ensure navigation icons are visible */
@@ -761,6 +648,8 @@ function Dashboard() {
           min-height: 0;
           position: relative;
           -webkit-overflow-scrolling: touch;
+          width: 100% !important;
+          max-width: 100% !important;
         }
         
         /* Ensure Page component allows scrolling */
@@ -768,10 +657,32 @@ function Dashboard() {
           height: auto !important;
           min-height: 100%;
           display: block;
+          width: 100% !important;
+          max-width: 100% !important;
         }
         
         .dashboard-main .Polaris-Page__Content {
           overflow: visible !important;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        
+        /* Ensure AnalyticsPage takes full width when rendered directly */
+        .dashboard-main .Polaris-Frame__Content > .analytics-page,
+        .dashboard-main .Polaris-Frame__Content > div > .analytics-page {
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        
+        /* Ensure Layout components don't constrain width */
+        .dashboard-main .Polaris-Layout {
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        
+        .dashboard-main .Polaris-Layout__Section {
+          width: 100% !important;
+          max-width: 100% !important;
         }
         
         /* Force scrolling on the Frame Content */

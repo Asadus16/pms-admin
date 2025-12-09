@@ -1,0 +1,45 @@
+/**
+ * Add Customer Page Styles
+ */
+
+.add-customer-page {
+  padding: var(--spacing-md);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.add-customer-page__header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.add-customer-page__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.add-customer-page__section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.add-customer-page__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border-light);
+  margin-top: var(--spacing-xl);
+}
+
+.add-customer-page__field-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+  .add-customer-page__field-group {
+    grid-template-columns: 1fr;
+  }
+}
+
