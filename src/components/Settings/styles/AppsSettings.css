@@ -1,0 +1,208 @@
+/**
+ * Apps and Sales Channels Settings Styles
+ */
+
+/* ========================================
+   Card Inner
+   ======================================== */
+
+.apps-card-inner {
+  padding: 12px;
+}
+
+.apps-list-wrapper {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ========================================
+   Tabs Container
+   ======================================== */
+
+.apps-tabs-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
+
+.apps-tabs-divider {
+  height: 1px;
+  background: var(--color-border-light);
+}
+
+.apps-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.apps-tab {
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 16px;
+  color: rgb(48, 48, 48);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.apps-tab:hover {
+  background: var(--color-bg-hover);
+  color: rgb(48, 48, 48);
+}
+
+.apps-tab.active {
+  background: #efefef;
+  color: rgb(48, 48, 48);
+}
+
+.apps-sort-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  color: rgb(97, 97, 97);
+  transition: all 0.15s ease;
+}
+
+.apps-sort-btn:hover {
+  background: var(--color-bg-hover);
+  color: rgb(48, 48, 48);
+}
+
+/* ========================================
+   Apps List
+   ======================================== */
+
+.apps-list {
+  padding: 0;
+}
+
+.apps-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  transition: background 0.15s ease;
+}
+
+.apps-row:hover {
+  background: var(--color-bg-hover);
+}
+
+.apps-icon {
+  width: 25px;
+  height: 25px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: white;
+  border: 1px solid var(--color-border-light);
+}
+
+.apps-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.apps-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.apps-name {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.apps-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: rgb(97, 97, 97);
+  margin-top: 2px;
+}
+
+.apps-menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: rgb(97, 97, 97);
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.apps-menu-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgb(48, 48, 48);
+}
+
+.apps-menu-btn .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.apps-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 16px;
+}
+
+/* ========================================
+   Learn More
+   ======================================== */
+
+.apps-learn-more {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.apps-learn-more a {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(0, 91, 211);
+  text-decoration: none;
+}
+
+.apps-learn-more a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   Develop Apps Button
+   ======================================== */
+
+.apps-develop-btn-wrapper .Polaris-Button {
+  background-color: #e3e3e3 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.apps-develop-btn-wrapper .Polaris-Button:hover {
+  background-color: #d5d5d5 !important;
+}

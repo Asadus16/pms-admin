@@ -1,0 +1,123 @@
+/**
+ * Webhooks Page Styles
+ */
+
+/* Page Header */
+.webhooks-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-top: 4px;
+}
+
+.webhooks-page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.webhooks-page-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  flex-shrink: 0;
+}
+
+.webhooks-page-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.webhooks-breadcrumb-separator {
+  color: rgb(138, 138, 138);
+  font-size: 14px;
+}
+
+.webhooks-breadcrumb-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+/* Card Content */
+.webhooks-card-content {
+  padding: 16px;
+}
+
+.webhooks-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 16px 0;
+}
+
+/* Create webhook box */
+.webhooks-create-box {
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.webhooks-create-wrapper {
+  padding: 12px 16px;
+  width: 100%;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.webhooks-create-wrapper:hover {
+  background: var(--color-bg-hover);
+}
+
+.webhooks-create-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.webhooks-create-content .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+/* Signing section */
+.webhooks-signing-section {
+  background: rgb(247, 247, 247);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.webhooks-signing-text {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0 0 4px 0;
+}
+
+.webhooks-signing-key {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+  word-break: break-all;
+}

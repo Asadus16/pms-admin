@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { TextField, InlineStack } from '@shopify/polaris';
 import './ui.css';
@@ -16,7 +18,7 @@ const countryCodes = [
   { code: '+61', country: 'AU', flag: '🇦🇺' },
 ];
 
-export const PhoneInput = ({ 
+export const PhoneInput = ({
   value = '',
   onChange,
   label = 'Phone',
@@ -24,7 +26,7 @@ export const PhoneInput = ({
   helpText,
   defaultCountryCode = '+91',
   className = '',
-  ...props 
+  ...props
 }) => {
   const [countryCode, setCountryCode] = useState(defaultCountryCode);
   const [phoneNumber, setPhoneNumber] = useState(value);

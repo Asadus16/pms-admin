@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useCallback } from 'react';
 import {
   Text,
@@ -120,7 +122,7 @@ function SidekickPanel({ isOpen, onClose, userName = 'Shafeen', onExpandedChange
           {/* What's new button */}
           <button className="whats-new-button">
             <span className="whats-new-dot"></span>
-            <span>What's new?</span>
+            <span>What&apos;s new?</span>
           </button>
         </div>
 

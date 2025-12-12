@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useCallback, useRef, useEffect, memo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Icon,
   Button,
@@ -26,8 +28,8 @@ import {
 import './styles/Shopifyheader.css';
 
 function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickOpen, showUnsavedChanges, onDiscard, onSave }) {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
+  const router = useRouter();
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState(null);
@@ -38,27 +40,43 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
   const searchRef = useRef(null);
   const searchInputRef = useRef(null);
 
-  // Check if we should show unsaved changes (either via prop or by checking if we're on add customer page)
-  const shouldShowUnsavedChanges = showUnsavedChanges || location.pathname.includes('/customers/new');
+  // Check if we should show unsaved changes (either via prop or by checking if we're on add customer page or create order page)
+  const isOnCustomerNew = pathname.includes('/customers/new');
+  const isOnBookingsNew = pathname.includes('/bookings/new');
+  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew;
+
+  // Get the appropriate text based on the current page
+  const getUnsavedChangesText = () => {
+    if (isOnBookingsNew) return 'Unsaved draft order';
+    if (isOnCustomerNew) return 'Unsaved changes';
+    return 'Unsaved changes';
+  };
 
   const handleDiscard = useCallback(() => {
     if (onDiscard) {
       onDiscard();
+    } else if (isOnBookingsNew) {
+      // Dispatch custom event to close CreateOrder
+      window.dispatchEvent(new CustomEvent('closeCreateOrder'));
+      router.push('/dashboard/bookings');
     } else {
       // Dispatch custom event to close AddCustomer
       window.dispatchEvent(new CustomEvent('closeAddCustomer'));
-      navigate('/dashboard/customers');
+      router.push('/dashboard/customers');
     }
-  }, [onDiscard, navigate]);
+  }, [onDiscard, router, isOnBookingsNew]);
 
   const handleSave = useCallback(() => {
     if (onSave) {
       onSave();
+    } else if (isOnBookingsNew) {
+      // Dispatch custom event to save order
+      window.dispatchEvent(new CustomEvent('saveCreateOrder'));
     } else {
       // Dispatch custom event to save customer
       window.dispatchEvent(new CustomEvent('saveAddCustomer'));
     }
-  }, [onSave]);
+  }, [onSave, isOnBookingsNew]);
 
 
   const toggleProfilePopover = useCallback(
@@ -330,7 +348,7 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
         )}
 
         {/* Left section - Logo */}
-        <div className="logo-section">
+        <div className="logo-section" onClick={() => router.push('/dashboard')} style={{ cursor: 'pointer' }}>
           <img
             src="/logos/shopify-logo-mono.svg"
             alt="Shopify"
@@ -347,7 +365,7 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
               <div className="unsaved-changes-bar">
                 <InlineStack gap="200" blockAlign="center">
                   <Icon source={AlertCircleIcon} tone="subdued" />
-                  <span className="unsaved-changes-text">Unsaved changes</span>
+                  <span className="unsaved-changes-text">{getUnsavedChangesText()}</span>
                 </InlineStack>
               </div>
               <div className="unsaved-changes-actions">

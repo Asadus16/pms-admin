@@ -1,0 +1,259 @@
+/**
+ * Customer Notifications Page Styles
+ */
+
+/* Page Header */
+.customer-notifications-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-top: 4px;
+}
+
+.customer-notifications-page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.customer-notifications-page-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  flex-shrink: 0;
+}
+
+.customer-notifications-page-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.customer-notifications-breadcrumb-separator {
+  color: rgb(138, 138, 138);
+  font-size: 14px;
+}
+
+.customer-notifications-breadcrumb-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+/* Accordion */
+.customer-notification-accordion {
+  overflow: hidden;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  margin: 0 16px 12px 16px;
+}
+
+.customer-notification-accordion:first-child {
+  margin-top: 16px;
+}
+
+.customer-notification-accordion:last-child {
+  margin-bottom: 16px;
+}
+
+.customer-notification-accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  background: #f7f7f7;
+}
+
+.customer-notification-accordion-header:hover {
+  background: #efefef;
+}
+
+.customer-notification-accordion-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.customer-notification-accordion-icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.customer-notification-accordion-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.customer-notification-accordion-content {
+  padding: 0;
+}
+
+/* Notification Item */
+.customer-notification-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.customer-notification-item:hover {
+  background: var(--color-bg-hover);
+}
+
+.customer-notification-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  padding-right: 16px;
+}
+
+.customer-notification-item-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.customer-notification-item-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.customer-notification-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.customer-notification-item-arrow {
+  width: 20px;
+  height: 20px;
+  color: rgb(138, 138, 138);
+}
+
+.customer-notification-item-arrow .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.customer-notification-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 16px;
+}
+
+/* Marketing double opt-in section */
+.customer-notification-marketing-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.customer-notification-marketing-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.customer-notification-marketing-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.customer-notification-marketing-info-icon {
+  width: 16px;
+  height: 16px;
+  color: rgb(138, 138, 138);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.customer-notification-marketing-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0;
+}
+
+.customer-notification-marketing-content {
+  padding: 16px 0 0 0;
+}
+
+.customer-notification-marketing-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  margin: 0 16px 16px 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.customer-notification-marketing-item:hover {
+  background: var(--color-bg-hover);
+}
+
+/* Shopify Messaging section */
+.customer-notification-messaging-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.customer-notification-messaging-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.customer-notification-messaging-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+}
+
+.customer-notification-messaging-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.customer-notification-messaging-status {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}

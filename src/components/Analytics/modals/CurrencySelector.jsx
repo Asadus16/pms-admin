@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Text, Icon } from '@shopify/polaris';
 import { SearchIcon } from '@shopify/polaris-icons';

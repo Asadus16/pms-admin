@@ -1,6 +1,6 @@
-const Sparkline = ({ data, color = '#12acf0', dashed = false }) => {
-    const width = 80;
-    const height = 28;
+const Sparkline = ({ data, color = '#12acf0', dashed = false, width: propWidth, height: propHeight }) => {
+    const width = propWidth || 80;
+    const height = propHeight || 28;
     const points = data || [1, 3, 1, 2, 5, 2, 1, 4, 6, 3, 2, 8, 4, 2];
     const max = Math.max(...points) || 1;
     const baseline = height - 2;

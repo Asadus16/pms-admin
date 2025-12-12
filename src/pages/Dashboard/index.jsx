@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useCallback, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useRouter, usePathname } from 'next/navigation'
 import {
   AppProvider,
   Page,
@@ -43,10 +45,13 @@ import {
 } from '@shopify/polaris-icons'
 import ShopifyHeader from '../../components/Shopifyheader'
 import CustomersPage from '../../components/CustomersPage'
+import OrdersPage from '../../components/OrdersPage'
 import AnalyticsPage from '../../components/AnalyticsPage'
 import SidekickPanel from '../../components/SidekickPanel'
 import AddCustomer from '../../components/AddCustomer'
+import CreateOrder from '../../components/CreateOrder'
 import SettingsPage from '../Settings/SettingsPage'
+import './dashboard.css'
 
 // Robot icon for TinySEO
 const RobotIcon = () => (
@@ -61,8 +66,8 @@ const RobotIcon = () => (
 )
 
 function Dashboard() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const router = useRouter()
+  const pathname = usePathname()
   const [mobileNavigationActive, setMobileNavigationActive] = useState(false)
   const [sidekickOpen, setSidekickOpen] = useState(false)
   const [sidekickExpanded, setSidekickExpanded] = useState(false)
@@ -71,9 +76,10 @@ function Dashboard() {
 
   // Get selected page from URL path
   const getSelectedFromPath = () => {
-    const path = location.pathname.replace('/dashboard', '').replace(/^\//, '') || 'dashboard'
+    const path = pathname.replace('/dashboard', '').replace(/^\//, '') || 'dashboard'
     if (path === '') return 'dashboard'
     if (path === 'customers/new' || path.startsWith('customers/new')) return 'customers/new'
+    if (path === 'bookings/new' || path.startsWith('bookings/new')) return 'bookings/new'
     if (path === 'customers/segments' || path.startsWith('customers/segments')) return 'segments'
     if (path === 'analytics/reports' || path.startsWith('analytics/reports')) return 'reports'
     if (path === 'analytics/live-view' || path.startsWith('analytics/live-view')) return 'live-view'
@@ -85,7 +91,7 @@ function Dashboard() {
   // Update selected when URL changes
   useEffect(() => {
     setSelected(getSelectedFromPath())
-  }, [location.pathname])
+  }, [pathname])
 
   const toggleMobileNavigationActive = useCallback(
     () =>
@@ -111,23 +117,23 @@ function Dashboard() {
   const handleNavigation = useCallback((page) => {
     setSelected(page)
     if (page === 'dashboard') {
-      navigate('/dashboard')
+      router.push('/dashboard')
     } else if (page === 'segments') {
-      navigate('/dashboard/customers/segments')
+      router.push('/dashboard/customers/segments')
     } else if (page === 'reports') {
-      navigate('/dashboard/analytics/reports')
+      router.push('/dashboard/analytics/reports')
     } else if (page === 'live-view') {
-      navigate('/dashboard/analytics/live-view')
+      router.push('/dashboard/analytics/live-view')
     } else {
-      navigate(`/dashboard/${page}`)
+      router.push(`/dashboard/${page}`)
     }
-  }, [navigate])
+  }, [router])
 
   // Check if analytics section is selected (including sub-items)
   const isAnalyticsSelected = selected === 'analytics' || selected === 'reports' || selected === 'live-view'
 
   const navigationMarkup = (
-    <Navigation location={location.pathname}>
+    <Navigation location={pathname}>
       <Navigation.Section
         items={[
           {
@@ -259,8 +265,13 @@ function Dashboard() {
   // For other pages, we wrap content in Page component
   const renderContent = () => {
     // Check for customers/new route
-    if (selected === 'customers/new' || location.pathname.includes('/customers/new')) {
-      return <AddCustomer onClose={() => navigate('/dashboard/customers')} />
+    if (selected === 'customers/new' || pathname.includes('/customers/new')) {
+      return <AddCustomer onClose={() => router.push('/dashboard/customers')} />
+    }
+
+    // Check for bookings/new route
+    if (selected === 'bookings/new' || pathname.includes('/bookings/new')) {
+      return <CreateOrder onClose={() => router.push('/dashboard/bookings')} />
     }
 
     // Dashboard shows AnalyticsPage
@@ -271,6 +282,11 @@ function Dashboard() {
     // Owner and Guests show CustomersPage
     if (selected === 'owner' || selected === 'guests') {
       return <CustomersPage />
+    }
+
+    // Bookings shows OrdersPage
+    if (selected === 'bookings') {
+      return <OrdersPage />
     }
 
     // Render AnalyticsPage for analytics and its sub-pages
@@ -449,356 +465,6 @@ function Dashboard() {
 
   return (
     <AppProvider i18n={{}}>
-      <style>{`
-        /* ========================================
-           Dashboard Layout - Curved Corners Fix
-           ======================================== */
-        
-        .dashboard-layout {
-          display: flex;
-          flex-direction: column;
-          height: 100vh;
-          overflow: hidden;
-          background: #1a1812;
-        }
-        
-        /* Header stays at top - highest z-index */
-        .dashboard-header {
-          flex-shrink: 0;
-          z-index: 520;
-          position: relative;
-        }
-        
-        /* Container for main content and sidekick */
-        .dashboard-body {
-          display: flex;
-          flex: 1;
-          min-height: 0;
-          overflow: hidden;
-          position: relative;
-        }
-        
-        .dashboard-main {
-          flex: 1;
-          min-width: 0;
-          min-height: 0;
-          height: 100%;
-          overflow: hidden;
-          background: #f6f6f7;
-          border-top-left-radius: 14px;
-          border-top-right-radius: 14px;
-          transition: border-top-right-radius 0.3s ease;
-          display: flex;
-          flex-direction: column;
-        }
-        
-        /* Keep right curve even when sidekick is open */
-        .dashboard-main.sidekick-open {
-          border-top-right-radius: 14px;
-          margin-right: 1px;
-        }
-        
-        .dashboard-main.sidekick-open .Polaris-Frame__Main {
-          border-top-right-radius: 14px !important;
-        }
-        
-        .dashboard-main.sidekick-open .Polaris-Frame__Content {
-          border-top-right-radius: 14px !important;
-        }
-        
-        .dashboard-main.sidekick-open .Polaris-Page {
-          border-top-right-radius: 14px !important;
-        }
-        
-        .dashboard-main.sidekick-open .Polaris-Page__Content {
-          border-top-right-radius: 14px !important;
-        }
-        
-        .dashboard-main .Polaris-Frame {
-          background: transparent !important;
-          flex: 1;
-          min-height: 0;
-          border-top-left-radius: 14px !important;
-          border-top-right-radius: 14px !important;
-          overflow: hidden;
-          display: flex;
-          flex-direction: row;
-        }
-              
-        /* Navigation panel - inherits curved corner from parent */
-        .dashboard-main .Polaris-Frame__Navigation {
-          background: #ebebeb !important;
-          border-top-left-radius: 14px;
-          z-index: 100 !important;
-          padding-top: 0 !important;
-          margin-top: 0 !important;
-          margin-right: 0 !important;
-          padding-right: 0 !important;
-          position: relative;
-        }
-        
-        .dashboard-main .Polaris-Navigation {
-          background: #ebebeb !important;
-          padding-top: 0 !important;
-          margin-top: 0 !important;
-          display: flex !important;
-          flex-direction: column !important;
-          height: 100% !important;
-        }
-        
-        /* Position Settings section at the bottom */
-        .dashboard-main .Polaris-Navigation__Section:last-child {
-          margin-top: auto !important;
-          padding-top: 16px !important;
-        }
-        
-        /* Ensure navigation icons are visible */
-        .dashboard-main .Polaris-Navigation__Item .Polaris-Navigation__Icon {
-          display: flex !important;
-          visibility: visible !important;
-          opacity: 1 !important;
-        }
-        
-        .dashboard-main .Polaris-Navigation__Item svg {
-          display: block !important;
-          visibility: visible !important;
-          opacity: 1 !important;
-        }
-        
-        /* Ensure navigation sections have proper spacing */
-        .dashboard-main .Polaris-Navigation__Section {
-          margin-top: 0 !important;
-        }
-        
-        /* First navigation section should have some top spacing */
-        .dashboard-main .Polaris-Navigation__Section:first-child {
-          padding-top: 0 !important;
-        }
-        
-        /* Remove background from navigation badges (dots) */
-        .dashboard-main .Polaris-Navigation__Item .Polaris-Badge {
-          background: transparent !important;
-          padding: 0 !important;
-          min-width: auto !important;
-          height: auto !important;
-          border: none !important;
-          font-size: 20px;
-          line-height: 1;
-          color: #6d7175;
-        }
-        
-        /* Style badge icons */
-        .dashboard-main .Polaris-Navigation__Item .Polaris-Badge svg {
-          width: 16px;
-          height: 16px;
-          color: #6d7175;
-        }
-        
-        /* Ensure badge container has no background */
-        .dashboard-main .Polaris-Navigation__Item .Polaris-Badge__Pip {
-          display: none !important;
-        }
-        
-        /* Ensure Icon components in badges are styled correctly */
-        .dashboard-main .Polaris-Navigation__Item .Polaris-Badge .Polaris-Icon {
-          display: inline-flex;
-        }
-        
-        /* Style the badge content wrapper */
-        .dashboard-main .Polaris-Navigation__Item .Polaris-Badge span {
-          display: inline-flex;
-          align-items: center;
-        }
-        
-        /* Align navigation items with Page header */
-        .dashboard-main .Polaris-Navigation__Item {
-          padding-top: 0 !important;
-          margin-top: 0 !important;
-        }
-        
-        /* Match Page header padding */
-        .dashboard-main .Polaris-Page__Header {
-          padding-top: 20px !important;
-        }
-        
-        /* Main content - transparent to show parent bg */
-        .dashboard-main .Polaris-Frame__Main {
-          background: transparent !important;
-          border-top-left-radius: 14px !important;
-          border-top-right-radius: 14px !important;
-          margin-left: 0 !important;
-          padding-left: 0 !important;
-          flex: 1;
-          min-width: 0;
-          min-height: 0;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-        }
-        
-        .dashboard-main .Polaris-Frame__Content {
-          background: #f6f6f7 !important;
-          overflow-y: auto !important;
-          overflow-x: hidden !important;
-          border-top-left-radius: 14px !important;
-          border-top-right-radius: 14px !important;
-          margin-left: 0 !important;
-          padding-left: 0 !important;
-          flex: 1 1 0;
-          min-height: 0;
-          position: relative;
-          -webkit-overflow-scrolling: touch;
-          width: 100% !important;
-          max-width: 100% !important;
-        }
-        
-        /* Ensure Page component allows scrolling */
-        .dashboard-main .Polaris-Page {
-          height: auto !important;
-          min-height: 100%;
-          display: block;
-          width: 100% !important;
-          max-width: 100% !important;
-        }
-        
-        .dashboard-main .Polaris-Page__Content {
-          overflow: visible !important;
-          width: 100% !important;
-          max-width: 100% !important;
-        }
-        
-        /* Ensure AnalyticsPage takes full width when rendered directly */
-        .dashboard-main .Polaris-Frame__Content > .analytics-page,
-        .dashboard-main .Polaris-Frame__Content > div > .analytics-page {
-          width: 100% !important;
-          max-width: 100% !important;
-        }
-        
-        /* Ensure Layout components don't constrain width */
-        .dashboard-main .Polaris-Layout {
-          width: 100% !important;
-          max-width: 100% !important;
-        }
-        
-        .dashboard-main .Polaris-Layout__Section {
-          width: 100% !important;
-          max-width: 100% !important;
-        }
-        
-        /* Force scrolling on the Frame Content */
-        .dashboard-main .Polaris-Frame__Content > * {
-          min-height: fit-content;
-        }
-        
-        /* Remove any gap between navigation and main content */
-        .dashboard-main .Polaris-Frame__Layout {
-          gap: 0 !important;
-          margin: 0 !important;
-          padding: 0 !important;
-        }
-        
-        /* Ensure Page components also have left border radius */
-        .dashboard-main .Polaris-Page {
-          border-top-left-radius: 14px !important;
-          border-top-right-radius: 14px !important;
-        }
-        
-        .dashboard-main .Polaris-Page__Content {
-          border-top-left-radius: 14px !important;
-          border-top-right-radius: 14px !important;
-        }
-        
-        /* Remove any TopBar styling since we're not using it */
-        .dashboard-main .Polaris-Frame__TopBar {
-          display: none !important;
-        }
-        
-        /* Sidekick panel container */
-        .sidekick-container {
-          width: 0;
-          overflow: hidden;
-          transition: width 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
-          background: #ffffff;
-          flex-shrink: 0;
-          height: 100%;
-          border-top-left-radius: 14px;
-          border-top-right-radius: 14px;
-          border-left: none;
-          opacity: 0;
-          visibility: hidden;
-          margin-left: 0;
-        }
-        
-        .sidekick-container.open {
-          width: 360px;
-          border-left: none;
-          border-top-left-radius: 14px;
-          border-top-right-radius: 14px;
-          opacity: 1;
-          visibility: visible;
-          margin-left: 1px;
-        }
-        
-        .sidekick-container.expanded {
-          width: 600px;
-        }
-        
-        /* ========================================
-           Mobile Navigation Fixes
-           ======================================== */
-        
-        /* Mobile navigation overlay - should be below header */
-        .Polaris-Frame__NavigationDismiss {
-          top: 0 !important;
-          z-index: 510 !important;
-        }
-        
-        /* Mobile navigation panel - position below header */
-        @media (max-width: 768px) {
-          /* The mobile nav slides in - make sure it's below header */
-          .Polaris-Frame__Navigation {
-            position: fixed !important;
-            top: 56px !important;
-            left: 0 !important;
-            bottom: 0 !important;
-            height: auto !important;
-            z-index: 515 !important;
-            border-top-left-radius: 0 !important;
-            border-top-right-radius: 14px !important;
-          }
-          
-          /* Navigation dismiss overlay */
-          .Polaris-Frame__NavigationDismiss {
-            top: 56px !important;
-            z-index: 510 !important;
-          }
-          
-          .sidekick-container.open {
-            position: fixed;
-            top: 56px;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            z-index: 505;
-            border-top-left-radius: 0;
-          }
-          
-          .dashboard-main {
-            border-top-right-radius: 14px !important;
-          }
-        }
-        
-        @media (max-width: 1024px) and (min-width: 769px) {
-          .sidekick-container.open {
-            width: 320px;
-          }
-          
-          .sidekick-container.expanded {
-            width: 480px;
-          }
-        }
-      `}</style>
-
       <div className="dashboard-layout">
         {/* Header - Rendered separately, outside of Frame but inside AppProvider */}
         <div className="dashboard-header">

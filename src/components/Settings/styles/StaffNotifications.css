@@ -1,0 +1,285 @@
+/**
+ * Staff Notifications Page Styles
+ */
+
+/* Page Header */
+.staff-notifications-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-top: 4px;
+}
+
+.staff-notifications-page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.staff-notifications-page-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  flex-shrink: 0;
+}
+
+.staff-notifications-page-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.staff-notifications-breadcrumb-separator {
+  color: rgb(138, 138, 138);
+  font-size: 14px;
+}
+
+.staff-notifications-breadcrumb-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+/* Notification Box */
+.staff-notification-box {
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  margin: 16px;
+  overflow: hidden;
+}
+
+.staff-notification-box:first-child {
+  margin-top: 16px;
+}
+
+/* Notification Item */
+.staff-notification-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.staff-notification-item:hover {
+  background: var(--color-bg-hover);
+}
+
+.staff-notification-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  padding-right: 16px;
+}
+
+.staff-notification-item-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.staff-notification-edit-icon {
+  width: 14px;
+  height: 14px;
+  color: rgb(97, 97, 97);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.staff-notification-item-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.staff-notification-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.staff-notification-item-arrow {
+  width: 20px;
+  height: 20px;
+  color: rgb(138, 138, 138);
+}
+
+.staff-notification-item-arrow .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.staff-notification-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 16px;
+}
+
+/* Recipients Section */
+.staff-recipients-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.staff-recipients-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+.staff-recipients-box {
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  margin: 16px;
+  overflow: hidden;
+}
+
+/* Recipient Item */
+.staff-recipient-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.staff-recipient-item:hover {
+  background: var(--color-bg-hover);
+}
+
+.staff-recipient-icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.staff-recipient-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.staff-recipient-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.staff-recipient-name {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.staff-recipient-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.staff-recipient-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.staff-recipient-off-badge {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 16px;
+  color: rgb(97, 97, 97);
+  background: rgb(241, 241, 241);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.staff-recipient-menu-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: rgb(97, 97, 97);
+  transition: background var(--transition-fast);
+}
+
+.staff-recipient-menu-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.staff-recipient-menu-btn .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.staff-recipient-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 16px;
+}
+
+/* Add Recipient */
+.staff-add-recipient-wrapper {
+  padding: 12px 16px;
+  width: 100%;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.staff-add-recipient-wrapper:hover {
+  background: var(--color-bg-hover);
+}
+
+.staff-add-recipient-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.staff-add-recipient-content .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+}

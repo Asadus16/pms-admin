@@ -1,0 +1,187 @@
+/**
+ * Security Settings Styles
+ * Security cards, collaborators, and activity logs styles
+ */
+
+/* ========================================
+   Security Settings
+   ======================================== */
+
+.security-card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+}
+
+.security-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.security-card-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+.security-card-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0;
+}
+
+.security-collaborators-section {
+  padding: 20px;
+}
+
+.security-section-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 8px 0;
+}
+
+.security-section-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0 0 16px 0;
+}
+
+.security-section-description a {
+  color: rgb(0, 91, 211);
+  text-decoration: none;
+}
+
+.security-section-description a:hover {
+  text-decoration: underline;
+}
+
+.security-collaborator-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #f7f7f7;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.security-collaborator-text {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+.security-collaborator-note {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0;
+}
+
+.security-collaborator-note a {
+  color: rgb(0, 91, 211);
+  text-decoration: none;
+}
+
+.security-collaborator-note a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   Security Activity Logs
+   ======================================== */
+
+.security-activity-logs {
+  width: 100%;
+}
+
+.security-logs-table-container {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.security-logs-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border-light);
+  background: white;
+}
+
+.security-logs-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.security-logs-tab {
+  padding: 6px 12px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.security-logs-tab:hover {
+  background: var(--color-bg-hover);
+}
+
+.security-logs-tab.active {
+  background: #e3e3e3;
+  color: rgb(48, 48, 48);
+}
+
+.security-logs-table-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.security-logs-action-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border-light);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  transition: all var(--transition-fast);
+}
+
+.security-logs-action-btn:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border);
+}
+
+.security-logs-index-table {
+  background: white;
+}

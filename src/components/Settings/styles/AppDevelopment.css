@@ -1,0 +1,347 @@
+/**
+ * App Development Page Styles
+ */
+
+/* ========================================
+   Dev Dashboard Promo Card
+   ======================================== */
+
+.app-dev-promo-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.app-dev-promo-content {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.app-dev-promo-text {
+  flex: 1;
+  padding: 24px;
+}
+
+.app-dev-promo-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 8px 0;
+}
+
+.app-dev-promo-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0 0 16px 0;
+}
+
+.app-dev-promo-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-dev-learn-more-link {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  text-decoration: underline;
+}
+
+.app-dev-learn-more-link:hover {
+  color: rgb(0, 0, 0);
+}
+
+.app-dev-promo-illustration {
+  width: 200px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.app-dev-promo-illustration img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ========================================
+   Legacy Custom Apps
+   ======================================== */
+
+.app-dev-legacy-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  padding-bottom: 16px;
+}
+
+.app-dev-legacy-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+/* Warning Banner */
+.app-dev-warning-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 20px 16px 20px;
+  padding: 12px 16px;
+  background: #fff1e3;
+  border-radius: 8px;
+}
+
+.app-dev-warning-icon {
+  flex-shrink: 0;
+  color: #b98900;
+}
+
+.app-dev-warning-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.app-dev-warning-text {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+/* Filter Bar */
+.app-dev-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px 16px 20px;
+}
+
+.app-dev-filter-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+}
+
+.app-dev-filter-input-wrapper .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(138, 138, 138);
+}
+
+.app-dev-filter-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  outline: none;
+}
+
+.app-dev-filter-input::placeholder {
+  color: rgb(138, 138, 138);
+}
+
+.app-dev-sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  transition: background 0.15s ease;
+}
+
+.app-dev-sort-btn:hover {
+  background: var(--color-bg-hover);
+}
+
+.app-dev-sort-btn .Polaris-Icon {
+  width: 16px;
+  height: 16px;
+  color: rgb(97, 97, 97);
+}
+
+/* Apps List */
+.app-dev-apps-list {
+  border-top: 1px solid var(--color-border-light);
+}
+
+.app-dev-app-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.app-dev-app-row:hover {
+  background: var(--color-bg-hover);
+}
+
+.app-dev-app-icon {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: rgb(138, 138, 138);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.app-dev-app-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.app-dev-app-name {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.app-dev-app-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 20px;
+}
+
+/* ========================================
+   Develop apps with caution
+   ======================================== */
+
+.app-dev-caution-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 12px 0;
+  padding: 20px 20px 0 20px;
+}
+
+.app-dev-caution-text {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 12px 0;
+  padding: 0 20px;
+}
+
+.app-dev-caution-text a {
+  color: rgb(0, 91, 211);
+  text-decoration: underline;
+}
+
+.app-dev-caution-text a:hover {
+  color: rgb(0, 66, 153);
+}
+
+.app-dev-caution-info {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0;
+  padding: 0 20px 20px 20px;
+}
+
+/* ========================================
+   Protected customer data access
+   ======================================== */
+
+.app-dev-protected-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 12px 0;
+  padding: 20px 20px 0 20px;
+}
+
+.app-dev-protected-text {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 16px 0;
+  padding: 0 20px;
+}
+
+.app-dev-upgrade-box {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 20px 20px 20px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.app-dev-upgrade-content {
+  flex: 1;
+}
+
+.app-dev-upgrade-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 4px 0;
+}
+
+.app-dev-upgrade-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}

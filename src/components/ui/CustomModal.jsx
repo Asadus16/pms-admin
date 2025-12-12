@@ -1,16 +1,18 @@
 import { Modal } from '@shopify/polaris';
+'use client';
+
 import { useRef, useEffect } from 'react';
 import './ui.css';
 
 /**
  * CustomModal - Wrapper around Polaris Modal with backdrop fix and consistent sizing
  */
-export const CustomModal = ({ 
-  children, 
+export const CustomModal = ({
+  children,
   size = 'medium',
   className = '',
   onClose,
-  ...props 
+  ...props
 }) => {
   const modalContentRef = useRef(null);
   const clickStartedInsideModal = useRef(false);
@@ -43,7 +45,7 @@ export const CustomModal = ({
   }, [onClose]);
 
   const sizeClass = size !== 'medium' ? `custom-modal--${size}` : '';
-  
+
   return (
     <Modal
       className={`custom-modal ${sizeClass} ${className}`}

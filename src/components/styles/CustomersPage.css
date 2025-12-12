@@ -44,16 +44,46 @@
 /* Fix modal backdrop and dialog styling */
 .Polaris-Backdrop {
   background-color: rgba(0, 0, 0, 0.5) !important;
-  z-index: var(--z-modal-backdrop) !important;
+  z-index: 400 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
 }
 
 .Polaris-Modal-Dialog {
-  z-index: var(--z-modal) !important;
+  z-index: 401 !important;
   position: relative !important;
 }
 
 .Polaris-Modal-Dialog__Container {
-  z-index: var(--z-modal) !important;
+  z-index: 401 !important;
+}
+
+.Polaris-Modal-Dialog__Modal {
+  background-color: #fff !important;
+}
+
+/* Email Customer Modal - narrower width, auto height, no scroll */
+.Polaris-Modal-Dialog:not(.Polaris-Modal-Dialog--sizeLarge) .Polaris-Modal-Dialog__Modal {
+  max-width: 580px !important;
+  width: 580px !important;
+  max-height: 90vh !important;
+}
+
+.Polaris-Modal-Dialog:not(.Polaris-Modal-Dialog--sizeLarge) .Polaris-Modal-Section {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+.Polaris-Modal-Dialog:not(.Polaris-Modal-Dialog--sizeLarge) .Polaris-Modal-Section:first-of-type {
+  padding-bottom: 8px !important;
+}
+
+.Polaris-Modal-Dialog:not(.Polaris-Modal-Dialog--sizeLarge) .Polaris-Modal-Section:last-of-type {
+  border-top: 1px solid var(--p-color-border);
+  padding-top: 16px !important;
 }
 
 .customers-page-wrapper .Polaris-Page {
@@ -246,5 +276,33 @@
   padding: var(--spacing-md);
   padding-top: var(--spacing-md);
   background-color: var(--color-bg-hover);
+}
+
+/* Popover styles - prevent horizontal scroll */
+.orders-page-wrapper .Polaris-Popover__Wrapper,
+.customers-page-wrapper .Polaris-Popover__Wrapper {
+  max-width: 360px !important;
+}
+
+.orders-page-wrapper .Polaris-Popover__Content,
+.customers-page-wrapper .Polaris-Popover__Content {
+  max-width: 360px !important;
+  overflow-x: hidden !important;
+}
+
+/* Ensure popovers stay within viewport */
+.Polaris-PositionedOverlay {
+  z-index: 400;
+}
+
+/* Prevent page scroll-x from popovers */
+.orders-page-wrapper,
+.customers-page-wrapper {
+  overflow-x: hidden;
+}
+
+/* Popover container width constraint */
+.Polaris-Popover {
+  max-width: 360px;
 }
 

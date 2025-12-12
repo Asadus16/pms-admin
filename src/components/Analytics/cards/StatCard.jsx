@@ -1,9 +1,11 @@
+'use client';
+
 import { useState } from 'react';
 import { Text, BlockStack, InlineStack } from '@shopify/polaris';
 import { chartTooltipData } from '../constants';
 import Sparkline, { DualSparkline } from '../charts/Sparkline';
 
-const StatCard = ({ title, value, change, changeType = 'positive', sparklineData, sparklineData2, dualLine = false }) => {
+const StatCard = ({ title, value, change, changeType = 'positive', sparklineData, sparklineData2, dualLine = false, compact = false }) => {
     const [showTooltip, setShowTooltip] = useState(false);
     const tooltipData = chartTooltipData[title];
 
@@ -26,6 +28,43 @@ const StatCard = ({ title, value, change, changeType = 'positive', sparklineData
             </div>
         );
     };
+
+    // Compact mode styles for inline stats strip
+    if (compact) {
+        return (
+            <div style={{
+                background: 'transparent',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+            }}>
+                <div
+                    style={{ position: 'relative', display: 'inline-block', marginBottom: '2px' }}
+                    onMouseEnter={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                >
+                    <Text variant="bodySm" as="p" tone="subdued">
+                        {title}
+                    </Text>
+                </div>
+                <InlineStack align="space-between" blockAlign="center" gap="300">
+                    <InlineStack gap="100" blockAlign="baseline" wrap={false}>
+                        <Text variant="bodyMd" as="p" fontWeight="semibold">{value}</Text>
+                        <span style={{
+                            fontFamily: 'Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+                            fontSize: '11px',
+                            fontWeight: '600',
+                            color: changeType === 'positive' ? 'rgb(7, 141, 78)' : changeType === 'critical' || changeType === 'negative' ? 'rgb(191, 38, 0)' : 'rgb(97, 97, 97)'
+                        }}>
+                            {changeType === 'positive' ? '↑' : changeType === 'critical' || changeType === 'negative' ? '↓' : ''}{change}
+                        </span>
+                    </InlineStack>
+                    <Sparkline data={sparklineData} color="#12acf0" height={24} width={70} />
+                </InlineStack>
+            </div>
+        );
+    }
 
     return (
         <div style={{
@@ -80,13 +119,15 @@ const StatCard = ({ title, value, change, changeType = 'positive', sparklineData
                 <InlineStack align="space-between" blockAlign="center">
                     <InlineStack gap="150" blockAlign="baseline">
                         <Text variant="headingMd" as="p" fontWeight="semibold">{value}</Text>
-                        <Text
-                            variant="bodySm"
-                            as="span"
-                            tone={changeType === 'positive' ? 'success' : changeType === 'critical' ? 'critical' : 'subdued'}
-                        >
+                        <span style={{
+                            fontFamily: 'Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+                            fontSize: '11px',
+                            fontWeight: '650',
+                            lineHeight: '20px',
+                            color: changeType === 'positive' ? 'rgb(7, 141, 78)' : changeType === 'critical' ? 'rgb(191, 38, 0)' : 'rgb(97, 97, 97)'
+                        }}>
                             {changeType === 'positive' ? '↑' : changeType === 'critical' ? '↓' : ''}{change}
-                        </Text>
+                        </span>
                     </InlineStack>
                     {dualLine ? (
                         <DualSparkline data1={sparklineData} data2={sparklineData2} />

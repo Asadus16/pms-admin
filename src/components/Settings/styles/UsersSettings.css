@@ -1,0 +1,137 @@
+/**
+ * Users Settings Styles
+ * Users table, tabs, and status badge styles
+ */
+
+/* ========================================
+   Users Section
+   ======================================== */
+
+.users-table-container {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.users-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.users-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: transparent;
+  border-radius: 6px;
+  padding: 0;
+}
+
+.users-tab {
+  padding: 6px 12px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.users-tab:hover {
+  color: rgb(48, 48, 48);
+}
+
+.users-tab.active {
+  background: #e3e3e3;
+  color: rgb(48, 48, 48);
+}
+
+.users-table-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.users-action-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border-light);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  transition: all var(--transition-fast);
+}
+
+.users-action-btn:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border);
+}
+
+.users-index-table {
+  background: white;
+}
+
+.users-status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 16px;
+}
+
+.users-status-badge.active {
+  background: #affdbf;
+  color: rgb(0, 102, 51);
+}
+
+.users-status-badge.pending {
+  background: #fef3cd;
+  color: rgb(133, 100, 4);
+}
+
+.users-role-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.users-2fa-warning {
+  width: 20px;
+  height: 20px;
+  color: #d4a017;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.users-learn-more {
+  padding: 16px 0;
+  text-align: center;
+}
+
+.users-learn-more a {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  text-decoration: none;
+}
+
+.users-learn-more a:hover {
+  text-decoration: underline;
+}

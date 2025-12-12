@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import {
     AppProvider,
     Card,
@@ -19,7 +21,7 @@ function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [step, setStep] = useState('email'); // 'email' or 'password'
     const [isHovered, setIsHovered] = useState(false);
-    const navigate = useNavigate();
+    const router = useRouter();
 
     const handleEmailLogin = () => {
         if (email) {
@@ -29,7 +31,7 @@ function Login() {
 
     const handlePasswordLogin = () => {
         if (password) {
-            navigate('/dashboard');
+            router.push('/dashboard');
         }
     };
 

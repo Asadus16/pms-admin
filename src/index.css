@@ -71,3 +71,10 @@ body {
 .Polaris-Backdrop {
   z-index: 599 !important;
 }
+
+/* ========================================
+   Stats Strip Scroll Container
+   ======================================== */
+.stats-scroll-container::-webkit-scrollbar {
+  display: none;
+}

@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import {
   Page,
   Card,
@@ -519,6 +521,7 @@ const STORAGE_KEYS = {
 
 // Helper functions for localStorage
 const getStoredColumns = () => {
+  if (typeof window === 'undefined') return null;
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.VISIBLE_COLUMNS);
     if (stored) {
@@ -536,6 +539,9 @@ const getStoredColumns = () => {
 };
 
 const getStoredSort = () => {
+  if (typeof window === 'undefined') {
+    return { sortBy: 'lastUpdate', sortDirection: 'desc' };
+  }
   try {
     const sortBy = localStorage.getItem(STORAGE_KEYS.SORT_BY);
     const sortDir = localStorage.getItem(STORAGE_KEYS.SORT_DIRECTION);
@@ -550,7 +556,7 @@ const getStoredSort = () => {
 };
 
 function CustomersPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortPopoverActive, setSortPopoverActive] = useState(false);
@@ -948,7 +954,7 @@ function CustomersPage() {
           }
           primaryAction={{
             content: 'Add customer',
-            onAction: () => navigate('/dashboard/customers/new'),
+            onAction: () => router.push('/dashboard/customers/new'),
           }}
           secondaryActions={[
             {

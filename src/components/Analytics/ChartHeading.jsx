@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Text } from '@shopify/polaris';
 import { chartTooltipData } from './constants';
