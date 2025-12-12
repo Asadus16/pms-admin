@@ -52,7 +52,7 @@ function PlanSettings() {
           <h2 className="settings-card-title">Subscriptions</h2>
         </div>
         <div className="subscriptions-description">
-          Additional items you're billed for on a recurring basis
+          Additional items you&apos;re billed for on a recurring basis
         </div>
         <div className="settings-card-content">
           <div className="subscriptions-bordered-content">

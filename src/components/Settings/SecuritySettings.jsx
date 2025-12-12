@@ -105,9 +105,9 @@ function SecuritySettings({ showActivityLogs, setShowActivityLogs }) {
             <InlineStack align="start">
               <Pagination
                 hasPrevious={false}
-                onPrevious={() => {}}
+                onPrevious={() => { }}
                 hasNext={true}
-                onNext={() => {}}
+                onNext={() => { }}
               />
             </InlineStack>
           </Box>
@@ -135,7 +135,7 @@ function SecuritySettings({ showActivityLogs, setShowActivityLogs }) {
         <div className="security-collaborators-section">
           <h3 className="security-section-title">Collaborators</h3>
           <p className="security-section-description">
-            Give designers, developers, and marketers access to this store. Collaborators don't count toward your staff limit. Learn more about <a href="#">collaborators</a>.
+            Give designers, developers, and marketers access to this store. Collaborators don&apos;t count toward your staff limit. Learn more about <a href="#">collaborators</a>.
           </p>
 
           <div className="security-collaborator-row">
@@ -146,7 +146,7 @@ function SecuritySettings({ showActivityLogs, setShowActivityLogs }) {
           </div>
 
           <p className="security-collaborator-note">
-            You'll still need to review and approve this request from <a href="#">Users</a>.
+            You&apos;ll still need to review and approve this request from <a href="#">Users</a>.
           </p>
         </div>
       </div>

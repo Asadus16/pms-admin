@@ -1,4 +1,13 @@
-// This will be moved from components/AnalyticsPage.jsx
-// Placeholder for now - will be refactored
-export { default } from '../../components/AnalyticsPage';
+'use client';
+
+import { AppProvider } from '@shopify/polaris';
+import AnalyticsPageComponent from '@components/AnalyticsPage';
+
+export default function AnalyticsPage() {
+    return (
+        <AppProvider i18n={{}}>
+            <AnalyticsPageComponent />
+        </AppProvider>
+    );
+}
 

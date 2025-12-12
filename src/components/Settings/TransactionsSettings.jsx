@@ -62,7 +62,7 @@ function TransactionsSettings() {
         </div>
         <div className="transactions-card-content">
           <p className="transactions-description">
-            Payment methods that are available with one of Shopify's approved payment providers
+            Payment methods that are available with one of Shopify&apos;s approved payment providers
           </p>
 
           {/* All payment methods in one bordered container */}

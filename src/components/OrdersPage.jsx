@@ -958,6 +958,7 @@ const STORAGE_KEYS = {
 
 // Helper functions for localStorage
 const getStoredColumns = () => {
+  if (typeof window === 'undefined') return null;
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.VISIBLE_COLUMNS);
     if (stored) {
@@ -974,6 +975,9 @@ const getStoredColumns = () => {
 };
 
 const getStoredSort = () => {
+  if (typeof window === 'undefined') {
+    return { sortBy: 'date', sortDirection: 'desc' };
+  }
   try {
     const sortBy = localStorage.getItem(STORAGE_KEYS.SORT_BY);
     const sortDir = localStorage.getItem(STORAGE_KEYS.SORT_DIRECTION);
@@ -988,6 +992,7 @@ const getStoredSort = () => {
 };
 
 const getStoredTab = () => {
+  if (typeof window === 'undefined') return 'all';
   try {
     const tab = localStorage.getItem(STORAGE_KEYS.ACTIVE_TAB);
     return tab || 'all';
@@ -1431,7 +1436,7 @@ function OrdersPage() {
                   {order.customer}
                 </Text>
                 <svg className="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 8L3 5h6l-3 3z" fill="#575757"/>
+                  <path d="M6 8L3 5h6l-3 3z" fill="#575757" />
                 </svg>
               </div>
             }
@@ -1479,7 +1484,7 @@ function OrdersPage() {
           <Badge tone="success">
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" width="12" height="12">
-                <path d="M2 5a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v2a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3zm3-2a3 3 0 0 0-3 3h2a3 3 0 0 1 3-3z" fill="currentColor"/>
+                <path d="M2 5a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v2a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3zm3-2a3 3 0 0 0-3 3h2a3 3 0 0 1 3-3z" fill="currentColor" />
               </svg>
               Paid
             </span>
@@ -1494,7 +1499,7 @@ function OrdersPage() {
             gap: '6px'
           }}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" width="12" height="12">
-              <path fillRule="evenodd" d="M2 5.125c0-1.726 1.4-3.125 3.125-3.125h1.75c0 3.125-3.125 3.125-3.125h1.75c0 1.726-1.4 3.125-3.125 3.125-3.125m3.125-1.875c-1.036 0-1.875.84-1.875 1.875v1.75c0 1.036.84 1.875 1.875 1.875h1.75c1.036 0 1.875-.84 1.875-1.875V5.125c0-1.036-.84-1.875-1.875-1.875z" fill="#bf5000"/>
+              <path fillRule="evenodd" d="M2 5.125c0-1.726 1.4-3.125 3.125-3.125h1.75c0 3.125-3.125 3.125-3.125h1.75c0 1.726-1.4 3.125-3.125 3.125-3.125m3.125-1.875c-1.036 0-1.875.84-1.875 1.875v1.75c0 1.036.84 1.875 1.875 1.875h1.75c1.036 0 1.875-.84 1.875-1.875V5.125c0-1.036-.84-1.875-1.875-1.875z" fill="#bf5000" />
             </svg>
             <Text variant="bodySm" as="span" fontWeight="medium">
               Payment pending
@@ -1543,7 +1548,7 @@ function OrdersPage() {
                   {formatItems(order.items)}
                 </Text>
                 <svg className="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 8L3 5h6l-3 3z" fill="#575757"/>
+                  <path d="M6 8L3 5h6l-3 3z" fill="#575757" />
                 </svg>
               </div>
             }
@@ -1631,7 +1636,7 @@ function OrdersPage() {
                         Out for delivery
                       </Text>
                       <svg className="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 8L3 5h6l-3 3z" fill="#575757"/>
+                        <path d="M6 8L3 5h6l-3 3z" fill="#575757" />
                       </svg>
                     </span>
                   </div>
@@ -1699,7 +1704,7 @@ function OrdersPage() {
                         In transit
                       </Text>
                       <svg className="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 8L3 5h6l-3 3z" fill="#575757"/>
+                        <path d="M6 8L3 5h6l-3 3z" fill="#575757" />
                       </svg>
                     </span>
                   </div>

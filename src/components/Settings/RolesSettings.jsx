@@ -124,9 +124,9 @@ function RolesSettings({ showRolesExportModal, setShowRolesExportModal, showAddR
           <InlineStack align="start">
             <Pagination
               hasPrevious={false}
-              onPrevious={() => {}}
+              onPrevious={() => { }}
               hasNext={true}
-              onNext={() => {}}
+              onNext={() => { }}
             />
           </InlineStack>
         </Box>
@@ -143,7 +143,7 @@ function RolesSettings({ showRolesExportModal, setShowRolesExportModal, showAddR
               </button>
             </div>
             <div className="settings-modal-content">
-              <p>Export a CSV file of all custom roles including name, category, and permissions. You'll receive an email to download the file when it's ready.</p>
+              <p>Export a CSV file of all custom roles including name, category, and permissions. You&apos;ll receive an email to download the file when it&apos;s ready.</p>
             </div>
             <div className="settings-modal-footer">
               <Button onClick={() => setShowRolesExportModal(false)}>Cancel</Button>

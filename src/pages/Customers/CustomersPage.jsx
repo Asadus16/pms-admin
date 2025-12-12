@@ -1,4 +1,13 @@
-// This will be moved from components/CustomersPage.jsx
-// Placeholder for now - will be refactored
-export { default } from '../../components/CustomersPage';
+'use client';
+
+import { AppProvider } from '@shopify/polaris';
+import CustomersPageComponent from '@components/CustomersPage';
+
+export default function CustomersPage() {
+    return (
+        <AppProvider i18n={{}}>
+            <CustomersPageComponent />
+        </AppProvider>
+    );
+}
 

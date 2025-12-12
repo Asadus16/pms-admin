@@ -14,13 +14,13 @@ import {
   InfoIcon,
   ArrowLeftIcon,
 } from '@shopify/polaris-icons';
-import ShopifyHeader from '../../../../src/components/Shopifyheader';
-import SettingsNavigation from '../../../../src/pages/Settings/components/SettingsNavigation';
-import PhoneInput from '../../../../src/components/ui/PhoneInput';
-import '../../../../src/pages/Settings/settings.css';
-import '../../../../src/pages/Settings/components/styles/SettingsLayout.css';
-import '../../../../src/pages/Settings/components/styles/SettingsResponsive.css';
-import '../../../../src/pages/Settings/components/styles/BillingSettings.css';
+import ShopifyHeader from '@components/Shopifyheader';
+import SettingsNavigation from '@components/Settings/SettingsNavigation';
+import PhoneInput from '@components/ui/PhoneInput';
+import '@pages/Settings/settings.css';
+import '@components/Settings/styles/SettingsLayout.css';
+import '@components/Settings/styles/SettingsResponsive.css';
+import '@components/Settings/styles/BillingSettings.css';
 
 // Indian states for dropdown
 const indianStates = [

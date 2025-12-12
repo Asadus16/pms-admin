@@ -255,7 +255,7 @@ function GeneralSettings({ formState, onInputChange }) {
                     checked={formState.fulfillmentOption === 'auto-fulfill'}
                     onChange={(e) => onInputChange('fulfillmentOption', e.target.value)}
                   />
-                  <span className="order-processing-radio-label">Automatically fulfill the order's line items</span>
+                  <span className="order-processing-radio-label">Automatically fulfill the order&apos;s line items</span>
                 </label>
                 <label className="order-processing-radio-option">
                   <input
@@ -277,7 +277,7 @@ function GeneralSettings({ formState, onInputChange }) {
                     checked={formState.fulfillmentOption === 'no-auto'}
                     onChange={(e) => onInputChange('fulfillmentOption', e.target.value)}
                   />
-                  <span className="order-processing-radio-label">Don't fulfill any of the order's line items automatically</span>
+                  <span className="order-processing-radio-label">Don&apos;t fulfill any of the order&apos;s line items automatically</span>
                 </label>
               </div>
             </div>

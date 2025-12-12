@@ -13,7 +13,7 @@ import {
   Divider,
 } from '@shopify/polaris';
 import { ArrowLeftIcon, LockIcon, DiscountIcon, AppsIcon, ChevronDownIcon, AlertTriangleIcon } from '@shopify/polaris-icons';
-import '../../pages/Settings/components/styles/TransactionsSettings.css';
+import '@components/Settings/styles/TransactionsSettings.css';
 
 function SendInvoiceModal({ isOpen, onClose, customer }) {
   const [toEmail, setToEmail] = useState(customer?.email || '');
@@ -23,7 +23,7 @@ function SendInvoiceModal({ isOpen, onClose, customer }) {
   const [ccBccExpanded, setCcBccExpanded] = useState(false);
   const [ccEmails, setCcEmails] = useState('');
   const [bccEmails, setBccEmails] = useState('');
-  
+
   // Toggle states
   const [lockProductPrices, setLockProductPrices] = useState(false);
   const [allowDiscountCodes, setAllowDiscountCodes] = useState(false);
@@ -85,7 +85,7 @@ function SendInvoiceModal({ isOpen, onClose, customer }) {
                   <span style={{ color: '#5e4206' }}>Before the customer can complete checkout, these changes need to be made:</span>
                 </Text>
                 <ul style={{ margin: '4px 0 0 16px', padding: 0, color: '#5e4206' }}>
-                  <li style={{ fontSize: '13px' }}>There are no shipping and delivery options for the customer's address.</li>
+                  <li style={{ fontSize: '13px' }}>There are no shipping and delivery options for the customer&apos;s address.</li>
                 </ul>
               </div>
             </InlineStack>
@@ -235,7 +235,7 @@ function SendInvoiceModal({ isOpen, onClose, customer }) {
                     Product prices
                   </Text>
                   <div style={{ fontSize: '13px', color: 'rgb(97, 97, 97)', marginTop: '2px' }}>
-                    Lock all product prices so they don't change
+                    Lock all product prices so they don&apos;t change
                   </div>
                 </div>
               </div>

@@ -594,7 +594,7 @@ function AddCustomer({ onClose }) {
                       />
                     ) : (
                       <Text variant="bodyMd" as="p" tone="subdued">
-                        Notes are private and won't be shared with the customer.
+                        Notes are private and won&apos;t be shared with the customer.
                       </Text>
                     )}
                   </BlockStack>

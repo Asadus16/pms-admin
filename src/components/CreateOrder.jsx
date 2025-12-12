@@ -422,6 +422,7 @@ function CreateOrder({ onClose }) {
     setSelectedCustomer(newCustomer);
     setCustomerSearchValue(fullName || newCustomerEmail);
     handleCloseAddCustomerModal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     newCustomerFirstName,
     newCustomerLastName,
@@ -1352,7 +1353,7 @@ function CreateOrder({ onClose }) {
 
                             <Text variant="bodyMd" as="p">
                               <Text as="span" fontWeight="semibold">Payment due when invoice is sent.</Text>{' '}
-                              You'll be able to collect the balance from the booking page.
+                              You&apos;ll be able to collect the balance from the booking page.
                             </Text>
 
                             {showPaymentReminderBanner && (

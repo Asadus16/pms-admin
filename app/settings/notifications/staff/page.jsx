@@ -13,13 +13,13 @@ import {
   MenuHorizontalIcon,
   ArrowLeftIcon,
 } from '@shopify/polaris-icons';
-import ShopifyHeader from '../../../../src/components/Shopifyheader';
-import SettingsNavigation from '../../../../src/pages/Settings/components/SettingsNavigation';
-import '../../../../src/pages/Settings/settings.css';
-import '../../../../src/pages/Settings/components/styles/SettingsLayout.css';
-import '../../../../src/pages/Settings/components/styles/SettingsResponsive.css';
-import '../../../../src/pages/Settings/components/styles/TransactionsSettings.css';
-import '../../../../src/pages/Settings/components/styles/StaffNotifications.css';
+import ShopifyHeader from '@components/Shopifyheader';
+import SettingsNavigation from '@components/Settings/SettingsNavigation';
+import '@pages/Settings/settings.css';
+import '@components/Settings/styles/SettingsLayout.css';
+import '@components/Settings/styles/SettingsResponsive.css';
+import '@components/Settings/styles/TransactionsSettings.css';
+import '@components/Settings/styles/StaffNotifications.css';
 
 // Notification Item Component
 const NotificationItem = ({ title, description, hasToggle, toggleValue, onToggleChange, hasEdit }) => {

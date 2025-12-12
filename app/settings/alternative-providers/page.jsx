@@ -12,11 +12,11 @@ import {
   SettingsIcon,
   ArrowLeftIcon,
 } from '@shopify/polaris-icons';
-import ShopifyHeader from '../../../src/components/Shopifyheader';
-import SettingsNavigation from '../../../src/pages/Settings/components/SettingsNavigation';
-import '../../../src/pages/Settings/components/styles/SettingsLayout.css';
-import '../../../src/pages/Settings/components/styles/SettingsResponsive.css';
-import '../../../src/pages/Settings/components/styles/TransactionsSettings.css';
+import ShopifyHeader from '@components/Shopifyheader';
+import SettingsNavigation from '@components/Settings/SettingsNavigation';
+import '@components/Settings/styles/SettingsLayout.css';
+import '@components/Settings/styles/SettingsResponsive.css';
+import '@components/Settings/styles/TransactionsSettings.css';
 
 // All payment methods with toggle
 const allPaymentMethods = [
@@ -204,7 +204,7 @@ function AlternativeProvidersPage() {
                       </div>
                       <div className="transactions-capture-content">
                         <div className="transactions-capture-title">Payment capture</div>
-                        <div className="transactions-capture-description">This can't be changed in your payment capture settings.</div>
+                        <div className="transactions-capture-description">This can&apos;t be changed in your payment capture settings.</div>
                       </div>
                       <span className="transactions-status-badge automatic">Automatic</span>
                     </div>

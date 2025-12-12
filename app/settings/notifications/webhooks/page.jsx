@@ -9,12 +9,12 @@ import {
   PlusCircleIcon,
   ArrowLeftIcon,
 } from '@shopify/polaris-icons';
-import ShopifyHeader from '../../../../src/components/Shopifyheader';
-import SettingsNavigation from '../../../../src/pages/Settings/components/SettingsNavigation';
-import '../../../../src/pages/Settings/settings.css';
-import '../../../../src/pages/Settings/components/styles/SettingsLayout.css';
-import '../../../../src/pages/Settings/components/styles/SettingsResponsive.css';
-import '../../../../src/pages/Settings/components/styles/WebhooksSettings.css';
+import ShopifyHeader from '@components/Shopifyheader';
+import SettingsNavigation from '@components/Settings/SettingsNavigation';
+import '@pages/Settings/settings.css';
+import '@components/Settings/styles/SettingsLayout.css';
+import '@components/Settings/styles/SettingsResponsive.css';
+import '@components/Settings/styles/WebhooksSettings.css';
 
 function WebhooksPage() {
   const router = useRouter();

@@ -521,6 +521,7 @@ const STORAGE_KEYS = {
 
 // Helper functions for localStorage
 const getStoredColumns = () => {
+  if (typeof window === 'undefined') return null;
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.VISIBLE_COLUMNS);
     if (stored) {
@@ -538,6 +539,9 @@ const getStoredColumns = () => {
 };
 
 const getStoredSort = () => {
+  if (typeof window === 'undefined') {
+    return { sortBy: 'lastUpdate', sortDirection: 'desc' };
+  }
   try {
     const sortBy = localStorage.getItem(STORAGE_KEYS.SORT_BY);
     const sortDir = localStorage.getItem(STORAGE_KEYS.SORT_DIRECTION);

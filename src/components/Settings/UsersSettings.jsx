@@ -140,7 +140,7 @@ function UsersSettings({ showExportModal, setShowExportModal, showUpgradeModal, 
               </button>
             </div>
             <div className="settings-modal-content">
-              <p>Export a CSV file of all users including their email address, name, roles, and assigned stores. You'll receive an email to download the file when it's ready. To export permissions data, go to Roles.</p>
+              <p>Export a CSV file of all users including their email address, name, roles, and assigned stores. You&apos;ll receive an email to download the file when it&apos;s ready. To export permissions data, go to Roles.</p>
             </div>
             <div className="settings-modal-footer">
               <Button onClick={() => setShowExportModal(false)}>Cancel</Button>

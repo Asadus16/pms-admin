@@ -81,7 +81,7 @@ function NotificationsSettings() {
 
           <div className="notifications-info-box">
             <p className="notifications-info-text">
-              Because your email domain hasn't been authenticated, recipients will see your email as{' '}
+              Because your email domain hasn&apos;t been authenticated, recipients will see your email as{' '}
               <strong>store+65242693676@shopifyemail.com</strong>. For better brand recognition,{' '}
               <a href="#" className="notifications-link">authenticate your domain</a> and ensure your domain has a{' '}
               <a href="#" className="notifications-link">DMARC record</a>.

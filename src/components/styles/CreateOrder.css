@@ -75,7 +75,7 @@
   gap: 16px;
   padding: 16px;
   border-bottom: 1px solid var(--p-color-border);
-  align-items: start;
+  align-items: flex-start;
 }
 
 .product-row:last-child {
@@ -85,7 +85,7 @@
 .product-info {
   display: flex;
   gap: 12px;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .product-image {
@@ -111,7 +111,7 @@
 
 .product-quantity {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   padding-top: 12px;
 }
 
@@ -122,7 +122,7 @@
 
 .product-total {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: flex-end;
   padding-top: 12px;
 }

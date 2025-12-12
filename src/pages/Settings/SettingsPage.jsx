@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Icon, AppProvider, Button } from '@shopify/polaris';
 import {
@@ -12,21 +12,21 @@ import {
   NotificationIcon,
   ArrowLeftIcon,
 } from '@shopify/polaris-icons';
-import ShopifyHeader from '../../components/Shopifyheader';
-import SettingsNavigation, { settingsNavItems } from './components/SettingsNavigation';
-import GeneralSettings from './components/GeneralSettings';
-import PlanSettings from './components/PlanSettings';
-import BillingSettings from './components/BillingSettings';
-import UsersSettings from './components/UsersSettings';
-import RolesSettings from './components/RolesSettings';
-import SecuritySettings from './components/SecuritySettings';
-import TransactionsSettings from './components/TransactionsSettings';
-import AppsSettings from './components/AppsSettings';
-import NotificationsSettings from './components/NotificationsSettings';
-import './components/styles/SettingsLayout.css';
-import './components/styles/SettingsResponsive.css';
+import ShopifyHeader from '@components/Shopifyheader';
+import SettingsNavigation, { settingsNavItems } from '@components/Settings/SettingsNavigation';
+import GeneralSettings from '@components/Settings/GeneralSettings';
+import PlanSettings from '@components/Settings/PlanSettings';
+import BillingSettings from '@components/Settings/BillingSettings';
+import UsersSettings from '@components/Settings/UsersSettings';
+import RolesSettings from '@components/Settings/RolesSettings';
+import SecuritySettings from '@components/Settings/SecuritySettings';
+import TransactionsSettings from '@components/Settings/TransactionsSettings';
+import AppsSettings from '@components/Settings/AppsSettings';
+import NotificationsSettings from '@components/Settings/NotificationsSettings';
+import '@components/Settings/styles/SettingsLayout.css';
+import '@components/Settings/styles/SettingsResponsive.css';
 
-function SettingsPage() {
+function SettingsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
@@ -272,6 +272,18 @@ function SettingsPage() {
         </div>
       </div>
     </AppProvider>
+  );
+}
+
+function SettingsPage() {
+  return (
+    <Suspense fallback={
+      <AppProvider i18n={{}}>
+        <div className="settings-page" style={{ background: '#f6f6f7', minHeight: '100vh' }} />
+      </AppProvider>
+    }>
+      <SettingsPageContent />
+    </Suspense>
   );
 }
 

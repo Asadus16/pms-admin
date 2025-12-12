@@ -11,11 +11,11 @@ import {
   FilterIcon,
   ArrowLeftIcon,
 } from '@shopify/polaris-icons';
-import ShopifyHeader from '../../../src/components/Shopifyheader';
-import SettingsNavigation from '../../../src/pages/Settings/components/SettingsNavigation';
-import '../../../src/pages/Settings/components/styles/SettingsLayout.css';
-import '../../../src/pages/Settings/components/styles/SettingsResponsive.css';
-import '../../../src/pages/Settings/components/styles/TransactionsSettings.css';
+import ShopifyHeader from '@components/Shopifyheader';
+import SettingsNavigation from '@components/Settings/SettingsNavigation';
+import '@components/Settings/styles/SettingsLayout.css';
+import '@components/Settings/styles/SettingsResponsive.css';
+import '@components/Settings/styles/TransactionsSettings.css';
 
 // Third-party payment providers data (using available SVG icons)
 const thirdPartyProviders = [
