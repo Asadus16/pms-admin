@@ -1,0 +1,348 @@
+/**
+ * Settings Navigation Styles
+ * Sidebar, navigation items, search, store info, and user info styles
+ */
+
+/* ========================================
+   Settings Sidebar
+   ======================================== */
+
+.settings-sidebar {
+  width: 280px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  overflow: hidden;
+  padding: 0;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  min-height: 0;
+  height: calc(100vh - 120px);
+  max-height: calc(100vh - 120px);
+}
+
+/* Store Info Section */
+.settings-store-info {
+  padding: 16px;
+  margin: 0;
+  flex-shrink: 0;
+  background: #f3f3f3;
+  border-bottom: 1px solid var(--color-border-light);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.settings-store-info-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.settings-store-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: #36a355;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+}
+
+.settings-store-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-store-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: 1.3;
+}
+
+.settings-store-url {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Search Box */
+.settings-search {
+  padding: 12px 16px;
+  flex-shrink: 0;
+}
+
+.settings-search-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-left: 36px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.settings-search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.settings-search-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.settings-search-wrapper {
+  position: relative;
+}
+
+.settings-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-tertiary);
+  pointer-events: none;
+}
+
+/* Navigation Items */
+.settings-nav {
+  padding: 0 0 12px 0;
+  flex: 1 1 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+
+.settings-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  margin: 1px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  color: rgb(48, 48, 48);
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  width: calc(100% - 16px);
+  text-align: left;
+}
+
+.settings-nav-item-label {
+  flex: 1;
+}
+
+/* Arrow hidden by default on desktop */
+.settings-nav-item-arrow {
+  display: none;
+  width: 20px;
+  height: 20px;
+  color: rgb(138, 138, 138);
+  flex-shrink: 0;
+}
+
+.settings-nav-item-arrow .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.settings-nav-item:hover {
+  background: var(--color-bg-hover);
+}
+
+.settings-nav-item.active {
+  background: #f3f3f3;
+  font-weight: 500;
+}
+
+.settings-nav-item-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(48, 48, 48);
+  flex-shrink: 0;
+}
+
+/* When not active: bold icons (regular outline icons appear bolder) */
+.settings-nav-item:not(.active) .settings-nav-item-icon {
+  opacity: 1;
+}
+
+/* When active: light icons (filled icons appear lighter) */
+.settings-nav-item.active .settings-nav-item-icon {
+  opacity: 0.7;
+  color: rgb(48, 48, 48);
+}
+
+/* User Info at Bottom */
+.settings-user-info {
+  margin-top: auto;
+  padding: 16px;
+  border-top: 1px solid var(--color-border-light);
+  flex-shrink: 0;
+}
+
+.settings-user-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.settings-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: #36a355;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.settings-user-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-user-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: 1.3;
+}
+
+.settings-user-email {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ========================================
+   Navigation Sub-items
+   ======================================== */
+
+.settings-nav-item-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-nav-sub-items {
+  display: flex;
+  flex-direction: column;
+  padding-left: 36px;
+}
+
+.settings-nav-sub-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  margin: 0 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  color: rgb(48, 48, 48);
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 20px;
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  text-align: left;
+  width: calc(100% - 16px);
+}
+
+.settings-nav-sub-item-label {
+  flex: 1;
+}
+
+.settings-nav-sub-item:hover {
+  background: var(--color-bg-hover);
+}
+
+.settings-nav-sub-item.active {
+  background: #f3f3f3;
+  font-weight: 400;
+}
+
+/* ========================================
+   Mobile Styles
+   ======================================== */
+
+@media (max-width: 768px) {
+  .settings-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    border: none;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  .settings-store-info {
+    border-radius: 0;
+  }
+
+  .settings-nav-item {
+    padding: 14px 20px;
+    margin: 0;
+    border-radius: 0;
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .settings-nav-item-arrow {
+    display: flex;
+  }
+
+  .settings-nav-sub-items {
+    padding-left: 0;
+  }
+
+  .settings-nav-sub-item {
+    padding: 12px 20px 12px 52px;
+    margin: 0;
+    border-radius: 0;
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .settings-search {
+    padding: 12px 20px;
+  }
+
+  .settings-user-info {
+    padding: 16px 20px;
+  }
+}

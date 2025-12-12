@@ -1,0 +1,1035 @@
+/**
+ * Billing Settings Styles
+ * Billing info, upcoming bills, past bills, and billing profile panel styles
+ */
+
+/* ========================================
+   Billing Section
+   ======================================== */
+
+.billing-info-banner {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-light);
+}
+
+.billing-info-banner-header {
+  background: #91d0fe;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.billing-info-banner-icon {
+  flex-shrink: 0;
+}
+
+.billing-info-banner-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-info-banner-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-info-banner-content {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  background: white;
+  padding: 12px 16px;
+}
+
+.billing-info-banner-content a {
+  color: rgb(0, 91, 211);
+  text-decoration: none;
+}
+
+.billing-info-banner-content a:hover {
+  text-decoration: underline;
+}
+
+.billing-upcoming-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  padding-bottom: 8px;
+}
+
+.billing-upcoming-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-view-link {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(0, 91, 211);
+  text-decoration: none;
+}
+
+.billing-view-link:hover {
+  text-decoration: underline;
+}
+
+.billing-upcoming-content {
+  padding: 16px;
+}
+
+.billing-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.billing-amount-value {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 32px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-amount-currency {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.billing-next-info {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin-bottom: 16px;
+}
+
+.billing-payment-method {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+}
+
+.billing-card-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.billing-card-icon {
+  width: 40px;
+  height: 26px;
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mastercard-icon {
+  width: 32px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mastercard-circles {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 26px;
+}
+
+.mc-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.mc-red {
+  background: #eb001b;
+  position: absolute;
+  left: 0;
+}
+
+.mc-orange {
+  background: #f79e1b;
+  position: absolute;
+  left: 10px;
+}
+
+.billing-card-number {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-edit-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  transition: background var(--transition-fast);
+}
+
+.billing-edit-btn:hover {
+  background: var(--color-bg-hover);
+}
+
+.billing-plan-link {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  padding: 12px 16px;
+  background: #f1f1f1;
+  border-radius: 0 0 12px 12px;
+  margin: 0 -1px -1px -1px;
+}
+
+.billing-plan-link a {
+  color: rgb(0, 91, 211);
+  text-decoration: none;
+}
+
+.billing-plan-link a:hover {
+  text-decoration: underline;
+}
+
+.billing-past-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  padding-bottom: 12px;
+}
+
+.billing-menu-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  transition: background var(--transition-fast);
+}
+
+.billing-menu-btn:hover {
+  background: var(--color-bg-hover);
+}
+
+.billing-table-container {
+  padding: 0 16px 16px 16px;
+}
+
+.billing-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0;
+  border: 1px solid var(--color-border-light);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  padding: 8px 12px;
+}
+
+.billing-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: transparent;
+  border-radius: 6px;
+  padding: 0;
+}
+
+.billing-tab {
+  padding: 6px 12px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.billing-tab:hover {
+  color: rgb(48, 48, 48);
+}
+
+.billing-tab.active {
+  background: #e3e3e3;
+  color: rgb(48, 48, 48);
+}
+
+.billing-table-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.billing-action-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border-light);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  transition: all var(--transition-fast);
+}
+
+.billing-action-btn:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border);
+}
+
+.billing-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--color-border-light);
+  border-top: none;
+}
+
+.billing-table th {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 16px;
+  color: rgb(97, 97, 97);
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.billing-th-checkbox {
+  width: 40px;
+  padding-left: 16px !important;
+}
+
+.billing-th-right {
+  text-align: right !important;
+}
+
+.billing-table td {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.billing-table tr:last-child td {
+  border-bottom: none;
+}
+
+.billing-td-checkbox {
+  width: 40px;
+  padding-left: 16px !important;
+}
+
+.billing-td-total {
+  text-align: right;
+}
+
+.billing-checkbox {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
+.billing-status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 16px;
+}
+
+.billing-status-badge.paid {
+  background: #affdbf;
+  color: rgb(0, 102, 51);
+}
+
+.billing-status-badge.unpaid {
+  background: rgb(254, 226, 226);
+  color: rgb(153, 27, 27);
+}
+
+.billing-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 0 0 0;
+}
+
+.billing-pagination-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border-light);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: rgb(97, 97, 97);
+  transition: all var(--transition-fast);
+}
+
+.billing-pagination-btn:hover:not(:disabled) {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border);
+}
+
+.billing-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   Billing Profile Panel
+   ======================================== */
+
+.billing-profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10001;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.billing-profile-panel {
+  width: 560px;
+  max-width: 100%;
+  height: 100%;
+  background: #f6f6f7;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.2s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.billing-profile-header {
+  padding: 24px;
+  background: white;
+  border-bottom: 1px solid var(--color-border-light);
+  position: relative;
+}
+
+.billing-profile-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.billing-profile-breadcrumb .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.billing-profile-breadcrumb-separator {
+  color: rgb(138, 138, 138);
+  font-size: 14px;
+}
+
+.billing-profile-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-profile-subtitle {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0;
+}
+
+.billing-profile-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  transition: background var(--transition-fast);
+}
+
+.billing-profile-close:hover {
+  background: var(--color-bg-hover);
+}
+
+.billing-profile-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.billing-profile-card-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  padding: 0 16px 12px 16px;
+}
+
+.billing-profile-bordered-content {
+  margin: 0 16px 16px 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.billing-profile-payment-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.billing-profile-card-text {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  flex: 1;
+}
+
+.billing-profile-primary-badge {
+  padding: 2px 10px;
+  background: #e3e5e7;
+  border-radius: 10px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 16px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-profile-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0;
+}
+
+.billing-profile-add-method {
+  padding: 12px 16px;
+  width: 100%;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.billing-profile-add-method:hover {
+  background: var(--color-bg-hover);
+}
+
+.billing-profile-add-method-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-profile-add-method-content .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.billing-profile-title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.billing-profile-info-icon {
+  width: 16px;
+  height: 16px;
+  color: rgb(138, 138, 138);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+}
+
+.billing-profile-info-icon .Polaris-Icon {
+  width: 16px;
+  height: 16px;
+}
+
+.billing-profile-gstin-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.billing-profile-gstin-icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.billing-profile-gstin-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.billing-profile-gstin-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-profile-gstin-value {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.billing-profile-address-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.billing-profile-address-icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.billing-profile-address-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.billing-profile-address-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-profile-address-value {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+/* Billing Profile Page Header */
+.billing-profile-page-header {
+  margin-bottom: 24px;
+  padding-top: 4px;
+}
+
+.billing-profile-page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.billing-profile-page-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  flex-shrink: 0;
+}
+
+.billing-profile-page-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.billing-profile-breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.billing-profile-breadcrumb-nav .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.billing-profile-breadcrumb-separator {
+  color: rgb(138, 138, 138);
+  font-size: 14px;
+}
+
+.billing-profile-breadcrumb-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+.billing-profile-page-subtitle {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0;
+  margin-top: 4px;
+}
+
+/* ========================================
+   Billing Profile Card Header
+   ======================================== */
+
+.billing-profile-card-header {
+  padding: 16px 16px 0 16px;
+}
+
+.billing-profile-card-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+/* ========================================
+   Billing Modal Styles
+   ======================================== */
+
+.billing-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.billing-modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.billing-modal.billing-modal-small {
+  max-width: 480px;
+}
+
+.billing-modal.billing-modal-upi {
+  max-width: 560px;
+}
+
+.billing-modal.billing-modal-wide {
+  max-width: 600px;
+}
+
+.billing-modal-header-upi {
+  background: #f3f3f3;
+  padding: 12px 24px !important;
+  border-radius: 16px 16px 0 0;
+}
+
+.billing-modal-header-gray {
+  background: #f3f3f3;
+  padding: 12px 24px !important;
+  border-radius: 16px 16px 0 0;
+}
+
+.billing-modal-title-upi {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.billing-modal-title-small {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+/* Phone input with country code */
+.billing-phone-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.billing-phone-input-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+.billing-country-select {
+  width: 70px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.billing-country-flag {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 15px;
+}
+
+.billing-country-flag svg {
+  display: block;
+  width: 20px;
+  height: 15px;
+}
+
+.billing-country-select .Polaris-Select__Content {
+  padding-left: 40px !important;
+}
+
+.billing-country-select .Polaris-Select__SelectedOption {
+  visibility: hidden;
+  width: 0;
+}
+
+.billing-phone-field {
+  flex: 1;
+}
+
+.billing-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.billing-modal-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+.billing-modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  transition: background var(--transition-fast);
+}
+
+.billing-modal-close:hover {
+  background: var(--color-bg-hover);
+}
+
+.billing-modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.billing-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--color-border-light);
+}
+
+/* ========================================
+   Billing Form Styles
+   ======================================== */
+
+.billing-form-group {
+  margin-bottom: 16px;
+}
+
+.billing-form-group:last-child {
+  margin-bottom: 0;
+}
+
+.billing-form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.billing-form-half {
+  flex: 1;
+}
+
+.billing-form-section-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 8px 0 16px 0;
+}
+
+.card-icon-suffix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(138, 138, 138);
+}
+
+.billing-info-suffix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(138, 138, 138);
+}
+
+.billing-info-suffix .Polaris-Icon {
+  width: 16px;
+  height: 16px;
+}
+
+.address-search-prefix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(138, 138, 138);
+}
+
+.address-search-prefix .Polaris-Icon {
+  width: 16px;
+  height: 16px;
+}

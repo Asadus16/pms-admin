@@ -1,0 +1,257 @@
+/**
+ * Notifications Settings Styles
+ */
+
+/* ========================================
+   Card Content
+   ======================================== */
+
+.notifications-card-content {
+  padding: 20px;
+}
+
+.notifications-section-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 4px 0;
+}
+
+.notifications-section-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0 0 16px 0;
+}
+
+/* ========================================
+   Email Input Row
+   ======================================== */
+
+.notifications-email-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.notifications-email-input {
+  flex: 1;
+}
+
+.notifications-email-value {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.notifications-email-badge {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: rgb(97, 97, 97);
+  padding: 4px 8px;
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.notifications-verify-text {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 16px 0;
+}
+
+.notifications-link {
+  color: rgb(48, 48, 48);
+  text-decoration: underline;
+}
+
+.notifications-link:hover {
+  color: rgb(0, 0, 0);
+}
+
+/* ========================================
+   Warning Banner
+   ======================================== */
+
+.notifications-warning-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #fff1e3;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.notifications-warning-icon {
+  flex-shrink: 0;
+  color: #b98900;
+}
+
+.notifications-warning-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.notifications-warning-text {
+  flex: 1;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+.notifications-warning-close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgb(97, 97, 97);
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.notifications-warning-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgb(48, 48, 48);
+}
+
+.notifications-warning-close .Polaris-Icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ========================================
+   Info Box
+   ======================================== */
+
+.notifications-info-box {
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.notifications-info-text {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0;
+}
+
+.notifications-info-text strong {
+  font-weight: 600;
+  color: rgb(48, 48, 48);
+}
+
+/* ========================================
+   Notification Rows
+   ======================================== */
+
+.notifications-card-inner {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notifications-list {
+  padding: 0;
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.notifications-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.notifications-row:hover {
+  background: var(--color-bg-hover);
+}
+
+.notifications-row-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  flex-shrink: 0;
+}
+
+.notifications-row-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.notifications-row-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.notifications-row-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.notifications-row-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.notifications-row-arrow {
+  flex-shrink: 0;
+  color: rgb(138, 138, 138);
+}
+
+.notifications-row-arrow .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.notifications-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 16px;
+}

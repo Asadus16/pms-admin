@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Text, Button, Icon } from '@shopify/polaris';
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon, ClockIcon } from '@shopify/polaris-icons';

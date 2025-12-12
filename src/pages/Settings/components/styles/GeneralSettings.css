@@ -1,0 +1,705 @@
+/**
+ * General Settings Styles
+ * Store details, store defaults, order ID, order processing, store assets, and resources styles
+ */
+
+/* ========================================
+   Store Details Section
+   ======================================== */
+
+.store-details-bordered-content {
+  margin: 16px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.store-details-item-no-border {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  position: relative;
+}
+
+.store-details-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 12px;
+}
+
+.store-details-edit-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+  margin-left: auto;
+  flex-shrink: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.store-details-item-no-border:hover .store-details-edit-btn {
+  opacity: 1;
+  visibility: visible;
+}
+
+.store-details-edit-btn:hover {
+  background: var(--color-bg-hover);
+}
+
+.store-details-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.store-details-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.store-details-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+
+.store-details-value {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.store-details-value-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.store-details-value-inline .dot {
+  color: var(--color-text-tertiary);
+}
+
+/* ========================================
+   Store Defaults Section
+   ======================================== */
+
+.store-defaults-currency-section {
+  margin: 0 16px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.store-defaults-no-border-section {
+  margin: 0;
+  margin-bottom: 16px;
+}
+
+.store-defaults-bordered-content {
+  margin: 16px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.store-defaults-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 12px;
+}
+
+.store-defaults-row {
+  padding: 8px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.store-defaults-row-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.store-defaults-row-content-full {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.store-defaults-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.store-defaults-row-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin-bottom: 4px;
+}
+
+.store-defaults-row-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.store-defaults-row-footer .store-defaults-row-description {
+  padding-left: 16px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.store-defaults-row-description a {
+  color: rgb(0, 91, 211);
+  text-decoration: none;
+}
+
+.store-defaults-row-description a:hover {
+  text-decoration: underline;
+}
+
+.store-defaults-row-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.currency-badge {
+  background: rgb(241, 241, 241);
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 450 !important;
+  line-height: 20px !important;
+  color: rgb(48, 48, 48) !important;
+  border: none;
+}
+
+.currency-menu-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(74, 74, 74);
+  transition: background var(--transition-fast);
+}
+
+.currency-menu-btn:hover {
+  background: var(--color-bg-hover);
+}
+
+.store-defaults-row-grid {
+  padding: 8px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.store-defaults-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.store-defaults-field-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.store-defaults-select-wrapper {
+  position: relative;
+  display: inline-block;
+  min-width: 200px;
+}
+
+.store-defaults-select-wrapper-full {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.store-defaults-select-input {
+  width: 100%;
+  padding: 6px 32px 6px 12px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color var(--transition-fast);
+}
+
+.store-defaults-select-input:hover {
+  border-color: var(--color-border);
+}
+
+.store-defaults-select-input:focus {
+  outline: none;
+  border-color: rgb(0, 91, 211);
+  box-shadow: 0 0 0 1px rgb(0, 91, 211);
+}
+
+.store-defaults-select-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  pointer-events: none;
+  color: rgb(74, 74, 74);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.store-defaults-row-footer {
+  padding: 8px 16px;
+  margin: 0 -16px;
+  margin-bottom: -16px;
+  background: #f7f7f7;
+}
+
+/* ========================================
+   Order ID Section
+   ======================================== */
+
+.order-id-content {
+  padding: 16px;
+  padding-top: 0;
+}
+
+.order-id-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin-bottom: 12px;
+}
+
+.order-id-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.order-id-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-id-field-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.order-id-input {
+  width: 100%;
+  padding: 6px 12px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.order-id-input:hover {
+  border-color: var(--color-border);
+}
+
+.order-id-input:focus {
+  border-color: rgb(0, 91, 211);
+  box-shadow: 0 0 0 1px rgb(0, 91, 211);
+}
+
+.order-id-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.order-id-preview {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+/* ========================================
+   Order Processing Section
+   ======================================== */
+
+.order-processing-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.order-processing-info-icon {
+  width: 18px;
+  height: 18px;
+  color: rgb(138, 138, 138);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+}
+
+.order-processing-content {
+  padding: 16px;
+  padding-top: 8px;
+}
+
+.order-processing-section {
+  margin-bottom: 20px;
+}
+
+.order-processing-section:last-child {
+  margin-bottom: 0;
+}
+
+.order-processing-section-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin-bottom: 12px;
+}
+
+.order-processing-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 4px;
+}
+
+.order-processing-radio-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.order-processing-radio-input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 2px solid rgb(138, 138, 138);
+  border-radius: 50%;
+  background: white;
+  position: relative;
+}
+
+.order-processing-radio-input:checked {
+  border-color: rgb(48, 48, 48);
+}
+
+.order-processing-radio-input:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: rgb(48, 48, 48);
+  border-radius: 50%;
+}
+
+.order-processing-radio-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.order-processing-checkbox-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  padding-left: 4px;
+}
+
+.order-processing-checkbox-input {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  margin: 0;
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 2px solid rgb(138, 138, 138);
+  border-radius: 4px;
+  background: white;
+  position: relative;
+}
+
+.order-processing-checkbox-input:checked {
+  background: rgb(48, 48, 48);
+  border-color: rgb(48, 48, 48);
+}
+
+.order-processing-checkbox-input:checked::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.order-processing-checkbox-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.order-processing-checkbox-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.order-processing-checkbox-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+/* ========================================
+   Store Assets Section
+   ======================================== */
+
+.store-assets-bordered-content {
+  margin: 12px 16px 16px 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.store-assets-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.store-assets-item:hover {
+  background: var(--color-bg-hover);
+}
+
+.store-assets-icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+  flex-shrink: 0;
+}
+
+.store-assets-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.store-assets-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin-bottom: 2px;
+}
+
+.store-assets-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.store-assets-arrow {
+  width: 20px;
+  height: 20px;
+  color: rgb(138, 138, 138);
+  flex-shrink: 0;
+}
+
+.store-assets-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 12px;
+}
+
+/* ========================================
+   Resources Section
+   ======================================== */
+
+.resources-bordered-content {
+  margin: 12px 16px 16px 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.resources-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.resources-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resources-icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+  flex-shrink: 0;
+}
+
+.resources-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.resources-btn {
+  padding: 6px 12px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.resources-btn:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border);
+}
+
+.resources-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 12px;
+}
+
+.resources-nav-bordered-content {
+  margin: 12px 16px 16px 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.resources-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.resources-nav-item:hover {
+  background: var(--color-bg-hover);
+}
+
+.resources-nav-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resources-arrow {
+  width: 20px;
+  height: 20px;
+  color: rgb(138, 138, 138);
+  flex-shrink: 0;
+}

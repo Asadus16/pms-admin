@@ -1,0 +1,961 @@
+/**
+ * Transactions Settings Styles
+ * Payment providers, payment methods, customizations, and Razorpay detail styles
+ */
+
+/* ========================================
+   Card Layout
+   ======================================== */
+
+.transactions-card-header {
+  padding: 20px;
+  padding-bottom: 0;
+}
+
+.transactions-card-header-row {
+  padding: 20px;
+  padding-bottom: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.transactions-card-content {
+  padding: 0 20px 20px 20px;
+}
+
+.transactions-section-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+.transactions-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0 0 16px 0;
+}
+
+.transactions-description a {
+  color: rgb(0, 91, 211);
+  text-decoration: none;
+}
+
+.transactions-description a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   Payment Providers
+   ======================================== */
+
+.transactions-provider-bordered {
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.transactions-providers-container {
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.transactions-provider-divider {
+  height: 1px;
+  background: var(--color-border-light);
+}
+
+.transactions-provider-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  gap: 16px;
+}
+
+.transactions-provider-row.clickable {
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.transactions-provider-row.clickable:hover {
+  background: var(--color-bg-hover);
+}
+
+.transactions-provider-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.transactions-provider-name {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin-bottom: 4px;
+}
+
+.transactions-provider-fee {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin-bottom: 8px;
+}
+
+.transactions-provider-icon.paypal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 26px;
+  background: #003087;
+  border-radius: 4px;
+}
+
+.paypal-icon {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.transactions-provider-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.transactions-payment-icon {
+  width: 40px;
+  height: 26px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  overflow: hidden;
+}
+
+.transactions-payment-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2px;
+}
+
+.transactions-payment-icon.more {
+  background: #d5ebfe;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgb(48, 48, 48);
+  border: none;
+  border-radius: 12px;
+}
+
+.transactions-provider-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ========================================
+   Status Badge
+   ======================================== */
+
+.transactions-status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.transactions-status-badge.active {
+  background: #affdbf;
+  color: rgb(0, 102, 51);
+}
+
+.transactions-status-badge.automatic {
+  background: #d5ebfe;
+  color: rgb(48, 48, 48);
+}
+
+/* ========================================
+   Add Payment Method
+   ======================================== */
+
+.transactions-add-method {
+  padding: 12px 16px;
+  width: 100%;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.transactions-add-method:hover {
+  background: var(--color-bg-hover);
+}
+
+.transactions-add-method-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.transactions-add-method-content .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+/* ========================================
+   Radio Group
+   ======================================== */
+
+.transactions-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.transactions-radio-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.transactions-radio-input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 2px solid rgb(138, 138, 138);
+  border-radius: 50%;
+  background: white;
+  position: relative;
+}
+
+.transactions-radio-input:checked {
+  border-color: rgb(48, 48, 48);
+}
+
+.transactions-radio-input:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: rgb(48, 48, 48);
+  border-radius: 50%;
+}
+
+.transactions-radio-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.transactions-radio-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.transactions-radio-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+/* ========================================
+   Manual Payment Methods
+   ======================================== */
+
+.transactions-manual-bordered {
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.transactions-manual-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
+
+.transactions-manual-name {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.transactions-manual-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0;
+}
+
+/* ========================================
+   Payment Customizations
+   ======================================== */
+
+.transactions-customizations-bordered {
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.transactions-customization-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.transactions-customization-row:hover {
+  background: var(--color-bg-hover);
+}
+
+.transactions-customization-icon {
+  width: 32px;
+  height: 32px;
+  background: #e8f4fd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.transactions-customization-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.transactions-customization-name {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.transactions-customization-app {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.transactions-customization-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transactions-customization-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 16px;
+}
+
+/* ========================================
+   Learn More
+   ======================================== */
+
+.transactions-learn-more {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.transactions-learn-more a {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  text-decoration: none;
+}
+
+.transactions-learn-more a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   Razorpay Detail View
+   ======================================== */
+
+.transactions-razorpay-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.transactions-razorpay-header {
+  margin-bottom: 8px;
+}
+
+.transactions-razorpay-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.transactions-razorpay-title-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transactions-razorpay-icon {
+  font-size: 18px;
+}
+
+.transactions-breadcrumb-separator {
+  color: rgb(138, 138, 138);
+  font-size: 16px;
+}
+
+.transactions-razorpay-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+.transactions-razorpay-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* About Section */
+.transactions-about-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.transactions-about-header:hover {
+  background: var(--color-bg-hover);
+}
+
+.transactions-about-toggle {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.transactions-about-content {
+  padding: 0 20px 20px 20px;
+}
+
+.transactions-about-content p {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 12px 0;
+}
+
+.transactions-about-content a {
+  color: rgb(0, 91, 211);
+  text-decoration: none;
+}
+
+.transactions-about-content a:hover {
+  text-decoration: underline;
+}
+
+/* Payment Capture Row (Bordered Section) */
+.transactions-capture-bordered {
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.transactions-capture-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.transactions-capture-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: rgb(97, 97, 97);
+}
+
+.transactions-capture-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.transactions-capture-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.transactions-capture-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.transactions-capture-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+/* ========================================
+   Payment Methods List (Detail View)
+   ======================================== */
+
+.transactions-methods-list {
+  padding: 0;
+}
+
+.transactions-method-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+}
+
+.transactions-method-icon {
+  width: 40px;
+  height: 26px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.transactions-method-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2px;
+}
+
+.transactions-method-name {
+  flex: 1;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.transactions-method-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 20px;
+}
+
+/* ========================================
+   Toggle Switch (Rectangular with rounded corners)
+   ======================================== */
+
+.transactions-toggle {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.transactions-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.transactions-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(200, 200, 200);
+  transition: 0.3s;
+  border-radius: 6px;
+}
+
+.transactions-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.transactions-toggle input:checked + .transactions-toggle-slider {
+  background-color: rgb(48, 48, 48);
+}
+
+.transactions-toggle input:checked + .transactions-toggle-slider:before {
+  transform: translateX(16px);
+}
+
+/* ========================================
+   Test Mode
+   ======================================== */
+
+.transactions-test-mode-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+}
+
+.transactions-test-mode-content {
+  flex: 1;
+}
+
+.transactions-test-mode-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin-bottom: 4px;
+}
+
+.transactions-test-mode-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+/* ========================================
+   Detail Actions
+   ======================================== */
+
+.transactions-detail-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 0;
+}
+
+/* Deactivate Button Wrapper - Override Polaris Button styles */
+.transactions-deactivate-btn-wrapper .Polaris-Button {
+  background-color: #c71e24 !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.transactions-deactivate-btn-wrapper .Polaris-Button:hover {
+  background-color: #a91a1f !important;
+}
+
+.transactions-deactivate-btn-wrapper .Polaris-Button .Polaris-Text--root {
+  color: white !important;
+}
+
+/* ========================================
+   More Actions Dropdown
+   ======================================== */
+
+.transactions-more-actions {
+  position: relative;
+  display: inline-block;
+}
+
+.transactions-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  overflow: hidden;
+  padding: 4px 0;
+}
+
+.transactions-dropdown-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.transactions-dropdown-item:hover {
+  background: rgb(247, 247, 247);
+}
+
+.transactions-dropdown-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.transactions-dropdown-icon .Polaris-Icon {
+  width: 16px;
+  height: 16px;
+}
+
+.transactions-dropdown-icon .Polaris-Icon svg {
+  width: 16px;
+  height: 16px;
+  fill: rgb(97, 97, 97);
+}
+
+.transactions-dropdown-text {
+  flex: 1;
+  text-align: left;
+}
+
+/* ========================================
+   Third-Party Payment Providers Page
+   ======================================== */
+
+.third-party-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.third-party-search-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+}
+
+.third-party-search-input-wrapper .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(138, 138, 138);
+}
+
+.third-party-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  outline: none;
+}
+
+.third-party-search-input::placeholder {
+  color: rgb(138, 138, 138);
+}
+
+.third-party-filter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.third-party-filter-btn:hover {
+  background: var(--color-bg-hover);
+}
+
+.third-party-filter-btn .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.third-party-providers-list {
+  padding: 0;
+}
+
+.third-party-provider-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.third-party-provider-row:hover {
+  background: var(--color-bg-hover);
+}
+
+.third-party-provider-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.third-party-provider-name {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin-bottom: 2px;
+}
+
+.third-party-provider-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: rgb(97, 97, 97);
+  margin-bottom: 8px;
+}
+
+.third-party-provider-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.third-party-payment-icon {
+  width: 40px;
+  height: 26px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  overflow: hidden;
+}
+
+.third-party-payment-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2px;
+}
+
+.third-party-icon-letter {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  border-radius: 4px;
+}
+
+.third-party-provider-action {
+  display: flex;
+  align-items: center;
+  color: rgb(138, 138, 138);
+}
+
+.third-party-provider-action .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.third-party-provider-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0 20px;
+}

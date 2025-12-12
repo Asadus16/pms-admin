@@ -1,0 +1,617 @@
+/**
+ * Settings Responsive Styles
+ * Mobile-first responsive design for all settings pages
+ * Inspired by Stripe dashboard mobile layout
+ */
+
+/* ========================================
+   Mobile Header (shown only on mobile)
+   ======================================== */
+
+.settings-mobile-header {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--color-bg-primary);
+  border-bottom: 1px solid var(--color-border-light);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.settings-mobile-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-mobile-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 8px;
+  margin: -8px;
+  margin-right: 0;
+  cursor: pointer;
+  color: rgb(48, 48, 48);
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.settings-mobile-back-btn .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.settings-mobile-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+.settings-mobile-close-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(74, 74, 74);
+  transition: background var(--transition-fast);
+}
+
+.settings-mobile-close-btn:hover {
+  background: var(--color-bg-hover);
+}
+
+/* ========================================
+   Mobile Navigation List View
+   ======================================== */
+
+.settings-mobile-nav-view {
+  display: none;
+}
+
+.settings-mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--color-bg-primary);
+}
+
+.settings-mobile-nav-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-mobile-nav-header-icon {
+  width: 24px;
+  height: 24px;
+  color: rgb(97, 97, 97);
+}
+
+.settings-mobile-nav-header-icon .Polaris-Icon {
+  width: 24px;
+  height: 24px;
+}
+
+.settings-mobile-nav-header-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+/* Mobile Nav Item with arrow */
+.settings-mobile-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--color-bg-primary);
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: background var(--transition-fast);
+}
+
+.settings-mobile-nav-item:hover {
+  background: var(--color-bg-hover);
+}
+
+.settings-mobile-nav-item.active {
+  background: #f3f3f3;
+}
+
+.settings-mobile-nav-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-mobile-nav-item-icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(74, 74, 74);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-mobile-nav-item-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+.settings-mobile-nav-item-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(48, 48, 48);
+}
+
+.settings-mobile-nav-item-arrow {
+  width: 20px;
+  height: 20px;
+  color: rgb(138, 138, 138);
+}
+
+.settings-mobile-nav-item-arrow .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile Sub-items (indented, no icon) */
+.settings-mobile-nav-sub-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 12px 52px;
+  background: var(--color-bg-primary);
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: background var(--transition-fast);
+}
+
+.settings-mobile-nav-sub-item:hover {
+  background: var(--color-bg-hover);
+}
+
+.settings-mobile-nav-sub-item-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 450;
+  color: rgb(48, 48, 48);
+}
+
+/* ========================================
+   Mobile Content Page Header
+   ======================================== */
+
+.settings-mobile-page-header {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 0 0 16px 0;
+}
+
+.settings-mobile-page-icon {
+  width: 24px;
+  height: 24px;
+  color: rgb(74, 74, 74);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-mobile-page-icon .Polaris-Icon {
+  width: 24px;
+  height: 24px;
+}
+
+.settings-mobile-page-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgb(48, 48, 48);
+  margin: 0;
+}
+
+/* ========================================
+   Full Width Content (for sub-pages without sidebar)
+   ======================================== */
+
+.settings-content.settings-content-full {
+  flex: 1;
+  max-width: 100%;
+}
+
+/* ========================================
+   Tablet Breakpoint (768px - 1024px)
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .settings-body {
+    padding-left: 120px;
+    gap: 12px;
+  }
+
+  .settings-sidebar {
+    width: 260px;
+  }
+
+  .settings-content-inner {
+    max-width: 100%;
+    padding-right: 8px;
+  }
+
+  .settings-close-btn-container {
+    right: 24px;
+  }
+}
+
+/* ========================================
+   Mobile Breakpoint (< 768px)
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Hide desktop header close button */
+  .settings-close-btn-container {
+    display: none;
+  }
+
+  /* Show mobile header */
+  .settings-mobile-header {
+    display: flex;
+  }
+
+  /* Adjust main body for mobile */
+  .settings-body-wrapper {
+    padding: 0;
+    background: var(--color-bg-primary) !important;
+  }
+
+  .settings-body {
+    flex-direction: column;
+    padding: 0;
+    padding-left: 0;
+    gap: 0;
+    max-width: 100%;
+    background: var(--color-bg-primary);
+  }
+
+  /* Hide desktop sidebar on mobile */
+  .settings-sidebar {
+    display: none;
+  }
+
+  /* Full width content on mobile */
+  .settings-content {
+    background: #f6f6f7 !important;
+    height: auto;
+    max-height: none;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .settings-content-inner {
+    max-width: 100%;
+    padding: 12px;
+    padding-bottom: 80px;
+    min-height: auto;
+  }
+
+  /* Hide desktop page titles on mobile (use mobile header instead) */
+  .settings-page-title-row {
+    display: none;
+  }
+
+  /* Show mobile page header */
+  .settings-mobile-page-header {
+    display: flex;
+  }
+
+  /* Cards full width */
+  .settings-card {
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+
+  /* Adjust form layouts */
+  .settings-row-inline,
+  .settings-row-inline-no-border {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Modal adjustments */
+  .settings-modal,
+  .billing-modal {
+    max-width: calc(100vw - 32px);
+    margin: 16px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+  }
+
+  .settings-modal-large {
+    max-width: calc(100vw - 32px);
+  }
+
+  /* Adjust title sizes */
+  .customer-notifications-breadcrumb-title,
+  .staff-notifications-breadcrumb-title,
+  .webhooks-breadcrumb-title {
+    font-size: 16px;
+  }
+
+  /* Hide breadcrumb navigation on mobile - show simpler header */
+  .customer-notifications-page-header,
+  .staff-notifications-page-header,
+  .webhooks-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .customer-notifications-page-title,
+  .staff-notifications-page-title,
+  .webhooks-page-title {
+    width: 100%;
+  }
+
+  /* Accordion adjustments */
+  .customer-notification-accordion {
+    margin: 0 12px 12px 12px;
+  }
+
+  .customer-notification-accordion:first-child {
+    margin-top: 12px;
+  }
+
+  /* Staff notification boxes */
+  .staff-notification-box,
+  .staff-recipients-box {
+    margin: 12px;
+  }
+
+  /* Webhooks */
+  .webhooks-card-content {
+    padding: 12px;
+  }
+
+  /* Recipient items */
+  .staff-recipient-item {
+    padding: 14px 16px;
+  }
+
+  /* Toggle sizing */
+  .transactions-toggle {
+    flex-shrink: 0;
+  }
+}
+
+/* ========================================
+   Small Mobile Breakpoint (< 480px)
+   ======================================== */
+
+@media (max-width: 480px) {
+  .settings-content-inner {
+    padding: 8px;
+    padding-bottom: 60px;
+  }
+
+  .settings-card {
+    border-radius: 10px;
+  }
+
+  /* Smaller padding on cards */
+  .settings-row,
+  .settings-card-header,
+  .settings-card-header-no-border {
+    padding: 12px;
+  }
+
+  /* Accordion adjustments */
+  .customer-notification-accordion {
+    margin: 0 8px 10px 8px;
+  }
+
+  .customer-notification-accordion-header {
+    padding: 14px;
+  }
+
+  .customer-notification-item {
+    padding: 14px;
+  }
+
+  /* Staff notifications */
+  .staff-notification-box,
+  .staff-recipients-box {
+    margin: 8px;
+  }
+
+  .staff-notification-item,
+  .staff-recipient-item {
+    padding: 12px 14px;
+  }
+
+  /* Marketing section */
+  .customer-notification-marketing-header {
+    padding: 14px;
+  }
+
+  .customer-notification-marketing-item {
+    margin: 0 8px 12px 8px;
+    padding: 14px;
+  }
+
+  /* Buttons */
+  .Polaris-Button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  /* Modal full screen on small devices */
+  .settings-modal,
+  .billing-modal {
+    max-width: 100vw;
+    margin: 0;
+    border-radius: 0;
+    max-height: 100vh;
+    height: 100vh;
+  }
+
+  .billing-modal-overlay,
+  .settings-modal-overlay {
+    padding: 0;
+  }
+}
+
+/* ========================================
+   Mobile Navigation State Classes
+   ======================================== */
+
+/* When showing navigation on mobile */
+.settings-page.mobile-nav-visible .settings-mobile-nav-view {
+  display: block;
+}
+
+.settings-page.mobile-nav-visible .settings-content {
+  display: none;
+}
+
+/* When showing content on mobile */
+.settings-page.mobile-content-visible .settings-mobile-nav-view {
+  display: none;
+}
+
+.settings-page.mobile-content-visible .settings-content {
+  display: block;
+}
+
+/* Sub-pages always show content on mobile (no nav toggle) */
+.settings-page.mobile-content-visible .settings-content.settings-content-full {
+  display: block;
+}
+
+/* Show header on mobile - keep hamburger menu accessible */
+@media (max-width: 768px) {
+  .settings-page .settings-header {
+    display: block;
+  }
+
+  /* Full width body for sub-pages */
+  .settings-body:has(.settings-content-full) {
+    padding-left: 0;
+  }
+
+  /* Ensure content-full takes proper width */
+  .settings-content.settings-content-full .settings-content-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+}
+
+/* ========================================
+   Landscape Mobile Adjustments
+   ======================================== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .settings-mobile-header {
+    padding: 12px 16px;
+  }
+
+  .settings-content-inner {
+    padding-bottom: 60px;
+  }
+}
+
+/* ========================================
+   High DPI / Retina Adjustments
+   ======================================== */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .settings-card {
+    border-width: 0.5px;
+  }
+
+  .customer-notification-accordion,
+  .staff-notification-box,
+  .staff-recipients-box,
+  .webhooks-create-box {
+    border-width: 0.5px;
+  }
+}
+
+/* ========================================
+   Dark Mode Support (if needed later)
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  /* Add dark mode styles here when needed */
+}
+
+/* ========================================
+   Reduced Motion Support
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-mobile-nav-item,
+  .settings-mobile-nav-sub-item,
+  .settings-card,
+  .customer-notification-accordion-header,
+  .staff-notification-item,
+  .staff-recipient-item {
+    transition: none;
+  }
+}
+
+/* ========================================
+   Touch Device Optimizations
+   ======================================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .settings-mobile-nav-item {
+    min-height: 48px;
+  }
+
+  .settings-mobile-nav-sub-item {
+    min-height: 44px;
+  }
+
+  .settings-mobile-back-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .settings-mobile-close-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Remove hover states on touch */
+  .settings-mobile-nav-item:hover,
+  .settings-mobile-nav-sub-item:hover {
+    background: transparent;
+  }
+
+  .settings-mobile-nav-item:active,
+  .settings-mobile-nav-sub-item:active {
+    background: var(--color-bg-hover);
+  }
+}

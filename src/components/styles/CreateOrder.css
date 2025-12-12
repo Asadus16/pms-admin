@@ -1,0 +1,1257 @@
+/**
+ * CreateOrder Component Styles
+ */
+
+.create-order-wrapper {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 0 20px 20px 20px;
+  min-height: 100%;
+  /* Ensure wrapper doesn't prevent scrolling */
+  overflow: visible;
+}
+
+.create-order-wrapper .Polaris-Page {
+  padding: 0;
+}
+
+/* Page title styling */
+.create-order-wrapper .create-booking-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  line-height: 24px !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* Products section */
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.more-actions-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 20px;
+  color: var(--p-color-text-subdued);
+  line-height: 1;
+}
+
+.more-actions-button:hover {
+  color: var(--p-color-text);
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* Products table */
+.products-table {
+  border: 1px solid var(--p-color-border);
+  border-radius: var(--p-border-radius-200);
+  overflow: hidden;
+}
+
+.products-table-header {
+  display: grid;
+  grid-template-columns: 1fr 120px 150px;
+  gap: 16px;
+  padding: 12px 16px;
+  background-color: var(--p-color-bg-surface-secondary);
+  border-bottom: 1px solid var(--p-color-border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--p-color-text-subdued);
+  text-transform: uppercase;
+}
+
+.product-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 150px;
+  gap: 16px;
+  padding: 16px;
+  border-bottom: 1px solid var(--p-color-border);
+  align-items: start;
+}
+
+.product-row:last-child {
+  border-bottom: none;
+}
+
+.product-info {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+}
+
+.product-image {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--p-border-radius-100);
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--p-color-border);
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-quantity {
+  display: flex;
+  align-items: start;
+  padding-top: 12px;
+}
+
+.product-quantity input[type="number"] {
+  width: 100%;
+  max-width: 80px;
+}
+
+.product-total {
+  display: flex;
+  align-items: start;
+  justify-content: flex-end;
+  padding-top: 12px;
+}
+
+.remove-product-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--p-color-text-subdued);
+}
+
+.remove-product-button:hover {
+  color: var(--p-color-text-critical);
+}
+
+/* Payment section */
+.payment-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid var(--p-color-border);
+  border-radius: var(--p-border-radius-200);
+  padding: 16px;
+}
+
+.payment-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.payment-row.total-row {
+  padding-top: 12px;
+}
+
+.payment-footer-message {
+  background-color: var(--p-color-bg-surface-secondary);
+  padding: 12px 16px;
+  border-radius: var(--p-border-radius-200);
+  margin-top: 4px;
+}
+
+.payment-link-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  color: rgb(0, 91, 211) !important;
+}
+
+.payment-link-button:hover {
+  text-decoration: underline;
+}
+
+.payment-link-text {
+  color: rgb(0, 91, 211) !important;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+.payment-link-button .payment-link-text,
+.payment-link-button .Polaris-Text,
+.payment-link-button span,
+.payment-link-button * {
+  color: rgb(0, 91, 211) !important;
+}
+
+/* Make Estimated tax text blue */
+.payment-row .Polaris-Text[data-polaris-tone="interactive"],
+.payment-row .Polaris-InlineStack .Polaris-Text[data-polaris-tone="interactive"],
+.payment-row .Polaris-InlineStack span[data-polaris-tone="interactive"],
+.payment-row span[data-polaris-tone="interactive"] {
+  color: rgb(0, 91, 211) !important;
+}
+
+/* Target all text elements in payment rows that should be blue */
+.create-order-wrapper .payment-row button.payment-link-button .Polaris-Text,
+.create-order-wrapper .payment-row button.payment-link-button span,
+.create-order-wrapper .payment-row .Polaris-InlineStack .Polaris-Text[data-polaris-tone="interactive"],
+.create-order-wrapper .payment-row .Polaris-InlineStack span[data-polaris-tone="interactive"],
+.create-order-wrapper .payment-row .Polaris-Text--toneInteractive,
+.create-order-wrapper .payment-row .Polaris-InlineStack .Polaris-Text--toneInteractive {
+  color: rgb(0, 91, 211) !important;
+}
+
+/* Force blue color on all interactive text in payment section */
+.create-order-wrapper .payment-summary .payment-link-button *,
+.create-order-wrapper .payment-summary .Polaris-Text[class*="interactive"],
+.create-order-wrapper .payment-summary .Polaris-Text[class*="Interactive"] {
+  color: rgb(0, 91, 211) !important;
+}
+
+.info-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--p-color-text-subdued);
+}
+
+.info-button:hover {
+  color: var(--p-color-text-interactive);
+}
+
+.info-button svg {
+  color: var(--p-color-text-subdued);
+}
+
+/* Card header with action button */
+.card-header-with-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--p-color-text-subdued);
+}
+
+.edit-button:hover {
+  color: var(--p-color-text);
+}
+
+/* Market country badge */
+.market-country-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background-color: var(--p-color-bg-surface-secondary);
+  border-radius: 6px;
+  width: fit-content;
+}
+
+/* Country flag icon */
+.country-flag-icon {
+  width: 20px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.india-flag-icon {
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Tags */
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background-color: var(--p-color-bg-surface-secondary);
+  border: 1px solid var(--p-color-border);
+  border-radius: var(--p-border-radius-100);
+  font-size: 13px;
+  color: var(--p-color-text);
+}
+
+.tag-remove-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 4px;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--p-color-text-subdued);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-remove-button:hover {
+  color: var(--p-color-text-critical);
+}
+
+/* Browse Products Modal */
+.add-filter-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px dashed var(--p-color-border);
+  border-radius: var(--p-border-radius-100);
+  cursor: pointer;
+  padding: 8px 12px;
+  color: var(--p-color-text);
+  font-size: 14px;
+  transition: border-color 0.2s;
+  align-self: flex-start;
+  margin-right: auto;
+}
+
+.add-filter-button:hover {
+  border-color: var(--p-color-text-interactive);
+  color: var(--p-color-text-interactive);
+}
+
+.browse-products-table {
+  border: 1px solid var(--p-color-border);
+  border-radius: var(--p-border-radius-200);
+  overflow-y: auto;
+  max-height: 350px;
+}
+
+.browse-products-header {
+  display: grid;
+  grid-template-columns: 40px 50px 1fr 100px 150px;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: var(--p-color-bg-surface-secondary);
+  border-bottom: 1px solid var(--p-color-border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--p-color-text-subdued);
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.header-checkbox {
+  width: 40px;
+}
+
+.header-product {
+  grid-column: 3;
+}
+
+.header-available {
+  text-align: left;
+}
+
+.header-price {
+  text-align: left;
+}
+
+.browse-product-item {
+  border-bottom: 1px solid var(--p-color-border);
+}
+
+.browse-product-item:last-child {
+  border-bottom: none;
+}
+
+.browse-product-row {
+  display: grid;
+  grid-template-columns: 40px 50px 1fr 100px 150px;
+  gap: 12px;
+  padding: 12px 16px;
+  align-items: center;
+}
+
+.product-checkbox {
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.product-checkbox .Polaris-Checkbox {
+  margin: 0;
+}
+
+.product-checkbox .Polaris-Checkbox__ChoiceLabel {
+  padding: 0;
+}
+
+.product-checkbox-spacer {
+  width: 40px;
+}
+
+.product-image-col {
+  width: 50px;
+}
+
+.browse-product-image {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--p-border-radius-100);
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--p-color-border);
+}
+
+.browse-product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-name-col {
+  flex: 1;
+}
+
+.product-variant-col {
+  width: 50px;
+}
+
+.product-name-spacer {
+  /* Empty spacer to align with Product column in header */
+  display: block;
+}
+
+.product-available-col {
+  width: 100px;
+  text-align: left;
+}
+
+.product-price-col {
+  width: 150px;
+  text-align: left;
+}
+
+/* Footer removed - variants selected moved to button section */
+
+/* Custom checkbox styling */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 6px 0;
+  user-select: none;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--p-color-border);
+  border-radius: var(--p-border-radius-100);
+  cursor: pointer;
+  position: relative;
+  background: var(--p-color-bg-surface);
+  flex-shrink: 0;
+}
+
+.custom-checkbox input[type="checkbox"]:checked {
+  background-color: var(--p-color-text);
+  border-color: var(--p-color-text);
+}
+
+.custom-checkbox input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 5.5px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+
+.custom-checkbox span {
+  font-size: 13px;
+  color: var(--p-color-text);
+  line-height: 1.4;
+}
+
+/* Modal overrides - Ensure backdrop is visible */
+.Polaris-Backdrop {
+  pointer-events: auto !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 500 !important;
+  display: block !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+/* Ensure modal appears above overlays and other content */
+.Polaris-Modal-Dialog__Container,
+.Polaris-Modal-Dialog,
+.Polaris-Modal-Dialog__Modal {
+  z-index: 600 !important;
+}
+
+.Polaris-Modal-Dialog__Backdrop {
+  z-index: 500 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+.Polaris-Modal-Dialog__Modal {
+  max-width: 520px !important;
+  width: 100% !important;
+  background-color: var(--p-color-bg-surface) !important;
+}
+
+.Polaris-Modal-Dialog,
+.Polaris-Modal-Dialog__Modal,
+.Polaris-Modal-Dialog__Modal * {
+  pointer-events: auto !important;
+}
+
+.Polaris-Modal-Header {
+  background-color: var(--p-color-bg-surface) !important;
+}
+
+.Polaris-Modal-Section {
+  background-color: var(--p-color-bg-surface) !important;
+}
+
+.Polaris-Modal-Footer {
+  background-color: var(--p-color-bg-surface) !important;
+}
+
+#custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 500;
+  pointer-events: auto;
+}
+
+/* Browse Products Modal - FORCE WIDTH GLOBALLY */
+[data-create-order-open="true"] .Polaris-Modal-Dialog__Modal,
+body[data-create-order-open="true"] .Polaris-Modal-Dialog__Modal,
+html body .Polaris-Modal-Dialog--sizeLarge .Polaris-Modal-Dialog__Modal,
+.Polaris-Modal-Dialog--sizeLarge .Polaris-Modal-Dialog__Modal,
+.Polaris-Modal-Dialog__Container .Polaris-Modal-Dialog__Modal {
+  max-width: 720px !important;
+  width: 720px !important;
+  min-width: 720px !important;
+  max-height: 600px !important;
+}
+
+html body .Polaris-Modal-Dialog--sizeLarge .Polaris-Modal-Section:first-of-type,
+.Polaris-Modal-Dialog--sizeLarge .Polaris-Modal-Section:first-of-type {
+  max-height: 450px !important;
+  overflow-y: auto !important;
+  padding-bottom: 8px !important;
+}
+
+html body .Polaris-Modal-Dialog--sizeLarge .Polaris-Modal-Section:last-of-type,
+.Polaris-Modal-Dialog--sizeLarge .Polaris-Modal-Section:last-of-type {
+  border-top: 1px solid var(--p-color-border);
+  padding: 16px 20px !important;
+}
+
+/* Fix search field border - use Backdrop for proper styling */
+.create-order-wrapper .Polaris-TextField__Backdrop {
+  border: 1px solid var(--p-color-border) !important;
+  border-radius: 8px !important;
+  background: white !important;
+}
+
+.create-order-wrapper .Polaris-TextField:focus-within .Polaris-TextField__Backdrop {
+  border: 2px solid var(--p-color-border-interactive) !important;
+  box-shadow: none !important;
+}
+
+.create-order-wrapper .Polaris-TextField__Input {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.create-order-wrapper .Polaris-TextField__Input:focus {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Modal TextField fixes */
+.Polaris-Modal-Section .Polaris-TextField__Backdrop {
+  border: 1px solid var(--p-color-border) !important;
+  border-radius: 8px !important;
+  background: white !important;
+}
+
+.Polaris-Modal-Section .Polaris-TextField:focus-within .Polaris-TextField__Backdrop {
+  border: 2px solid var(--p-color-border-interactive) !important;
+  box-shadow: none !important;
+}
+
+.Polaris-Modal-Section .Polaris-TextField__Input {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.Polaris-Modal-Section .Polaris-TextField__Input:focus {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Customer dropdown styles */
+.customer-dropdown-wrapper {
+  position: relative;
+  z-index: 999;
+  isolation: isolate;
+}
+
+/* Ensure the Card containing customer dropdown allows overflow */
+.create-order-wrapper .Polaris-LegacyCard,
+.create-order-wrapper .Polaris-Card {
+  overflow: visible !important;
+}
+
+.create-order-wrapper .Polaris-LegacyCard__Section,
+.create-order-wrapper .Polaris-Card__Section {
+  overflow: visible !important;
+}
+
+.create-order-wrapper .Polaris-BlockStack {
+  overflow: visible !important;
+}
+
+.create-order-wrapper .Polaris-Box {
+  overflow: visible !important;
+}
+
+.create-order-wrapper .Polaris-Layout__Section {
+  overflow: visible !important;
+}
+
+/* Don't override Frame Content scrolling - let dashboard.css handle it */
+/* Only allow overflow visible for specific elements that need dropdown overflow */
+body[data-create-order-open="true"] .Polaris-Layout__Section--oneThird {
+  overflow: visible !important;
+}
+
+/* Ensure Page content doesn't prevent scrolling */
+body[data-create-order-open="true"] .Polaris-Page {
+  height: auto !important;
+  min-height: 100% !important;
+}
+
+body[data-create-order-open="true"] .Polaris-Page__Content {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+/* Force the customer card to have higher stacking */
+.create-order-wrapper .Polaris-Layout__Section--oneThird {
+  position: relative;
+  z-index: 10;
+}
+
+.customer-dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2147483646;
+}
+
+.customer-dropdown {
+  background: white;
+  border: 1px solid var(--p-color-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 2147483647;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.create-customer-option {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--p-color-bg-surface-secondary);
+  border: none;
+  border-bottom: 1px solid var(--p-color-border);
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  color: var(--p-color-text);
+}
+
+.create-customer-option > * {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.create-customer-option .Polaris-Icon {
+  flex: 0 0 auto !important;
+  width: 20px !important;
+  height: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.create-customer-option span {
+  flex: 0 0 auto !important;
+  margin-left: 0 !important;
+}
+
+.create-customer-option:hover {
+  background: var(--p-color-bg-surface-hover);
+}
+
+.customer-list {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.customer-option {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  padding: 12px 16px;
+  background: white;
+  border: none;
+  border-bottom: 1px solid var(--p-color-border);
+  cursor: pointer;
+  text-align: left;
+}
+
+.customer-option:last-child {
+  border-bottom: none;
+}
+
+.customer-option:hover {
+  background: var(--p-color-bg-surface-hover);
+}
+
+.customer-option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.customer-name-phone,
+.customer-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--p-color-text);
+  line-height: 1.4;
+}
+
+.customer-email,
+.customer-phone {
+  font-size: 13px;
+  color: var(--p-color-text-subdued);
+  line-height: 1.4;
+}
+
+.selected-customer-info {
+  padding: 16px;
+  background: var(--p-color-bg-surface);
+  border-radius: 8px;
+  border: 1px solid var(--p-color-border);
+}
+
+.customer-name-link {
+  color: var(--p-color-text-interactive);
+  text-decoration: none;
+}
+
+.customer-name-link:hover {
+  text-decoration: underline;
+}
+
+.customer-section {
+  padding-top: 16px;
+  border-top: 1px solid var(--p-color-border);
+}
+
+.selected-customer-info .customer-section:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.customer-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.edit-section-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--p-color-text-subdued);
+}
+
+.edit-section-button:hover {
+  color: var(--p-color-text);
+}
+
+.customer-email-link {
+  color: var(--p-color-text-interactive);
+  text-decoration: none;
+}
+
+.customer-email-link:hover {
+  text-decoration: underline;
+}
+
+.customer-address {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.view-map-link {
+  color: var(--p-color-text-interactive);
+  text-decoration: none;
+  margin-top: 4px;
+  display: inline-block;
+}
+
+.view-map-link:hover {
+  text-decoration: underline;
+}
+
+/* Phone input wrapper for Add Customer modal */
+.phone-input-wrapper {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--p-color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+.phone-input-wrapper .country-select {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  background: var(--p-color-bg-surface-secondary);
+  border-right: 1px solid var(--p-color-border);
+  min-width: 80px;
+}
+
+.phone-input-wrapper .country-select .Polaris-Select {
+  border: none !important;
+  background: transparent !important;
+}
+
+.phone-input-wrapper .country-select .Polaris-Select__Backdrop {
+  border: none !important;
+  background: transparent !important;
+}
+
+.phone-input-wrapper .phone-field {
+  flex: 1;
+}
+
+.phone-input-wrapper .phone-field .Polaris-TextField__Backdrop {
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.phone-input-wrapper .phone-field .Polaris-TextField__Input {
+  border: none !important;
+}
+
+/* Notes textarea wrapper */
+.notes-textarea-wrapper .Polaris-TextField__Backdrop {
+  border: 1px solid var(--p-color-border) !important;
+  border-radius: 8px !important;
+}
+
+/* Guests date picker styles */
+/* Guests section header */
+.guests-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 0;
+  width: 100%;
+}
+
+.guests-section-header .Polaris-Text {
+  flex: 1;
+}
+
+.guests-section-header .Polaris-Icon {
+  flex-shrink: 0;
+}
+
+/* Guests section collapsible animation */
+.guests-section-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease-out;
+  visibility: hidden;
+}
+
+.guests-section-content > .Polaris-BlockStack {
+  min-height: 0;
+  overflow: hidden !important;
+}
+
+.guests-section-content.open {
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.35s ease-in;
+  visibility: visible;
+}
+
+.guests-date-picker {
+  padding: 16px;
+  background: var(--p-color-bg-surface);
+  border: 1px solid var(--p-color-border);
+  border-radius: var(--p-border-radius-200);
+  margin-top: 8px;
+  overflow: visible !important;
+  position: relative;
+  z-index: 1;
+}
+
+.guests-date-picker .Polaris-BlockStack,
+.guests-date-picker .Polaris-InlineStack,
+.guests-date-picker .Polaris-Box {
+  overflow: visible !important;
+}
+
+/* Ensure Card doesn't clip dropdowns in Guests section */
+.create-order-wrapper .Polaris-Card,
+.create-order-wrapper .Polaris-Card__Section {
+  overflow: visible !important;
+}
+
+.date-picker-calendar-wrapper {
+  margin-bottom: 24px;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+.calendar-header-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.calendar-header-nav .Polaris-Text {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+.calendar-nav-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--p-color-text);
+  border-radius: var(--p-border-radius-100);
+  transition: background-color 0.2s;
+}
+
+.calendar-nav-button:hover {
+  background-color: var(--p-color-bg-surface-hover);
+}
+
+.calendar-nav-button .Polaris-Icon {
+  width: 16px;
+  height: 16px;
+}
+
+.date-picker-calendar {
+  width: 100%;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--p-color-text-subdued);
+  padding: 4px 2px;
+  text-transform: uppercase;
+}
+
+.calendar-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: var(--p-border-radius-100);
+  font-size: 12px;
+  color: var(--p-color-text);
+  transition: background-color 0.2s, color 0.2s;
+  position: relative;
+  min-height: 32px;
+}
+
+.calendar-day:not(.empty):not(.selected):hover {
+  background-color: #000;
+  color: white;
+}
+
+.calendar-day.selected {
+  background-color: var(--p-color-text);
+  color: white;
+  font-weight: 600;
+}
+
+.calendar-day.selected:hover {
+  background-color: var(--p-color-text) !important;
+  color: white !important;
+}
+
+.calendar-day.selected.checkin {
+  border-top-left-radius: var(--p-border-radius-100);
+  border-bottom-left-radius: var(--p-border-radius-100);
+}
+
+.calendar-day.selected.checkout {
+  border-top-right-radius: var(--p-border-radius-100);
+  border-bottom-right-radius: var(--p-border-radius-100);
+}
+
+.calendar-day.in-range {
+  background-color: var(--p-color-bg-surface-secondary);
+  border-radius: 0;
+}
+
+.calendar-day.in-range:hover {
+  background-color: var(--p-color-bg-surface-secondary);
+  color: var(--p-color-text);
+}
+
+.calendar-day.empty {
+  cursor: default;
+}
+
+.date-input-wrapper,
+.time-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--p-color-border);
+  border-radius: var(--p-border-radius-100);
+  padding: 8px 12px;
+  background: white;
+  transition: border-color 0.2s;
+  z-index: 1;
+}
+
+.guests-date-picker .time-input-wrapper {
+  z-index: 100;
+}
+
+.guests-date-picker .time-input-wrapper[data-dropdown-open="true"] {
+  z-index: 10001;
+}
+
+.date-input-wrapper:focus-within,
+.time-input-wrapper:focus-within {
+  border: 2px solid var(--p-color-border-interactive);
+}
+
+.date-input-wrapper .Polaris-Icon,
+.time-input-wrapper .Polaris-Icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.date-input,
+.time-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--p-color-text);
+  background: transparent;
+  width: 100%;
+}
+
+.date-input {
+  cursor: pointer;
+}
+
+.time-input {
+  cursor: pointer;
+}
+
+.time-picker-dropdown {
+  background: white;
+  border: 1px solid var(--p-color-border);
+  border-radius: var(--p-border-radius-200);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 2147483647;
+}
+
+.time-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--p-color-text);
+  transition: background-color 0.2s;
+}
+
+.time-option:hover {
+  background-color: var(--p-color-bg-surface-hover);
+}
+
+.time-option.selected {
+  background-color: var(--p-color-bg-surface-interactive);
+  color: var(--p-color-text-interactive);
+  font-weight: 500;
+}
+
+/* Guests date picker save button - black background */
+.guests-date-picker .Polaris-Button--variantPrimary {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.guests-date-picker .Polaris-Button--variantPrimary:hover {
+  background-color: #333 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .create-order-wrapper {
+    padding: 12px;
+  }
+
+  .products-table-header,
+  .product-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .product-quantity,
+  .product-total {
+    padding-top: 0;
+  }
+
+  .browse-products-header,
+  .browse-product-row {
+    grid-template-columns: 40px 1fr;
+  }
+
+  .browse-products-header > div:nth-child(3),
+  .browse-products-header > div:nth-child(4),
+  .browse-product-row > div:nth-child(3),
+  .browse-product-row > div:nth-child(4) {
+    display: none;
+  }
+
+  .customer-dropdown {
+    max-height: 300px;
+  }
+}
+
+/* Send Invoice Modal Styles */
+.Polaris-Modal-Dialog__Modal:has(.send-invoice-modal-content) {
+  max-width: 580px !important;
+  width: 580px !important;
+}
+
+/* Fallback for browsers without :has() support */
+[data-send-invoice-modal="true"] .Polaris-Modal-Dialog__Modal {
+  max-width: 580px !important;
+  width: 580px !important;
+}

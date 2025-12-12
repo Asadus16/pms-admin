@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import {
   Page,
   Card,
@@ -27,15 +29,15 @@ import {
 import './styles/AddCustomer.css';
 
 function AddCustomer({ onClose }) {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleBack = useCallback(() => {
     if (onClose) {
       onClose();
     } else {
-      navigate('/dashboard/customers');
+      router.push('/dashboard/customers');
     }
-  }, [onClose, navigate]);
+  }, [onClose, router]);
 
   // Indian flag icon component
   const IndiaFlagIcon = () => (
@@ -615,7 +617,6 @@ function AddCustomer({ onClose }) {
                     </div>
 
                     <TextField
-                      label="Tags"
                       value={tags}
                       onChange={handleTagInput}
                       onKeyDown={handleTagKeyDown}

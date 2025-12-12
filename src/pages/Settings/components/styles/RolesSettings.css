@@ -1,0 +1,300 @@
+/**
+ * Roles Settings Styles
+ * Roles table, info banner, and add role form styles
+ */
+
+/* ========================================
+   Roles Section
+   ======================================== */
+
+.roles-info-banner {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-light);
+}
+
+.roles-info-banner-header {
+  background: #91d0fe;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.roles-info-banner-icon {
+  flex-shrink: 0;
+}
+
+.roles-info-banner-icon .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.roles-info-banner-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 590;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  flex: 1;
+}
+
+.roles-banner-close {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(48, 48, 48);
+  transition: background var(--transition-fast);
+}
+
+.roles-banner-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.roles-info-banner-content {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  background: white;
+  padding: 12px 16px;
+}
+
+.roles-info-banner-content a {
+  color: rgb(0, 91, 211);
+  text-decoration: none;
+}
+
+.roles-info-banner-content a:hover {
+  text-decoration: underline;
+}
+
+.roles-table-container {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.roles-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.roles-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: transparent;
+  border-radius: 6px;
+  padding: 0;
+}
+
+.roles-tab {
+  padding: 6px 12px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.roles-tab:hover {
+  color: rgb(48, 48, 48);
+}
+
+.roles-tab.active {
+  background: #e3e3e3;
+  color: rgb(48, 48, 48);
+}
+
+.roles-table-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.roles-action-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border-light);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(97, 97, 97);
+  transition: all var(--transition-fast);
+}
+
+.roles-action-btn:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border);
+}
+
+.roles-index-table {
+  background: white;
+}
+
+/* ========================================
+   Add Role Form
+   ======================================== */
+
+.roles-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+}
+
+.roles-breadcrumb .Polaris-Icon {
+  width: 20px;
+  height: 20px;
+  color: rgb(97, 97, 97);
+}
+
+.roles-breadcrumb-separator {
+  color: rgb(138, 138, 138);
+  font-size: 14px;
+}
+
+.roles-breadcrumb-current {
+  font-weight: 600;
+  color: rgb(48, 48, 48);
+}
+
+.add-role-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-role-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.add-role-label {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+}
+
+.add-role-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.add-role-input:hover {
+  border-color: var(--color-border);
+}
+
+.add-role-input:focus {
+  border-color: rgb(0, 91, 211);
+  box-shadow: 0 0 0 1px rgb(0, 91, 211);
+}
+
+.add-role-permissions-section {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.add-role-permissions-header {
+  margin-bottom: 16px;
+}
+
+.add-role-permissions-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  margin: 0 0 4px 0;
+}
+
+.add-role-permissions-description {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(97, 97, 97);
+  margin: 0;
+}
+
+.add-role-select-wrapper {
+  position: relative;
+}
+
+.add-role-select {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgb(48, 48, 48);
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.add-role-select:hover {
+  border-color: var(--color-border);
+}
+
+.add-role-select:focus {
+  border-color: rgb(0, 91, 211);
+  box-shadow: 0 0 0 1px rgb(0, 91, 211);
+}
+
+.add-role-select-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: rgb(97, 97, 97);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

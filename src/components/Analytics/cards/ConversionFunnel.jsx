@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { BlockStack, Text, InlineStack } from '@shopify/polaris';
 import ChartHeading from '../ChartHeading';

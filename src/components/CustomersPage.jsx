@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import {
   Page,
   Card,
@@ -550,7 +552,7 @@ const getStoredSort = () => {
 };
 
 function CustomersPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortPopoverActive, setSortPopoverActive] = useState(false);
@@ -948,7 +950,7 @@ function CustomersPage() {
           }
           primaryAction={{
             content: 'Add customer',
-            onAction: () => navigate('/dashboard/customers/new'),
+            onAction: () => router.push('/dashboard/customers/new'),
           }}
           secondaryActions={[
             {
