@@ -27,9 +27,10 @@ import {
 } from '@shopify/polaris-icons';
 import './styles/Shopifyheader.css';
 
-function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickOpen, showUnsavedChanges, onDiscard, onSave }) {
+function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickOpen, showUnsavedChanges, onDiscard, onSave, userType = 'owners' }) {
   const pathname = usePathname();
   const router = useRouter();
+  const basePath = `/${userType}`;
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState(null);
@@ -40,15 +41,17 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
   const searchRef = useRef(null);
   const searchInputRef = useRef(null);
 
-  // Check if we should show unsaved changes (either via prop or by checking if we're on add customer page or create order page)
+  // Check if we should show unsaved changes (either via prop or by checking if we're on add customer page or create order page or add developer page)
   const isOnCustomerNew = pathname.includes('/customers/new');
   const isOnBookingsNew = pathname.includes('/bookings/new');
-  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew;
+  const isOnDeveloperNew = pathname.includes('/developers/new');
+  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew || isOnDeveloperNew;
 
   // Get the appropriate text based on the current page
   const getUnsavedChangesText = () => {
     if (isOnBookingsNew) return 'Unsaved draft order';
     if (isOnCustomerNew) return 'Unsaved changes';
+    if (isOnDeveloperNew) return 'Unsaved changes';
     return 'Unsaved changes';
   };
 
@@ -58,13 +61,17 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     } else if (isOnBookingsNew) {
       // Dispatch custom event to close CreateOrder
       window.dispatchEvent(new CustomEvent('closeCreateOrder'));
-      router.push('/dashboard/bookings');
+      router.push(`${basePath}/bookings`);
+    } else if (isOnDeveloperNew) {
+      // Dispatch custom event to close AddDeveloper
+      window.dispatchEvent(new CustomEvent('closeAddDeveloper'));
+      router.push(`${basePath}/developers`);
     } else {
       // Dispatch custom event to close AddCustomer
       window.dispatchEvent(new CustomEvent('closeAddCustomer'));
-      router.push('/dashboard/customers');
+      router.push(`${basePath}/customers`);
     }
-  }, [onDiscard, router, isOnBookingsNew]);
+  }, [onDiscard, router, isOnBookingsNew, isOnDeveloperNew, basePath]);
 
   const handleSave = useCallback(() => {
     if (onSave) {
@@ -72,11 +79,14 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     } else if (isOnBookingsNew) {
       // Dispatch custom event to save order
       window.dispatchEvent(new CustomEvent('saveCreateOrder'));
+    } else if (isOnDeveloperNew) {
+      // Dispatch custom event to save developer
+      window.dispatchEvent(new CustomEvent('saveAddDeveloper'));
     } else {
       // Dispatch custom event to save customer
       window.dispatchEvent(new CustomEvent('saveAddCustomer'));
     }
-  }, [onSave, isOnBookingsNew]);
+  }, [onSave, isOnBookingsNew, isOnDeveloperNew]);
 
 
   const toggleProfilePopover = useCallback(
@@ -348,13 +358,13 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
         )}
 
         {/* Left section - Logo */}
-        <div className="logo-section" onClick={() => router.push('/dashboard')} style={{ cursor: 'pointer' }}>
+        <div className="logo-section" onClick={() => router.push(basePath)} style={{ cursor: 'pointer' }}>
           <img
-            src="/logos/shopify-logo-mono.svg"
-            alt="Shopify"
+            src="/logos/nest-quest.svg"
+            alt="Nest Quest"
             className="height-24 width-auto"
             loading="eager"
-            key="shopify-logo-header"
+            key="nest-quest-logo-header"
           />
         </div>
 

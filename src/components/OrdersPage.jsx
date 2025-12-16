@@ -1008,7 +1008,6 @@ function OrdersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortPopoverActive, setSortPopoverActive] = useState(false);
   const [editColumnsMode, setEditColumnsMode] = useState(false);
-  const [activeTab, setActiveTab] = useState(getStoredTab());
   const [searchActive, setSearchActive] = useState(false);
 
   // Popover states for customer and items
@@ -1019,23 +1018,33 @@ function OrdersPage() {
   const [emailModalOrder, setEmailModalOrder] = useState(null);
   const [selectedAddressOption, setSelectedAddressOption] = useState('current');
 
-  // Initialize sort from localStorage
-  const storedSort = getStoredSort();
-  const [selectedSort, setSelectedSort] = useState(storedSort.sortBy);
-  const [sortDirection, setSortDirection] = useState(storedSort.sortDirection);
-
   // Default visible columns
   const defaultColumns = allColumns.filter(col => col.default).map(col => col.id);
 
-  // Initialize visible columns from localStorage or use defaults
-  const [visibleColumns, setVisibleColumns] = useState(() => {
-    const stored = getStoredColumns();
-    return stored || defaultColumns;
-  });
-  const [tempVisibleColumns, setTempVisibleColumns] = useState(() => {
-    const stored = getStoredColumns();
-    return stored || defaultColumns;
-  });
+  // Initialize state with defaults (will be updated from localStorage in useEffect)
+  const [selectedSort, setSelectedSort] = useState('date');
+  const [sortDirection, setSortDirection] = useState('desc');
+  const [visibleColumns, setVisibleColumns] = useState(defaultColumns);
+  const [tempVisibleColumns, setTempVisibleColumns] = useState(defaultColumns);
+  const [activeTab, setActiveTab] = useState('all');
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Load from localStorage on client-side only
+  useEffect(() => {
+    setIsMounted(true);
+    const storedSort = getStoredSort();
+    setSelectedSort(storedSort.sortBy);
+    setSortDirection(storedSort.sortDirection);
+
+    const storedColumns = getStoredColumns();
+    if (storedColumns) {
+      setVisibleColumns(storedColumns);
+      setTempVisibleColumns(storedColumns);
+    }
+
+    const storedTab = getStoredTab();
+    setActiveTab(storedTab);
+  }, []);
 
   const itemsPerPage = 50;
 

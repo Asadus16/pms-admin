@@ -42,16 +42,29 @@ import {
   TransactionIcon,
   InventoryIcon,
   ChartLineIcon,
+  AppsFilledIcon,
+  AppsIcon,
+  TeamIcon,
+  LocationFilledIcon,
+  LocationIcon,
+  EmailIcon,
+  LockIcon,
+  ChatIcon,
 } from '@shopify/polaris-icons'
 import ShopifyHeader from '../../components/Shopifyheader'
 import CustomersPage from '../../components/CustomersPage'
+import PropertyOwnersPage from '../../components/PropertyOwnersPage'
 import OrdersPage from '../../components/OrdersPage'
 import AnalyticsPage from '../../components/AnalyticsPage'
 import SidekickPanel from '../../components/SidekickPanel'
 import AddCustomer from '../../components/AddCustomer'
+import AddDeveloper from '../../components/AddDeveloper'
 import CreateOrder from '../../components/CreateOrder'
 import SettingsPage from '../Settings/SettingsPage'
 import './dashboard.css'
+
+// Valid user types
+const VALID_USER_TYPES = ['real-estate-company', 'owners', 'guests', 'property-manager', 'property-developer']
 
 // Robot icon for TinySEO
 const RobotIcon = () => (
@@ -65,7 +78,7 @@ const RobotIcon = () => (
   </svg>
 )
 
-function Dashboard() {
+function Dashboard({ userType: rawUserType = 'owners' }) {
   const router = useRouter()
   const pathname = usePathname()
   const [mobileNavigationActive, setMobileNavigationActive] = useState(false)
@@ -74,12 +87,20 @@ function Dashboard() {
   const [hoveredSalesChannel, setHoveredSalesChannel] = useState(null)
   const [hoveredApp, setHoveredApp] = useState(null)
 
+  // Normalize user type - default to 'owners' if invalid
+  const userType = VALID_USER_TYPES.includes(rawUserType) ? rawUserType : 'owners'
+
+  // Base path for this user type (use the raw value from URL for navigation)
+  const basePath = `/${rawUserType}`
+
   // Get selected page from URL path
   const getSelectedFromPath = () => {
-    const path = pathname.replace('/dashboard', '').replace(/^\//, '') || 'dashboard'
+    // Remove the userType prefix from pathname to get the page
+    const path = pathname.replace(basePath, '').replace(/^\//, '') || 'dashboard'
     if (path === '') return 'dashboard'
     if (path === 'customers/new' || path.startsWith('customers/new')) return 'customers/new'
     if (path === 'bookings/new' || path.startsWith('bookings/new')) return 'bookings/new'
+    if (path === 'developers/new' || path.startsWith('developers/new')) return 'developers/new'
     if (path === 'customers/segments' || path.startsWith('customers/segments')) return 'segments'
     if (path === 'analytics/reports' || path.startsWith('analytics/reports')) return 'reports'
     if (path === 'analytics/live-view' || path.startsWith('analytics/live-view')) return 'live-view'
@@ -91,7 +112,7 @@ function Dashboard() {
   // Update selected when URL changes
   useEffect(() => {
     setSelected(getSelectedFromPath())
-  }, [pathname])
+  }, [pathname, basePath])
 
   const toggleMobileNavigationActive = useCallback(
     () =>
@@ -117,22 +138,23 @@ function Dashboard() {
   const handleNavigation = useCallback((page) => {
     setSelected(page)
     if (page === 'dashboard') {
-      router.push('/dashboard')
+      router.push(basePath)
     } else if (page === 'segments') {
-      router.push('/dashboard/customers/segments')
+      router.push(`${basePath}/customers/segments`)
     } else if (page === 'reports') {
-      router.push('/dashboard/analytics/reports')
+      router.push(`${basePath}/analytics/reports`)
     } else if (page === 'live-view') {
-      router.push('/dashboard/analytics/live-view')
+      router.push(`${basePath}/analytics/live-view`)
     } else {
-      router.push(`/dashboard/${page}`)
+      router.push(`${basePath}/${page}`)
     }
-  }, [router])
+  }, [router, basePath])
 
   // Check if analytics section is selected (including sub-items)
   const isAnalyticsSelected = selected === 'analytics' || selected === 'reports' || selected === 'live-view'
 
-  const navigationMarkup = (
+  // Navigation for Property Developers / Real Estate Company
+  const developerNavigation = (
     <Navigation location={pathname}>
       <Navigation.Section
         items={[
@@ -140,56 +162,147 @@ function Dashboard() {
             label: 'Dashboard',
             icon: selected === 'dashboard' ? ChartVerticalIcon : ChartVerticalFilledIcon,
             onClick: () => handleNavigation('dashboard'),
-            url: '/dashboard',
+            url: basePath,
+            selected: selected === 'dashboard',
+          },
+          {
+            label: 'Developers',
+            icon: TeamIcon,
+            onClick: () => handleNavigation('developers'),
+            url: `${basePath}/developers`,
+            selected: selected === 'developers',
+          },
+          {
+            label: 'Projects',
+            icon: selected === 'projects' ? ProductIcon : ProductFilledIcon,
+            onClick: () => handleNavigation('projects'),
+            url: `${basePath}/projects`,
+            selected: selected === 'projects',
+          },
+          {
+            label: 'Properties',
+            icon: selected === 'properties' ? HomeIcon : HomeFilledIcon,
+            onClick: () => handleNavigation('properties'),
+            url: `${basePath}/properties`,
+            selected: selected === 'properties',
+          },
+          {
+            label: 'Inventory',
+            icon: InventoryIcon,
+            onClick: () => handleNavigation('inventory'),
+            url: `${basePath}/inventory`,
+            selected: selected === 'inventory',
+          },
+          {
+            label: 'Owners',
+            icon: selected === 'owners' ? PersonIcon : PersonFilledIcon,
+            onClick: () => handleNavigation('owners'),
+            url: `${basePath}/owners`,
+            selected: selected === 'owners',
+          },
+          {
+            label: 'Contacts',
+            icon: ChatIcon,
+            onClick: () => handleNavigation('contacts'),
+            url: `${basePath}/contacts`,
+            selected: selected === 'contacts',
+          },
+          {
+            label: 'Leads',
+            icon: EmailIcon,
+            onClick: () => handleNavigation('leads'),
+            url: `${basePath}/leads`,
+            selected: selected === 'leads',
+          },
+          {
+            label: 'Reports',
+            icon: ChartLineIcon,
+            onClick: () => handleNavigation('reports'),
+            url: `${basePath}/reports`,
+            selected: selected === 'reports',
+          },
+          {
+            label: 'Integrations',
+            icon: selected === 'integrations' ? AppsIcon : AppsFilledIcon,
+            onClick: () => handleNavigation('integrations'),
+            url: `${basePath}/integrations`,
+            selected: selected === 'integrations',
+          },
+        ]}
+      />
+      <Navigation.Section
+        items={[
+          {
+            label: 'Settings',
+            icon: selected === 'settings' || selected === 'roles-permissions' ? SettingsIcon : SettingsFilledIcon,
+            onClick: () => handleNavigation('settings'),
+            url: `${basePath}/settings`,
+            selected: selected === 'settings' || selected === 'roles-permissions',
+          },
+        ]}
+      />
+    </Navigation>
+  )
+
+  // Navigation for Owners (existing sidebar)
+  const ownersNavigation = (
+    <Navigation location={pathname}>
+      <Navigation.Section
+        items={[
+          {
+            label: 'Dashboard',
+            icon: selected === 'dashboard' ? ChartVerticalIcon : ChartVerticalFilledIcon,
+            onClick: () => handleNavigation('dashboard'),
+            url: basePath,
             selected: selected === 'dashboard',
           },
           {
             label: 'Properties',
             icon: selected === 'properties' ? HomeIcon : HomeFilledIcon,
             onClick: () => handleNavigation('properties'),
-            url: '/dashboard/properties',
+            url: `${basePath}/properties`,
             selected: selected === 'properties',
           },
           {
             label: 'Bookings',
             icon: selected === 'bookings' ? OrderIcon : OrderFilledIcon,
             onClick: () => handleNavigation('bookings'),
-            url: '/dashboard/bookings',
+            url: `${basePath}/bookings`,
             selected: selected === 'bookings',
           },
           {
             label: 'Owner',
             icon: selected === 'owner' ? PersonIcon : PersonFilledIcon,
             onClick: () => handleNavigation('owner'),
-            url: '/dashboard/owner',
+            url: `${basePath}/owner`,
             selected: selected === 'owner',
           },
           {
             label: 'Guests',
             icon: selected === 'guests' ? PersonIcon : PersonFilledIcon,
             onClick: () => handleNavigation('guests'),
-            url: '/dashboard/guests',
+            url: `${basePath}/guests`,
             selected: selected === 'guests',
           },
           {
             label: 'Transactions',
             icon: TransactionIcon,
             onClick: () => handleNavigation('transactions'),
-            url: '/dashboard/transactions',
+            url: `${basePath}/transactions`,
             selected: selected === 'transactions',
           },
           {
             label: 'Inventory',
             icon: InventoryIcon,
             onClick: () => handleNavigation('inventory'),
-            url: '/dashboard/inventory',
+            url: `${basePath}/inventory`,
             selected: selected === 'inventory',
           },
           {
             label: 'Reports',
             icon: ChartLineIcon,
             onClick: () => handleNavigation('reports'),
-            url: '/dashboard/reports',
+            url: `${basePath}/reports`,
             selected: selected === 'reports',
           },
         ]}
@@ -201,7 +314,7 @@ function Dashboard() {
             label: 'Google & YouTube',
             icon: LogoGoogleIcon,
             onClick: () => handleNavigation('google-youtube'),
-            url: '/dashboard/google-youtube',
+            url: `${basePath}/google-youtube`,
             selected: selected === 'google-youtube',
             badge: hoveredSalesChannel === 'google-youtube' ? (
               <Icon source={PinIcon} tone="subdued" />
@@ -213,7 +326,7 @@ function Dashboard() {
             label: 'Online Store',
             icon: StoreFilledIcon,
             onClick: () => handleNavigation('online-store'),
-            url: '/dashboard/online-store',
+            url: `${basePath}/online-store`,
             selected: selected === 'online-store',
             badge: hoveredSalesChannel === 'online-store' ? (
               <Icon source={PinIcon} tone="subdued" />
@@ -235,7 +348,7 @@ function Dashboard() {
             label: 'TinySEO',
             icon: RobotIcon,
             onClick: () => handleNavigation('tinyseo'),
-            url: '/dashboard/tinyseo',
+            url: `${basePath}/tinyseo`,
             selected: selected === 'tinyseo',
             badge: hoveredApp === 'tinyseo' ? (
               <Icon source={PinIcon} tone="subdued" />
@@ -251,14 +364,18 @@ function Dashboard() {
             label: 'Settings',
             icon: selected === 'settings' ? SettingsIcon : SettingsFilledIcon,
             onClick: () => handleNavigation('settings'),
-            url: '/dashboard/settings',
+            url: `${basePath}/settings`,
             selected: selected === 'settings',
           },
         ]}
       />
-
     </Navigation>
   )
+
+  // Select navigation based on user type
+  const navigationMarkup = (userType === 'property-developer' || userType === 'real-estate-company')
+    ? developerNavigation
+    : ownersNavigation
 
   // For customers page, we render CustomersPage directly (it has its own Page wrapper)
   // For analytics page, we render AnalyticsPage directly
@@ -266,12 +383,17 @@ function Dashboard() {
   const renderContent = () => {
     // Check for customers/new route
     if (selected === 'customers/new' || pathname.includes('/customers/new')) {
-      return <AddCustomer onClose={() => router.push('/dashboard/customers')} />
+      return <AddCustomer onClose={() => router.push(`${basePath}/customers`)} />
     }
 
     // Check for bookings/new route
     if (selected === 'bookings/new' || pathname.includes('/bookings/new')) {
-      return <CreateOrder onClose={() => router.push('/dashboard/bookings')} />
+      return <CreateOrder onClose={() => router.push(`${basePath}/bookings`)} />
+    }
+
+    // Check for developers/new route
+    if (selected === 'developers/new' || pathname.includes('/developers/new')) {
+      return <AddDeveloper onClose={() => router.push(`${basePath}/developers`)} />
     }
 
     // Dashboard shows AnalyticsPage
@@ -279,9 +401,14 @@ function Dashboard() {
       return <AnalyticsPage />
     }
 
-    // Owner and Guests show CustomersPage
+    // Owner and Guests show CustomersPage (for non-developer user types)
     if (selected === 'owner' || selected === 'guests') {
       return <CustomersPage />
+    }
+
+    // Developers page for property-developer/real-estate-company uses PropertyOwnersPage
+    if (selected === 'developers') {
+      return <PropertyOwnersPage />
     }
 
     // Bookings shows OrdersPage
@@ -294,9 +421,9 @@ function Dashboard() {
       return <AnalyticsPage />
     }
 
-    // Render SettingsPage for settings
-    if (selected === 'settings') {
-      return <SettingsPage />
+    // Render SettingsPage for settings (pass userType for conditional sidebar)
+    if (selected === 'settings' || selected === 'roles-permissions') {
+      return <SettingsPage userType={userType} initialPage={selected === 'roles-permissions' ? 'roles-permissions' : undefined} />
     }
 
     const pageTitle = {
@@ -314,6 +441,13 @@ function Dashboard() {
       'google-youtube': 'Google & YouTube',
       'online-store': 'Online Store',
       'tinyseo': 'TinySEO',
+      // Developer-specific pages
+      projects: 'Projects',
+      owners: 'Owners',
+      contacts: 'Contacts',
+      leads: 'Leads',
+      integrations: 'Integrations',
+      'roles-permissions': 'Roles & Permissions',
     }[selected] || 'Dashboard'
 
     const pageContent = {
@@ -447,6 +581,85 @@ function Dashboard() {
           </BlockStack>
         </Card>
       ),
+      // Developer-specific pages
+      projects: (
+        <Card>
+          <BlockStack gap="200">
+            <Text variant="headingMd" as="h2">
+              Projects
+            </Text>
+            <Text as="p" tone="subdued">
+              Manage your real estate projects.
+            </Text>
+            <Button variant="primary">Add Project</Button>
+          </BlockStack>
+        </Card>
+      ),
+      owners: (
+        <Card>
+          <BlockStack gap="200">
+            <Text variant="headingMd" as="h2">
+              Owners
+            </Text>
+            <Text as="p" tone="subdued">
+              Manage property owners.
+            </Text>
+            <Button variant="primary">Add Owner</Button>
+          </BlockStack>
+        </Card>
+      ),
+      contacts: (
+        <Card>
+          <BlockStack gap="200">
+            <Text variant="headingMd" as="h2">
+              Contacts
+            </Text>
+            <Text as="p" tone="subdued">
+              Manage your contacts and communication.
+            </Text>
+            <Button variant="primary">Add Contact</Button>
+          </BlockStack>
+        </Card>
+      ),
+      leads: (
+        <Card>
+          <BlockStack gap="200">
+            <Text variant="headingMd" as="h2">
+              Leads
+            </Text>
+            <Text as="p" tone="subdued">
+              Track and manage sales leads.
+            </Text>
+            <Button variant="primary">Add Lead</Button>
+          </BlockStack>
+        </Card>
+      ),
+      integrations: (
+        <Card>
+          <BlockStack gap="200">
+            <Text variant="headingMd" as="h2">
+              Integrations
+            </Text>
+            <Text as="p" tone="subdued">
+              Connect with third-party services.
+            </Text>
+            <Button variant="primary">Browse Integrations</Button>
+          </BlockStack>
+        </Card>
+      ),
+      'roles-permissions': (
+        <Card>
+          <BlockStack gap="200">
+            <Text variant="headingMd" as="h2">
+              Roles & Permissions
+            </Text>
+            <Text as="p" tone="subdued">
+              Manage user roles and access permissions.
+            </Text>
+            <Button variant="primary">Manage Roles</Button>
+          </BlockStack>
+        </Card>
+      ),
     }
 
     // If dashboard is selected, don't wrap in Page component
@@ -472,6 +685,7 @@ function Dashboard() {
             onMobileNavigationToggle={toggleMobileNavigationActive}
             onSidekickToggle={toggleSidekick}
             isSidekickOpen={sidekickOpen}
+            userType={userType}
           />
         </div>
 

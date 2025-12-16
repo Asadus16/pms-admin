@@ -83,6 +83,10 @@
   margin-right: 0 !important;
   padding-right: 0 !important;
   position: relative;
+  width: 240px !important;
+  min-width: 240px !important;
+  max-width: 240px !important;
+  flex-shrink: 0 !important;
 }
 
 .dashboard-main .Polaris-Navigation {
@@ -92,6 +96,9 @@
   display: flex !important;
   flex-direction: column !important;
   height: 100% !important;
+  width: 240px !important;
+  min-width: 240px !important;
+  max-width: 240px !important;
 }
 
 /* Position Settings section at the bottom */
@@ -158,9 +165,30 @@
   align-items: center;
 }
 
+/* Constrain navigation sections width */
+.dashboard-main .Polaris-Navigation__PrimaryNavigation {
+  width: 240px !important;
+  max-width: 240px !important;
+}
+
+.dashboard-main .Polaris-Navigation__Section {
+  width: 240px !important;
+  max-width: 240px !important;
+}
+
+.dashboard-main .Polaris-Navigation__SectionItems {
+  width: 100% !important;
+  max-width: 240px !important;
+}
+
+/* Fix navigation item wrapper padding */
+.dashboard-main .Polaris-Navigation__ItemWrapper {
+  padding: 0px 12px !important;
+}
+
 /* Align navigation items with Page header */
 .dashboard-main .Polaris-Navigation__Item {
-  padding-top: 0 !important;
+  padding: 0px 4px 0px 8px !important;
   margin-top: 0 !important;
 }
 

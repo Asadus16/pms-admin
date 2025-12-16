@@ -1,0 +1,99 @@
+/* ========================================
+   User Type Selection Layout
+   ======================================== */
+
+.user-type-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #1a1812;
+}
+
+/* Header */
+.user-type-header {
+  flex-shrink: 0;
+  height: 56px;
+  background: #1a1812;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 520;
+  position: relative;
+}
+
+.user-type-logo {
+  display: flex;
+  align-items: center;
+}
+
+/* Body container */
+.user-type-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Main content area with rounded corners */
+.user-type-main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  background: #e6e6e6;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+}
+
+/* Content wrapper for the card */
+.user-type-content {
+  width: 100%;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
+/* Card styling */
+.user-type-content .Polaris-Card {
+  border-radius: 12px !important;
+}
+
+/* Select styling */
+.user-type-content .Polaris-Select__Content {
+  border-radius: 8px !important;
+  border: 1px solid #8a8a8a !important;
+}
+
+.user-type-content .Polaris-Select select {
+  border-radius: 8px !important;
+}
+
+/* Button styling */
+.user-type-button .Polaris-Button {
+  background-color: #303030 !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+}
+
+.user-type-button .Polaris-Button:hover {
+  background-color: #404040 !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .user-type-main {
+    padding-top: 20px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+  }
+
+  .user-type-content {
+    padding: 0 16px;
+  }
+}

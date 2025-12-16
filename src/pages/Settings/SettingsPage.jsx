@@ -26,11 +26,18 @@ import NotificationsSettings from '@components/Settings/NotificationsSettings';
 import '@components/Settings/styles/SettingsLayout.css';
 import '@components/Settings/styles/SettingsResponsive.css';
 
-function SettingsPageContent() {
+function SettingsPageContent({ userType = 'owners', initialPage }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
-  const [activeSection, setActiveSection] = useState('general');
+
+  // Check if this is a developer/real-estate user type
+  const isDeveloperType = userType === 'property-developer' || userType === 'real-estate-company';
+
+  // Default to 'roles-permissions' for developer types, 'general' for others
+  const defaultSection = isDeveloperType ? 'roles-permissions' : 'general';
+
+  const [activeSection, setActiveSection] = useState(initialPage || defaultSection);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileNav, setShowMobileNav] = useState(true);
@@ -41,8 +48,12 @@ function SettingsPageContent() {
     const section = searchParams.get('section');
     if (section) {
       setActiveSection(section);
+    } else if (initialPage) {
+      setActiveSection(initialPage);
+    } else if (isDeveloperType) {
+      setActiveSection('roles-permissions');
     }
-  }, [searchParams]);
+  }, [searchParams, initialPage, isDeveloperType]);
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -79,17 +90,21 @@ function SettingsPageContent() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleClose = useCallback(() => {
-    router.push('/dashboard');
-  }, [router]);
+    router.push(`/${userType}`);
+  }, [router, userType]);
 
   const handleNavClick = useCallback((sectionId) => {
     setActiveSection(sectionId);
-    router.push(`/settings?section=${sectionId}`, { scroll: false });
+    // Only update URL for non-developer types (when showing full settings menu)
+    // For developer types, SettingsPage is embedded in Dashboard so don't change URL
+    if (!isDeveloperType) {
+      router.push(`/settings?section=${sectionId}`, { scroll: false });
+    }
     // On mobile, switch to content view after selecting
     if (isMobile) {
       setShowMobileNav(false);
     }
-  }, [router, isMobile]);
+  }, [router, isMobile, isDeveloperType]);
 
   const handleMobileBack = useCallback(() => {
     setShowMobileNav(true);
@@ -144,6 +159,21 @@ function SettingsPageContent() {
         return <AppsSettings />;
       case 'notifications':
         return <NotificationsSettings />;
+      case 'roles-permissions':
+        return (
+          <div className="settings-card">
+            <div className="settings-card-header">
+              <h2 className="settings-card-title">Roles & Permissions</h2>
+            </div>
+            <div className="settings-card-content">
+              <div className="settings-row">
+                <div className="settings-row-description">
+                  Manage user roles and access permissions for your organization.
+                </div>
+              </div>
+            </div>
+          </div>
+        );
       default:
         return (
           <div className="settings-card">
@@ -181,7 +211,7 @@ function SettingsPageContent() {
       <div className={`settings-page ${mobileStateClass}`}>
         {/* Header */}
         <div className="settings-header">
-          <ShopifyHeader />
+          <ShopifyHeader userType={userType} />
         </div>
 
         {/* Mobile Sub-header - Shows back button when viewing content */}
@@ -218,6 +248,7 @@ function SettingsPageContent() {
                 onNavClick={handleNavClick}
                 isMobile={isMobile}
                 onMobileItemClick={() => setShowMobileNav(false)}
+                showRolesPermissions={isDeveloperType}
               />
             )}
 
@@ -275,14 +306,14 @@ function SettingsPageContent() {
   );
 }
 
-function SettingsPage() {
+function SettingsPage({ userType, initialPage }) {
   return (
     <Suspense fallback={
       <AppProvider i18n={{}}>
         <div className="settings-page" style={{ background: '#f6f6f7', minHeight: '100vh' }} />
       </AppProvider>
     }>
-      <SettingsPageContent />
+      <SettingsPageContent userType={userType} initialPage={initialPage} />
     </Suspense>
   );
 }

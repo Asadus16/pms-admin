@@ -1,0 +1,146 @@
+/**
+ * AddDeveloper Component Styles
+ */
+
+.add-developer-wrapper {
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.add-developer-wrapper .Polaris-Page {
+  max-width: 100% !important;
+}
+
+.add-developer-wrapper .new-developer-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  line-height: 24px !important;
+  color: var(--color-text-primary) !important;
+}
+
+.add-developer-wrapper .Polaris-Page__Header {
+  padding-bottom: var(--spacing-lg) !important;
+  margin-bottom: 0 !important;
+}
+
+.add-developer-wrapper .Polaris-Page__Content {
+  padding-top: 0 !important;
+  padding-bottom: var(--spacing-xl) !important;
+  margin-top: 0 !important;
+}
+
+.add-developer-wrapper .Polaris-Layout {
+  display: flex;
+  gap: var(--spacing-md) !important;
+}
+
+.add-developer-wrapper .Polaris-Layout__Section:first-child .Polaris-Card:last-child {
+  margin-bottom: 120px !important;
+}
+
+.add-developer-wrapper .Polaris-Layout__Section {
+  flex: 0 1 62% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 62% !important;
+}
+
+.add-developer-wrapper .Polaris-Layout__Section:first-child {
+  padding-bottom: 120px !important;
+}
+
+.add-developer-wrapper .Polaris-Layout__Section--secondary,
+.add-developer-wrapper .Polaris-Layout__Section[class*="oneThird"] {
+  flex: 0 0 33.333% !important;
+  max-width: 33.333% !important;
+  min-width: 33.333% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* TinyMCE Editor Styles */
+.tinymce-wrapper {
+  border-radius: var(--p-border-radius-200);
+  overflow: hidden;
+}
+
+.tinymce-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background: var(--p-color-bg-surface);
+  border: 1px dashed var(--p-color-border-input);
+  border-radius: var(--p-border-radius-200);
+  color: var(--p-color-text-secondary);
+  font-size: 14px;
+}
+
+.tinymce-wrapper .tox-tinymce {
+  border: 1px solid var(--p-color-border-input) !important;
+  border-radius: var(--p-border-radius-200) !important;
+}
+
+.tinymce-wrapper .tox .tox-toolbar-overlord,
+.tinymce-wrapper .tox .tox-toolbar__primary {
+  background: var(--p-color-bg-surface) !important;
+}
+
+.tinymce-wrapper .tox:not(.tox-tinymce-inline) .tox-editor-header {
+  border-bottom: 1px solid var(--p-color-border-input) !important;
+  box-shadow: none !important;
+}
+
+.tinymce-wrapper .tox .tox-tbtn {
+  border-radius: var(--p-border-radius-100) !important;
+}
+
+.tinymce-wrapper .tox .tox-tbtn:hover {
+  background: var(--p-color-bg-surface-hover) !important;
+}
+
+/* Media DropZone custom content */
+.add-developer-wrapper .Polaris-DropZone {
+  min-height: 120px;
+}
+
+.add-developer-wrapper .Polaris-DropZone__Container {
+  padding: 24px;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .add-developer-wrapper {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .add-developer-wrapper .Polaris-Layout {
+    flex-direction: column !important;
+    gap: var(--spacing-md) !important;
+  }
+
+  .add-developer-wrapper .Polaris-Layout__Section {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .add-developer-wrapper .Polaris-Layout__Section--secondary,
+  .add-developer-wrapper .Polaris-Layout__Section[class*="oneThird"] {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .rich-text-toolbar {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}
