@@ -27,7 +27,7 @@ import {
 } from '@shopify/polaris';
 import {
   SearchIcon,
-  PersonIcon,
+  ProductIcon,
   LayoutColumns3Icon,
   SortIcon,
   ViewIcon,
@@ -35,32 +35,32 @@ import {
   PlusIcon,
 } from '@shopify/polaris-icons';
 import './styles/CustomersPage.css';
-import { developersData } from '../data/developers';
+import { projectsData } from '../data/projects';
 
-// All available columns for developers
+// All available columns for projects
 const allColumns = [
-  { id: 'name', title: 'Name', default: true },
-  { id: 'propertiesCount', title: 'Number of properties', default: true },
-  { id: 'primaryContactName', title: 'Primary contact name', default: true },
-  { id: 'primaryContactNumber', title: 'Primary contact number', default: true },
-  { id: 'primaryContactEmail', title: 'Primary contact email', default: true },
+  { id: 'projectId', title: 'Project ID', default: true },
+  { id: 'projectName', title: 'Project Name', default: true },
+  { id: 'developer', title: 'Developer', default: true },
+  { id: 'constructionProgress', title: 'Construction Progress', default: true },
+  { id: 'community', title: 'Community', default: true },
+  { id: 'subCommunity', title: 'Sub Community', default: true },
   { id: 'status', title: 'Status', default: true },
-  { id: 'dateAdded', title: 'Date added', default: true },
 ];
 
 // Sort options
 const sortOptions = [
   { value: 'dateAdded', label: 'Date added' },
-  { value: 'propertiesCount', label: 'Number of properties' },
-  { value: 'name', label: 'Name' },
+  { value: 'projectName', label: 'Project Name' },
+  { value: 'constructionProgress', label: 'Construction Progress' },
   { value: 'status', label: 'Status' },
 ];
 
 // LocalStorage keys
 const STORAGE_KEYS = {
-  VISIBLE_COLUMNS: 'developers_visible_columns',
-  SORT_BY: 'developers_sort_by',
-  SORT_DIRECTION: 'developers_sort_direction',
+  VISIBLE_COLUMNS: 'projects_visible_columns',
+  SORT_BY: 'projects_sort_by',
+  SORT_DIRECTION: 'projects_sort_direction',
 };
 
 // Helper functions for localStorage
@@ -72,8 +72,8 @@ const getStoredColumns = () => {
       const parsed = JSON.parse(stored);
       const allowed = new Set(allColumns.map((c) => c.id));
       const sanitized = Array.isArray(parsed) ? parsed.filter((id) => allowed.has(id)) : [];
-      if (!sanitized.includes('name')) {
-        sanitized.unshift('name');
+      if (!sanitized.includes('projectId')) {
+        sanitized.unshift('projectId');
       }
       return sanitized.length ? sanitized : null;
     }
@@ -101,7 +101,7 @@ const getStoredSort = () => {
   return { sortBy: 'dateAdded', sortDirection: 'desc' };
 };
 
-function PropertyOwnersPage() {
+function ProjectsPage() {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -143,12 +143,12 @@ function PropertyOwnersPage() {
   const itemsPerPage = 50;
 
   const resourceName = {
-    singular: 'developer',
-    plural: 'developers',
+    singular: 'project',
+    plural: 'projects',
   };
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(developersData);
+    useIndexResourceState(projectsData);
 
   const handleSearchChange = useCallback((value) => {
     setSearchValue(value);
@@ -183,7 +183,7 @@ function PropertyOwnersPage() {
   }, [tempVisibleColumns]);
 
   const toggleColumnVisibility = useCallback((columnId) => {
-    if (columnId === 'name') return;
+    if (columnId === 'projectId') return;
 
     setTempVisibleColumns(prev => {
       if (prev.includes(columnId)) {
@@ -259,12 +259,13 @@ function PropertyOwnersPage() {
     setImportFile(null);
   }, [importFile]);
 
-  // Filter developers based on search
-  const filteredDevelopers = developersData.filter((developer) =>
-    developer.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-    developer.primaryContactName.toLowerCase().includes(searchValue.toLowerCase()) ||
-    developer.primaryContactEmail.toLowerCase().includes(searchValue.toLowerCase()) ||
-    developer.primaryContactNumber.toLowerCase().includes(searchValue.toLowerCase())
+  // Filter projects based on search
+  const filteredProjects = projectsData.filter((project) =>
+    project.projectId.toLowerCase().includes(searchValue.toLowerCase()) ||
+    project.projectName.toLowerCase().includes(searchValue.toLowerCase()) ||
+    project.developer.toLowerCase().includes(searchValue.toLowerCase()) ||
+    project.community.toLowerCase().includes(searchValue.toLowerCase()) ||
+    project.subCommunity.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   const formatDate = (dateStr) => {
@@ -274,15 +275,15 @@ function PropertyOwnersPage() {
     return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' });
   };
 
-  // Sort developers
-  const sortedDevelopers = [...filteredDevelopers].sort((a, b) => {
+  // Sort projects
+  const sortedProjects = [...filteredProjects].sort((a, b) => {
     let comparison = 0;
     switch (selectedSort) {
-      case 'propertiesCount':
-        comparison = a.propertiesCount - b.propertiesCount;
+      case 'constructionProgress':
+        comparison = a.constructionProgress - b.constructionProgress;
         break;
-      case 'name':
-        comparison = a.name.localeCompare(b.name);
+      case 'projectName':
+        comparison = a.projectName.localeCompare(b.projectName);
         break;
       case 'status':
         comparison = a.status.localeCompare(b.status);
@@ -296,72 +297,74 @@ function PropertyOwnersPage() {
     return sortDirection === 'desc' ? -comparison : comparison;
   });
 
-  const totalDevelopers = developersData.length;
+  const totalProjects = projectsData.length;
 
   // Get current visible columns for normal view
   const currentVisibleColumns = allColumns.filter(col => visibleColumns.includes(col.id));
 
   // Render cell content based on column id
-  const renderCellContent = (developer, columnId) => {
+  const renderCellContent = (project, columnId) => {
     switch (columnId) {
-      case 'name':
+      case 'projectId':
         return (
           <Text variant="bodyMd" fontWeight="semibold" as="span">
-            {developer.name}
+            {project.projectId}
           </Text>
         );
-      case 'propertiesCount':
+      case 'projectName':
         return (
           <Text variant="bodyMd" as="span">
-            {developer.propertiesCount}
+            {project.projectName}
           </Text>
         );
-      case 'primaryContactName':
+      case 'developer':
         return (
           <Text variant="bodyMd" as="span">
-            {developer.primaryContactName}
+            {project.developer}
           </Text>
         );
-      case 'primaryContactNumber':
+      case 'constructionProgress':
         return (
-          <Text variant="bodyMd" as="span" tone="subdued">
-            {developer.primaryContactNumber}
+          <div style={{ minWidth: '120px' }}>
+            <Text variant="bodyMd" as="span">
+              {project.constructionProgress}%
+            </Text>
+          </div>
+        );
+      case 'community':
+        return (
+          <Text variant="bodyMd" as="span">
+            {project.community}
           </Text>
         );
-      case 'primaryContactEmail':
+      case 'subCommunity':
         return (
           <Text variant="bodyMd" as="span" tone="subdued">
-            {developer.primaryContactEmail}
+            {project.subCommunity}
           </Text>
         );
       case 'status':
         return (
-          <Badge tone={developer.status === 'active' ? 'success' : 'subdued'}>
-            {developer.status === 'active' ? 'Active' : 'Inactive'}
+          <Badge tone={project.status === 'active' ? 'success' : project.status === 'completed' ? 'info' : 'subdued'}>
+            {project.status === 'active' ? 'Active' : project.status === 'completed' ? 'Completed' : 'Inactive'}
           </Badge>
-        );
-      case 'dateAdded':
-        return (
-          <Text variant="bodyMd" as="span" tone="subdued">
-            {formatDate(developer.dateAdded)}
-          </Text>
         );
       default:
         return null;
     }
   };
 
-  const rowMarkup = sortedDevelopers.map((developer, index) => (
+  const rowMarkup = sortedProjects.map((project, index) => (
     <IndexTable.Row
-      id={developer.id}
-      key={developer.id}
-      selected={selectedResources.includes(developer.id)}
+      id={project.id}
+      key={project.id}
+      selected={selectedResources.includes(project.id)}
       position={index}
-      onClick={() => router.push(`${basePath}/developers/${developer.id}`)}
+      onClick={() => router.push(`${basePath}/projects/${project.id}`)}
     >
       {currentVisibleColumns.map((column) => (
         <IndexTable.Cell key={column.id}>
-          {renderCellContent(developer, column.id)}
+          {renderCellContent(project, column.id)}
         </IndexTable.Cell>
       ))}
     </IndexTable.Row>
@@ -370,7 +373,7 @@ function PropertyOwnersPage() {
   // Render a single column as a mini table for edit mode
   const renderColumnBlock = (column) => {
     const isVisible = tempVisibleColumns.includes(column.id);
-    const isNameColumn = column.id === 'name';
+    const isProjectIdColumn = column.id === 'projectId';
 
     return (
       <div
@@ -381,7 +384,7 @@ function PropertyOwnersPage() {
           <Text variant="bodySm" as="span" fontWeight="medium">
             {column.title}
           </Text>
-          {!isNameColumn && (
+          {!isProjectIdColumn && (
             <button
               onClick={() => toggleColumnVisibility(column.id)}
               className={`edit-column-toggle-btn ${!isVisible ? 'hidden' : ''}`}
@@ -393,15 +396,15 @@ function PropertyOwnersPage() {
         </div>
 
         <div className={`edit-column-data ${!isVisible ? 'hidden' : ''}`}>
-          {sortedDevelopers.slice(0, 10).map((developer, index) => (
+          {sortedProjects.slice(0, 10).map((project, index) => (
             <div
-              key={developer.id}
+              key={project.id}
               className="edit-column-row"
               style={{
                 borderBottom: index < 9 ? '1px solid #f1f1f1' : 'none',
               }}
             >
-              {renderCellContent(developer, column.id)}
+              {renderCellContent(project, column.id)}
             </div>
           ))}
         </div>
@@ -414,7 +417,7 @@ function PropertyOwnersPage() {
     <Button
       icon={SortIcon}
       onClick={toggleSortPopover}
-      accessibilityLabel="Sort developers"
+      accessibilityLabel="Sort projects"
     />
   );
 
@@ -424,13 +427,13 @@ function PropertyOwnersPage() {
         <Page
           title={
             <InlineStack gap="200" blockAlign="center">
-              <Icon source={PersonIcon} />
-              <span className="customers-page-title">Developers</span>
+              <Icon source={ProductIcon} />
+              <span className="customers-page-title">Projects</span>
             </InlineStack>
           }
           primaryAction={{
-            content: 'Add developer',
-            onAction: () => router.push(`${basePath}/developers/new`),
+            content: 'Add project',
+            onAction: () => router.push(`${basePath}/projects/new`),
           }}
           secondaryActions={[
             {
@@ -443,18 +446,18 @@ function PropertyOwnersPage() {
             },
           ]}
         >
-          {/* Developer count stats bar */}
+          {/* Project count stats bar */}
           <Box paddingBlockEnd="600" className="customer-stats-box">
             <Card padding="400" className="customer-stats-card">
               <InlineStack gap="200" align="start">
                 <Text variant="bodyMd" as="span" fontWeight="semibold">
-                  {totalDevelopers} developers
+                  {totalProjects} projects
                 </Text>
                 <Text variant="bodyMd" as="span" tone="subdued">
                   |
                 </Text>
                 <Text variant="bodyMd" as="span" tone="subdued">
-                  {developersData.filter(d => d.status === 'active').length} active
+                  {projectsData.filter(p => p.status === 'active').length} active
                 </Text>
               </InlineStack>
             </Card>
@@ -467,7 +470,7 @@ function PropertyOwnersPage() {
               <InlineStack align="space-between" blockAlign="center">
                 <div className="flex-1 max-width-93">
                   <TextField
-                    placeholder="Search developers"
+                    placeholder="Search projects"
                     value={searchValue}
                     onChange={handleSearchChange}
                     clearButton
@@ -552,7 +555,7 @@ function PropertyOwnersPage() {
               <div className="table-scroll-container">
                 <IndexTable
                   resourceName={resourceName}
-                  itemCount={sortedDevelopers.length}
+                  itemCount={sortedProjects.length}
                   selectedItemsCount={
                     allResourcesSelected ? 'All' : selectedResources.length
                   }
@@ -575,13 +578,13 @@ function PropertyOwnersPage() {
                   <Pagination
                     hasPrevious={currentPage > 1}
                     onPrevious={() => setCurrentPage(currentPage - 1)}
-                    hasNext={currentPage * itemsPerPage < totalDevelopers}
+                    hasNext={currentPage * itemsPerPage < totalProjects}
                     onNext={() => setCurrentPage(currentPage + 1)}
                   />
                   <Text variant="bodySm" as="span" tone="subdued">
                     {`${(currentPage - 1) * itemsPerPage + 1}-${Math.min(
                       currentPage * itemsPerPage,
-                      totalDevelopers
+                      totalProjects
                     )}`}
                   </Text>
                 </InlineStack>
@@ -594,9 +597,9 @@ function PropertyOwnersPage() {
         <Modal
           open={exportModalOpen}
           onClose={handleExportModalClose}
-          title="Export developers"
+          title="Export projects"
           primaryAction={{
-            content: 'Export developers',
+            content: 'Export projects',
             onAction: handleExport,
           }}
           secondaryActions={[
@@ -610,12 +613,12 @@ function PropertyOwnersPage() {
             <BlockStack gap="500">
               <BlockStack gap="300">
                 <Text variant="headingSm" as="h3">
-                  Developers selected
+                  Projects selected
                 </Text>
                 <ChoiceList
                   choices={[
                     { label: 'Current page', value: 'current' },
-                    { label: 'All developers', value: 'all' },
+                    { label: 'All projects', value: 'all' },
                   ]}
                   selected={exportOption}
                   onChange={handleExportOptionChange}
@@ -627,7 +630,7 @@ function PropertyOwnersPage() {
                   Fields included
                 </Text>
                 <Text variant="bodyMd" as="p" tone="subdued">
-                  By default, all exports include: name, contact info, projects count, total value, status.
+                  By default, all exports include: project ID, project name, developer, construction progress, community, sub community, status.
                 </Text>
                 <BlockStack gap="200">
                   <Checkbox
@@ -664,9 +667,9 @@ function PropertyOwnersPage() {
         <Modal
           open={importModalOpen}
           onClose={handleImportModalClose}
-          title="Import developers by CSV"
+          title="Import projects by CSV"
           primaryAction={{
-            content: 'Import developers',
+            content: 'Import projects',
             onAction: handleImport,
             disabled: !importFile,
           }}
@@ -720,4 +723,5 @@ function PropertyOwnersPage() {
   );
 }
 
-export default PropertyOwnersPage;
+export default ProjectsPage;
+

@@ -8,18 +8,18 @@ const SessionsByLocation = () => {
     const [hoveredIndex, setHoveredIndex] = useState(null);
 
     const locations = [
-        { label: 'India · Karnataka · Bengaluru', value: 70, compare: 121, change: '21%', changeType: 'positive' },
-        { label: 'Germany · Saxony · Falkenstein', value: 49, compare: 1, change: '80%', changeType: 'positive' },
-        { label: 'India · Maharashtra · Mumbai', value: 18, compare: 23, change: '7%', changeType: 'positive' },
-        { label: 'India · Telangana · Hyderabad', value: 15, compare: 28, change: '56%', changeType: 'positive' },
-        { label: 'India · None · None', value: 14, compare: 22, change: null, changeType: 'neutral' },
+        { label: 'Dubai', value: 85, compare: 70, change: '21%', changeType: 'positive' },
+        { label: 'Lahore', value: 52, compare: 45, change: '16%', changeType: 'positive' },
+        { label: 'Karachi', value: 38, compare: 30, change: '27%', changeType: 'positive' },
+        { label: 'Riyadh', value: 28, compare: 20, change: '40%', changeType: 'positive' },
+        { label: 'London', value: 15, compare: 12, change: '25%', changeType: 'positive' },
     ];
 
     const maxValue = Math.max(...locations.map(l => Math.max(l.value, l.compare)));
 
     return (
         <BlockStack gap="300">
-            <ChartHeading title="Sessions by location" />
+            <ChartHeading title="Leads by Location (Buyer/Tenant Origin)" />
             <BlockStack gap="300">
                 {locations.map((location, index) => (
                     <div

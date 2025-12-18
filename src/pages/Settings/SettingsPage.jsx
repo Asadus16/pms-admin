@@ -32,7 +32,7 @@ function SettingsPageContent({ userType = 'owners', initialPage }) {
   const [mounted, setMounted] = useState(false);
 
   // Check if this is a developer/real-estate user type
-  const isDeveloperType = userType === 'property-developer' || userType === 'real-estate-company';
+  const isDeveloperType = userType === 'property-manager' || userType === 'real-estate-company';
 
   // Default to 'roles-permissions' for developer types, 'general' for others
   const defaultSection = isDeveloperType ? 'roles-permissions' : 'general';

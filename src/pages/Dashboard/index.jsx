@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import {
   AppProvider,
   Page,
@@ -54,17 +54,24 @@ import {
 import ShopifyHeader from '../../components/Shopifyheader'
 import CustomersPage from '../../components/CustomersPage'
 import PropertyOwnersPage from '../../components/PropertyOwnersPage'
+import ProjectsPage from '../../components/ProjectsPage'
+import ProjectViewPage from '../../components/ProjectViewPage'
+import AddProject from '../../components/AddProject'
 import OrdersPage from '../../components/OrdersPage'
 import AnalyticsPage from '../../components/AnalyticsPage'
 import SidekickPanel from '../../components/SidekickPanel'
 import AddCustomer from '../../components/AddCustomer'
 import AddDeveloper from '../../components/AddDeveloper'
 import CreateOrder from '../../components/CreateOrder'
+import DeveloperViewPage from '../../components/DeveloperViewPage'
+import { developersData } from '../../data/developers'
+import { projectsData } from '../../data/projects'
 import SettingsPage from '../Settings/SettingsPage'
+import PropertyDeveloperDashboard from './PropertyDeveloperDashboard'
 import './dashboard.css'
 
 // Valid user types
-const VALID_USER_TYPES = ['real-estate-company', 'owners', 'guests', 'property-manager', 'property-developer']
+const VALID_USER_TYPES = ['real-estate-company', 'owners', 'guests', 'property-manager']
 
 // Robot icon for TinySEO
 const RobotIcon = () => (
@@ -81,6 +88,7 @@ const RobotIcon = () => (
 function Dashboard({ userType: rawUserType = 'owners' }) {
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [mobileNavigationActive, setMobileNavigationActive] = useState(false)
   const [sidekickOpen, setSidekickOpen] = useState(false)
   const [sidekickExpanded, setSidekickExpanded] = useState(false)
@@ -101,6 +109,11 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     if (path === 'customers/new' || path.startsWith('customers/new')) return 'customers/new'
     if (path === 'bookings/new' || path.startsWith('bookings/new')) return 'bookings/new'
     if (path === 'developers/new' || path.startsWith('developers/new')) return 'developers/new'
+    if (path === 'projects/new' || path.startsWith('projects/new')) return 'projects/new'
+    // Developers view route
+    if (path.startsWith('developers/') && !path.startsWith('developers/new')) return path
+    // Projects view route
+    if (path.startsWith('projects/') && !path.startsWith('projects/new')) return path
     if (path === 'customers/segments' || path.startsWith('customers/segments')) return 'segments'
     if (path === 'analytics/reports' || path.startsWith('analytics/reports')) return 'reports'
     if (path === 'analytics/live-view' || path.startsWith('analytics/live-view')) return 'live-view'
@@ -373,9 +386,21 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
   )
 
   // Select navigation based on user type
-  const navigationMarkup = (userType === 'property-developer' || userType === 'real-estate-company')
+  const navigationMarkup = (userType === 'property-manager' || userType === 'real-estate-company')
     ? developerNavigation
     : ownersNavigation
+
+  // Property-manager dashboard edit mode uses the global header Save/Discard bar
+  const isPropertyDeveloperDashboard = userType === 'property-manager' && selected === 'dashboard'
+  const isEditingDashboard = isPropertyDeveloperDashboard && searchParams?.get('edit') === '1'
+
+  const handleDashboardDiscard = useCallback(() => {
+    window.dispatchEvent(new CustomEvent('pdDashboardDiscard'))
+  }, [])
+
+  const handleDashboardSave = useCallback(() => {
+    window.dispatchEvent(new CustomEvent('pdDashboardSave'))
+  }, [])
 
   // For customers page, we render CustomersPage directly (it has its own Page wrapper)
   // For analytics page, we render AnalyticsPage directly
@@ -396,8 +421,42 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
       return <AddDeveloper onClose={() => router.push(`${basePath}/developers`)} />
     }
 
-    // Dashboard shows AnalyticsPage
+    // Check for developers/:id/edit route
+    if (selected.startsWith('developers/') && selected.endsWith('/edit')) {
+      const developerId = selected.split('/')[1];
+      const initialDeveloper = developersData.find((d) => String(d.id) === String(developerId)) || null;
+      return (
+        <AddDeveloper
+          mode="edit"
+          initialDeveloper={initialDeveloper}
+          onClose={() => router.push(`${basePath}/developers`)}
+        />
+      );
+    }
+
+    // Check for projects/new route
+    if (selected === 'projects/new' || pathname.includes('/projects/new')) {
+      return <AddProject onClose={() => router.push(`${basePath}/projects`)} />
+    }
+
+    // Check for projects/:id/edit route
+    if (selected.startsWith('projects/') && selected.endsWith('/edit')) {
+      const projectId = selected.split('/')[1];
+      const initialProject = projectsData.find((p) => String(p.id) === String(projectId)) || null;
+      return (
+        <AddProject
+          mode="edit"
+          initialProject={initialProject}
+          onClose={() => router.push(`${basePath}/projects`)}
+        />
+      );
+    }
+
+    // Dashboard: property-manager gets its own component
     if (selected === 'dashboard') {
+      if (userType === 'property-manager') {
+        return <PropertyDeveloperDashboard />
+      }
       return <AnalyticsPage />
     }
 
@@ -406,9 +465,26 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
       return <CustomersPage />
     }
 
-    // Developers page for property-developer/real-estate-company uses PropertyOwnersPage
+    // Developers page for property-manager/real-estate-company uses PropertyOwnersPage
     if (selected === 'developers') {
       return <PropertyOwnersPage />
+    }
+
+    // Projects page for property-manager/real-estate-company uses ProjectsPage
+    if (selected === 'projects') {
+      return <ProjectsPage />
+    }
+
+    // Developer view page: /:userType/developers/:id
+    if (selected.startsWith('developers/') && selected !== 'developers/new') {
+      const developerId = selected.split('/')[1];
+      return <DeveloperViewPage developerId={developerId} />;
+    }
+
+    // Project view page: /:userType/projects/:id
+    if (selected.startsWith('projects/') && selected !== 'projects/new') {
+      const projectId = selected.split('/')[1];
+      return <ProjectViewPage projectId={projectId} />;
     }
 
     // Bookings shows OrdersPage
@@ -581,20 +657,6 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
           </BlockStack>
         </Card>
       ),
-      // Developer-specific pages
-      projects: (
-        <Card>
-          <BlockStack gap="200">
-            <Text variant="headingMd" as="h2">
-              Projects
-            </Text>
-            <Text as="p" tone="subdued">
-              Manage your real estate projects.
-            </Text>
-            <Button variant="primary">Add Project</Button>
-          </BlockStack>
-        </Card>
-      ),
       owners: (
         <Card>
           <BlockStack gap="200">
@@ -664,6 +726,9 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
 
     // If dashboard is selected, don't wrap in Page component
     if (selected === 'dashboard') {
+      if (userType === 'property-manager') {
+        return <PropertyDeveloperDashboard />
+      }
       return <AnalyticsPage />
     }
 
@@ -686,6 +751,9 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
             onSidekickToggle={toggleSidekick}
             isSidekickOpen={sidekickOpen}
             userType={userType}
+            showUnsavedChanges={isEditingDashboard}
+            onDiscard={isEditingDashboard ? handleDashboardDiscard : undefined}
+            onSave={isEditingDashboard ? handleDashboardSave : undefined}
           />
         </div>
 

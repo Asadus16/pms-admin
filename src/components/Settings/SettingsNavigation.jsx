@@ -83,7 +83,7 @@ function SettingsNavigation({
   onMobileItemClick,
   showRolesPermissions = false
 }) {
-  // For property-developer, only show Roles & Permissions
+  // For property-manager, only show Roles & Permissions
   // For other user types, show all settings nav items
   const navItems = showRolesPermissions
     ? [

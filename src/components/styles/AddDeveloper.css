@@ -24,6 +24,20 @@
   margin-bottom: 0 !important;
 }
 
+/* Custom header for ViewDeveloper - aligns with content (copied from buildit-fe AddUser.css) */
+.add-developer-wrapper .view-user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg, 20px) 56px var(--spacing-lg, 20px) 20px;
+  margin-bottom: 0;
+}
+
+/* Hide empty Page header when using custom header */
+.add-developer-wrapper .view-user-header + .Polaris-Page .Polaris-Page__Header {
+  display: none;
+}
+
 .add-developer-wrapper .Polaris-Page__Content {
   padding-top: 0 !important;
   padding-bottom: var(--spacing-xl) !important;
@@ -61,8 +75,10 @@
 
 /* TinyMCE Editor Styles */
 .tinymce-wrapper {
+  border: 1px solid var(--p-color-input-border, var(--p-color-border, #c9cccf));
   border-radius: var(--p-border-radius-200);
   overflow: hidden;
+  background: var(--p-color-bg-surface);
 }
 
 .tinymce-loading {
@@ -71,15 +87,22 @@
   justify-content: center;
   min-height: 300px;
   background: var(--p-color-bg-surface);
-  border: 1px dashed var(--p-color-border-input);
+  border: 1px dashed var(--p-color-input-border, var(--p-color-border, #c9cccf));
   border-radius: var(--p-border-radius-200);
   color: var(--p-color-text-secondary);
   font-size: 14px;
 }
 
 .tinymce-wrapper .tox-tinymce {
-  border: 1px solid var(--p-color-border-input) !important;
-  border-radius: var(--p-border-radius-200) !important;
+  /* Wrapper owns the border to ensure it always renders consistently */
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Match Polaris-like focus treatment */
+.tinymce-wrapper:focus-within {
+  border-color: var(--p-color-border-focus, #005bd3);
+  box-shadow: 0 0 0 1px var(--p-color-border-focus, #005bd3);
 }
 
 .tinymce-wrapper .tox .tox-toolbar-overlord,
@@ -88,7 +111,7 @@
 }
 
 .tinymce-wrapper .tox:not(.tox-tinymce-inline) .tox-editor-header {
-  border-bottom: 1px solid var(--p-color-border-input) !important;
+  border-bottom: 1px solid var(--p-color-input-border, var(--p-color-border, #c9cccf)) !important;
   box-shadow: none !important;
 }
 

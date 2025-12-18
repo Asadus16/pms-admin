@@ -8,16 +8,16 @@ const ProductsBySellThroughRate = () => {
     const [hoveredIndex, setHoveredIndex] = useState(null);
 
     const products = [
-        { name: 'Clear Complexion Skin Softener Serum - 50+ herbs infused · 50 m...', rate: '1.05%', compare: '1.04%', change: '1%', changeType: 'positive', barWidth: 100 },
-        { name: 'Lip Stain – 50+ Ayurvedic Herbs infused · Pink · None', rate: '0.61%', compare: '0.2%', change: '205%', changeType: 'positive', barWidth: 58 },
-        { name: 'Clear Complexion Ayurvedic Body Lotion – Infused with 50+ Rare ...', rate: '0.5%', compare: '0%', change: null, barWidth: 48 },
-        { name: 'Clear Complexion Soap – Infused with 50+ Ayurvedic Herbs · 120 ...', rate: '0.42%', compare: '0.42%', change: null, barWidth: 40 },
-        { name: 'CLEAR COMPLEXION 15-DAY CHALLENGE - Ayurvedic 50+ Herbs...', rate: '0.21%', compare: '0%', change: null, barWidth: 20 },
+        { name: 'Unit A-301 · DHA Phase 8 (Fastest-selling)', rate: '15 days', compare: '20 days', change: '25%', changeType: 'positive', barWidth: 100 },
+        { name: 'Villa X · Emirates Hills (Highest ROI)', rate: '28%', compare: '22%', change: '27%', changeType: 'positive', barWidth: 85 },
+        { name: 'Apartment B-205 · Business Bay (Fast-selling)', rate: '22 days', compare: '30 days', change: '27%', changeType: 'positive', barWidth: 70 },
+        { name: 'Unit C-102 · Marina (Lowest Occupancy)', rate: '45%', compare: '55%', change: '18%', barWidth: 45 },
+        { name: 'Penthouse D-801 · Downtown (High ROI)', rate: '24%', compare: '20%', change: '20%', barWidth: 60 },
     ];
 
     return (
         <BlockStack gap="300">
-            <ChartHeading title="Products by sell-through rate" />
+            <ChartHeading title="Units by Performance Metrics" />
             <BlockStack gap="200">
                 {products.map((product, index) => (
                     <div

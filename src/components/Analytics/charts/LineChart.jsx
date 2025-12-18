@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { Text, InlineStack } from '@shopify/polaris';
 
-const LineChart = ({ height = 280, showYAxis = true, yAxisLabels = ['₹4K', '₹2K', '₹0', '-₹2K', '-₹4K'] }) => {
+const LineChart = ({ height = 280, showYAxis = true, yAxisLabels = ['AED 8K', 'AED 6K', 'AED 4K', 'AED 2K', 'AED 0'], data = null }) => {
     const [hoverData, setHoverData] = useState(null);
     const xLabels = ['12 AM', '2 AM', '4 AM', '6 AM', '8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM', '8 PM', '10 PM'];
 
-    const mainLinePoints = [
+    // Default static data
+    const defaultMainLinePoints = [
         { x: 0, y: 108, value: 0 },
         { x: 35, y: 100, value: 200 },
         { x: 70, y: 80, value: 892 },
@@ -30,6 +31,15 @@ const LineChart = ({ height = 280, showYAxis = true, yAxisLabels = ['₹4K', '�
         { x: 760, y: 95, value: 445 },
         { x: 800, y: 108, value: 0 },
     ];
+
+    // Generate points from data if provided
+    const mainLinePoints = data ? data.map((value, index) => {
+        const x = (index / (data.length - 1)) * 800;
+        const maxValue = Math.max(...data);
+        const minValue = Math.min(...data);
+        const y = 200 - ((value - minValue) / (maxValue - minValue)) * 180;
+        return { x, y, value };
+    }) : defaultMainLinePoints;
 
     const compareLinePoints = [
         { x: 0, y: 108, value: 0 },
@@ -102,8 +112,8 @@ const LineChart = ({ height = 280, showYAxis = true, yAxisLabels = ['₹4K', '�
     };
 
     const formatValue = (val) => {
-        if (val < 0) return `-₹${Math.abs(val).toLocaleString()}.00`;
-        return `₹${val.toLocaleString()}.00`;
+        if (val < 0) return `-AED ${Math.abs(val).toLocaleString()}.00`;
+        return `AED ${val.toLocaleString()}.00`;
     };
 
     const calculateChange = (current, compare) => {
@@ -121,23 +131,23 @@ const LineChart = ({ height = 280, showYAxis = true, yAxisLabels = ['₹4K', '�
                     left: 0,
                     top: 0,
                     bottom: 30,
-                    width: '40px',
+                    width: '55px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     paddingRight: '8px'
                 }}>
                     {yAxisLabels.map((label, i) => (
-                        <Text key={i} variant="bodySm" as="span" tone="subdued" alignment="end">
+                        <span key={i} style={{ fontSize: '11px', color: '#6d7175', textAlign: 'right', display: 'block' }}>
                             {label}
-                        </Text>
+                        </span>
                     ))}
                 </div>
             )}
 
             <div style={{
                 position: 'absolute',
-                left: showYAxis ? '48px' : '0',
+                left: showYAxis ? '63px' : '0',
                 right: 0,
                 top: 0,
                 bottom: 0,
@@ -179,20 +189,9 @@ const LineChart = ({ height = 280, showYAxis = true, yAxisLabels = ['₹4K', '�
                     />
 
                     <path
-                        d="M 0 108 
-               C 30 108, 50 100, 70 80
-               C 90 55, 110 55, 130 55
-               C 150 70, 170 100, 200 108
-               L 280 108
-               C 300 108, 320 100, 360 75
-               C 380 60, 400 50, 420 50
-               C 440 60, 460 80, 480 90
-               C 500 100, 510 108, 520 108
-               L 560 108
-               C 580 108, 600 100, 640 75
-               C 660 55, 680 45, 700 50
-               C 720 60, 740 80, 760 95
-               C 780 105, 790 108, 800 108"
+                        d={mainLinePoints.map((point, i) => 
+                            `${i === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
+                        ).join(' ')}
                         fill="none"
                         stroke="#12acf0"
                         strokeWidth="2"
@@ -200,20 +199,9 @@ const LineChart = ({ height = 280, showYAxis = true, yAxisLabels = ['₹4K', '�
                     />
 
                     <path
-                        d="M 0 108 
-               C 30 108, 50 100, 70 80
-               C 90 55, 110 55, 130 55
-               C 150 70, 170 100, 200 108
-               L 280 108
-               C 300 108, 320 100, 360 75
-               C 380 60, 400 50, 420 50
-               C 440 60, 460 80, 480 90
-               C 500 100, 510 108, 520 108
-               L 560 108
-               C 580 108, 600 100, 640 75
-               C 660 55, 680 45, 700 50
-               C 720 60, 740 80, 760 95
-               C 780 105, 790 108, 800 108"
+                        d={mainLinePoints.map((point, i) => 
+                            `${i === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
+                        ).join(' ')}
                         fill="none"
                         stroke="transparent"
                         strokeWidth="20"
@@ -317,9 +305,9 @@ const LineChart = ({ height = 280, showYAxis = true, yAxisLabels = ['₹4K', '�
                     paddingRight: '0'
                 }}>
                     {xLabels.map((label, i) => (
-                        <Text key={i} variant="bodySm" as="span" tone="subdued">
+                        <span key={i} style={{ fontSize: '11px', color: '#6d7175' }}>
                             {label}
-                        </Text>
+                        </span>
                     ))}
                 </div>
             </div>

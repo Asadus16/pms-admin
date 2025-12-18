@@ -45,13 +45,15 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
   const isOnCustomerNew = pathname.includes('/customers/new');
   const isOnBookingsNew = pathname.includes('/bookings/new');
   const isOnDeveloperNew = pathname.includes('/developers/new');
-  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew || isOnDeveloperNew;
+  const isOnDeveloperEdit = pathname.includes('/developers/') && pathname.includes('/edit');
+  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew || isOnDeveloperNew || isOnDeveloperEdit;
 
   // Get the appropriate text based on the current page
   const getUnsavedChangesText = () => {
     if (isOnBookingsNew) return 'Unsaved draft order';
     if (isOnCustomerNew) return 'Unsaved changes';
     if (isOnDeveloperNew) return 'Unsaved changes';
+    if (isOnDeveloperEdit) return 'Unsaved changes';
     return 'Unsaved changes';
   };
 
@@ -66,12 +68,16 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
       // Dispatch custom event to close AddDeveloper
       window.dispatchEvent(new CustomEvent('closeAddDeveloper'));
       router.push(`${basePath}/developers`);
+    } else if (isOnDeveloperEdit) {
+      // Dispatch custom event to close EditDeveloper
+      window.dispatchEvent(new CustomEvent('closeEditDeveloper'));
+      router.push(`${basePath}/developers`);
     } else {
       // Dispatch custom event to close AddCustomer
       window.dispatchEvent(new CustomEvent('closeAddCustomer'));
       router.push(`${basePath}/customers`);
     }
-  }, [onDiscard, router, isOnBookingsNew, isOnDeveloperNew, basePath]);
+  }, [onDiscard, router, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, basePath]);
 
   const handleSave = useCallback(() => {
     if (onSave) {
@@ -82,11 +88,14 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     } else if (isOnDeveloperNew) {
       // Dispatch custom event to save developer
       window.dispatchEvent(new CustomEvent('saveAddDeveloper'));
+    } else if (isOnDeveloperEdit) {
+      // Dispatch custom event to save developer edits
+      window.dispatchEvent(new CustomEvent('saveEditDeveloper'));
     } else {
       // Dispatch custom event to save customer
       window.dispatchEvent(new CustomEvent('saveAddCustomer'));
     }
-  }, [onSave, isOnBookingsNew, isOnDeveloperNew]);
+  }, [onSave, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit]);
 
 
   const toggleProfilePopover = useCallback(

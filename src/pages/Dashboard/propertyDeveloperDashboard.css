@@ -1,0 +1,115 @@
+.pd-grid {
+  display: grid;
+  gap: var(--spacing-md);
+  /* Make cards in the same row match height (like the original fixed-row layout) */
+  align-items: stretch;
+  /* 12-col grid to match AnalyticsPage sizing:
+     - stats: 3 cols each (4-up)
+     - standard charts: 4 cols each (3-up)
+     - 2:1 rows: 8 + 4 */
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.pd-widget {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+}
+
+.pd-widget > * {
+  height: 100%;
+}
+
+.pd-widget .analytics-card {
+  height: 100%;
+}
+
+.pd-widget.span-3 { grid-column: span 3; }
+.pd-widget.span-4 { grid-column: span 4; }
+.pd-widget.span-8 { grid-column: span 8; }
+
+.pd-grid.is-editing {
+  background-image:
+    radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 12px 12px;
+  background-position: 0 0;
+  padding: 4px;
+  border-radius: 16px;
+}
+
+.pd-grid.is-editing .pd-widget {
+  cursor: grab;
+}
+
+.pd-grid.is-editing .pd-widget:active {
+  cursor: grabbing;
+}
+
+.pd-drag-handle {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.pd-remove-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 2;
+}
+
+@media (max-width: 1200px) {
+  .pd-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .pd-widget.span-3 { grid-column: span 6; }  /* 2-up */
+  .pd-widget.span-4 { grid-column: span 6; }  /* 2-up */
+  .pd-widget.span-8 { grid-column: span 12; } /* full width */
+}
+
+@media (max-width: 768px) {
+  .pd-grid { grid-template-columns: 1fr; }
+  .pd-widget.span-3,
+  .pd-widget.span-4,
+  .pd-widget.span-8 { grid-column: span 1; }
+}
+
+/* Compact Select Dropdown Styles */
+.compact-select .Polaris-Select {
+  font-size: 11px;
+}
+
+.compact-select .Polaris-Select__Input {
+  font-size: 11px;
+  padding: 2px 24px 2px 6px;
+  min-height: 26px;
+  height: 26px;
+}
+
+.compact-select .Polaris-Select__Content {
+  font-size: 11px;
+}
+
+.compact-select .Polaris-Select__Icon {
+  width: 14px;
+  height: 14px;
+  right: 4px;
+}
+
+.compact-select .Polaris-Select__Icon svg {
+  width: 10px;
+  height: 10px;
+}
+
+/* Compact chart heading for long titles */
+.compact-chart-heading h3 {
+  font-size: 14px !important;
+}
+

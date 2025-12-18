@@ -3,19 +3,18 @@ import ChartHeading from '../ChartHeading';
 
 const SalesBreakdown = () => {
     const items = [
-        { label: 'Gross sales', value: '₹6,093.00', change: '59%', type: 'positive', hasBg: false },
-        { label: 'Discounts', value: '-₹281.71', change: '16%', type: 'positive', hasBg: true },
-        { label: 'Returns', value: '₹0.00', change: '100%', type: 'positive', hasBg: false },
-        { label: 'Net sales', value: '₹5,811.29', change: '1.9K%', type: 'positive', hasBg: true },
-        { label: 'Shipping charges', value: '₹198.00', change: null, type: 'neutral', hasBg: false },
-        { label: 'Return fees', value: '₹0.00', change: null, type: 'neutral', hasBg: true },
-        { label: 'Taxes', value: '₹0.00', change: null, type: 'neutral', hasBg: false },
+        { label: 'Sales Transactions Value', value: 'AED 4,200.00', change: '45%', type: 'positive', hasBg: false },
+        { label: 'Long-Term Rent Collected', value: 'AED 850.00', change: '12%', type: 'positive', hasBg: true },
+        { label: 'Short-Term Booking Revenue', value: 'AED 320.00', change: '8%', type: 'positive', hasBg: false },
+        { label: 'Agency Fees Earned', value: 'AED 580.00', change: '22%', type: 'positive', hasBg: true },
+        { label: 'Owner Payouts (last period)', value: '-AED 450.00', change: null, type: 'neutral', hasBg: false },
+        { label: 'Expenses / Maintenance Costs', value: '-AED 290.00', change: null, type: 'neutral', hasBg: true },
     ];
 
     return (
         <BlockStack gap="0">
             <div style={{ marginBottom: '12px', paddingLeft: '4px' }}>
-                <ChartHeading title="Total sales breakdown" variant="bodySm" />
+                <ChartHeading title="Total Revenue Breakdown" variant="bodySm" />
             </div>
             {items.map((item, index) => (
                 <div key={index} style={{
@@ -46,16 +45,16 @@ const SalesBreakdown = () => {
                 margin: '1px 0',
                 borderRadius: '8px',
                 background: '#f7f7f7',
-                marginTop: '4px'
+                marginTop: '12px'
             }}>
                 <InlineStack align="space-between">
                     <Text variant="bodySm" as="span">
-                        <span style={{ color: '#005bd3', cursor: 'pointer', fontWeight: 500 }}>Total sales</span>
+                        <span style={{ color: '#005bd3', cursor: 'pointer', fontWeight: 500 }}>Net Income</span>
                     </Text>
                     <InlineStack gap="200">
-                        <Text variant="bodySm" as="span" fontWeight="semibold">₹6,009.29</Text>
+                        <Text variant="bodySm" as="span" fontWeight="semibold">AED 5,210.00</Text>
                         <span style={{ color: '#369962', fontSize: '12px' }}>
-                            ↗ 5.1K%
+                            ↗ 35%
                         </span>
                     </InlineStack>
                 </InlineStack>

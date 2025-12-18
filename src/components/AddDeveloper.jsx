@@ -35,7 +35,7 @@ const generateDeveloperId = () => {
   return `DEV-${timestamp}-${random}`;
 };
 
-function AddDeveloper({ onClose }) {
+function AddDeveloper({ onClose, mode = 'create', initialDeveloper = null }) {
   const router = useRouter();
   const editorRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -45,8 +45,8 @@ function AddDeveloper({ onClose }) {
     setIsMounted(true);
   }, []);
 
-  // Generate developer ID on mount
-  const [developerId] = useState(() => generateDeveloperId());
+  // Generate developer ID on mount (or use existing for edit)
+  const [developerId] = useState(() => initialDeveloper?.developerId || generateDeveloperId());
 
   // Developer Details state
   const [developerName, setDeveloperName] = useState('');
@@ -75,11 +75,32 @@ function AddDeveloper({ onClose }) {
   // Notes state
   const [notes, setNotes] = useState('');
 
+  // Populate form when editing
+  useEffect(() => {
+    if (mode !== 'edit' || !initialDeveloper) return;
+
+    setDeveloperName(initialDeveloper.name || initialDeveloper.developerName || '');
+    setSelectedCountry(initialDeveloper.selectedCountry || '');
+    setSelectedCity(initialDeveloper.selectedCity || '');
+    setRegisteredAddress(initialDeveloper.registeredAddress || '');
+    setWebsiteUrl(initialDeveloper.websiteUrl || '');
+    setReraNumber(initialDeveloper.reraNumber || '');
+    setDescription(initialDeveloper.description || '');
+
+    setContactName(initialDeveloper.primaryContactName || initialDeveloper.contactName || '');
+    setContactEmail(initialDeveloper.primaryContactEmail || initialDeveloper.contactEmail || '');
+    setContactPhone(initialDeveloper.primaryContactNumber || initialDeveloper.contactPhone || '');
+    setPhoneCountryCode(initialDeveloper.phoneCountryCode || 'AE');
+
+    setStatus(initialDeveloper.status || 'active');
+    setNotes(initialDeveloper.notes || '');
+  }, [mode, initialDeveloper]);
+
   const handleBack = useCallback(() => {
     if (onClose) {
       onClose();
     } else {
-      router.push('/property-developer/developers');
+      router.push('/property-manager/developers');
     }
   }, [onClose, router]);
 
@@ -287,11 +308,12 @@ function AddDeveloper({ onClose }) {
 
   // Set data attribute on body when AddDeveloper is mounted
   useEffect(() => {
-    document.body.setAttribute('data-add-developer-open', 'true');
+    const attr = mode === 'edit' ? 'data-edit-developer-open' : 'data-add-developer-open';
+    document.body.setAttribute(attr, 'true');
     return () => {
-      document.body.removeAttribute('data-add-developer-open');
+      document.body.removeAttribute(attr);
     };
-  }, []);
+  }, [mode]);
 
   // Listen for custom events from header
   useEffect(() => {
@@ -303,14 +325,17 @@ function AddDeveloper({ onClose }) {
       handleSave();
     };
 
-    window.addEventListener('closeAddDeveloper', handleClose);
-    window.addEventListener('saveAddDeveloper', handleSaveEvent);
+    const closeEvent = mode === 'edit' ? 'closeEditDeveloper' : 'closeAddDeveloper';
+    const saveEvent = mode === 'edit' ? 'saveEditDeveloper' : 'saveAddDeveloper';
+
+    window.addEventListener(closeEvent, handleClose);
+    window.addEventListener(saveEvent, handleSaveEvent);
 
     return () => {
-      window.removeEventListener('closeAddDeveloper', handleClose);
-      window.removeEventListener('saveAddDeveloper', handleSaveEvent);
+      window.removeEventListener(closeEvent, handleClose);
+      window.removeEventListener(saveEvent, handleSaveEvent);
     };
-  }, [handleBack, handleSave]);
+  }, [handleBack, handleSave, mode]);
 
   // Cleanup object URLs on unmount
   useEffect(() => {
@@ -384,7 +409,7 @@ function AddDeveloper({ onClose }) {
           <InlineStack gap="050" blockAlign="center">
             <Icon source={TeamIcon} tone="base" />
             <Icon source={ChevronRightIcon} tone="subdued" />
-            <span className="new-developer-title">New developer</span>
+            <span className="new-developer-title">{mode === 'edit' ? 'Edit developer' : 'New developer'}</span>
           </InlineStack>
         }
       >
