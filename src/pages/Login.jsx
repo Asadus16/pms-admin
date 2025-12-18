@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
     AppProvider,
@@ -21,7 +21,25 @@ function Login({ userType = 'owners' }) {
     const [showPassword, setShowPassword] = useState(false);
     const [step, setStep] = useState('email'); // 'email' or 'password'
     const [isHovered, setIsHovered] = useState(false);
+    const [selectedUserType, setSelectedUserType] = useState(userType);
     const router = useRouter();
+
+    // Get user type from localStorage on mount
+    useEffect(() => {
+        const storedUserType = localStorage.getItem('selectedUserType');
+        if (storedUserType) {
+            setSelectedUserType(storedUserType);
+        }
+    }, []);
+
+    const handleGetStarted = () => {
+        if (selectedUserType === 'property-manager') {
+            router.push('/property-manager-signup');
+        } else {
+            // For other user types, you can add different signup flows
+            router.push('/signup');
+        }
+    };
 
     const handleEmailLogin = () => {
         if (email) {
@@ -493,15 +511,21 @@ function Login({ userType = 'owners' }) {
                             {step === 'email' ? (
                                 // EMAIL STEP
                                 <BlockStack gap="500">
-                                    {/* Spacer for mobile padding-top */}
-                                    <div className="mobile-padding-spacer" style={{ display: 'none' }}></div>
-
-                                    {/* Logo */}
-                                    <div className="login-logo-container-mobile" style={{ paddingTop: '1px', paddingBottom: '8px' }}>
+                                    {/* Logo - at the top, left-aligned */}
+                                    <div style={{ 
+                                        display: 'block', 
+                                        width: '100%',
+                                        marginBottom: '8px',
+                                        paddingTop: '0px'
+                                    }}>
                                         <img
-                                            src="/logos/nest-quest.svg"
+                                            src="/logos/nest-quest-black.svg"
                                             alt="Nest Quest"
-                                            style={{ height: '26px', width: 'auto' }}
+                                            style={{ 
+                                                height: '24px', 
+                                                width: 'auto',
+                                                display: 'block'
+                                            }}
                                         />
                                     </div>
 
@@ -657,10 +681,22 @@ function Login({ userType = 'owners' }) {
                                     {/* Get Started Link */}
                                     <div style={{ paddingTop: '16px' }}>
                                         <Text as="span" variant="bodyMd">
-                                            New to Shopify?{' '}
-                                            <a href="#" style={{ color: '#005bd3', textDecoration: 'none', fontWeight: '500' }}>
+                                            New to Nest Quest?{' '}
+                                            <button
+                                                onClick={handleGetStarted}
+                                                style={{
+                                                    color: '#005bd3',
+                                                    textDecoration: 'none',
+                                                    fontWeight: '500',
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    cursor: 'pointer',
+                                                    padding: 0,
+                                                    font: 'inherit'
+                                                }}
+                                            >
                                                 Get started →
-                                            </a>
+                                            </button>
                                         </Text>
                                     </div>
 
@@ -682,15 +718,21 @@ function Login({ userType = 'owners' }) {
                             ) : (
                                 // PASSWORD STEP
                                 <BlockStack gap="500">
-                                    {/* Spacer for mobile padding-top */}
-                                    <div className="mobile-padding-spacer" style={{ display: 'none' }}></div>
-
-                                    {/* Logo */}
-                                    <div className="login-logo-container-mobile" style={{ paddingTop: '4px' }}>
+                                    {/* Logo - at the top, left-aligned */}
+                                    <div style={{ 
+                                        display: 'block', 
+                                        width: '100%',
+                                        marginBottom: '8px',
+                                        paddingTop: '0px'
+                                    }}>
                                         <img
-                                            src="/logos/nest-quest.svg"
+                                            src="/logos/nest-quest-black.svg"
                                             alt="Nest Quest"
-                                            style={{ height: '26px', width: 'auto' }}
+                                            style={{ 
+                                                height: '24px', 
+                                                width: 'auto',
+                                                display: 'block'
+                                            }}
                                         />
                                     </div>
 
