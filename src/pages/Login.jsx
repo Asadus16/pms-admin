@@ -15,7 +15,7 @@ import {
 } from '@shopify/polaris';
 import { ChevronRightIcon, ViewIcon, HideIcon } from '@shopify/polaris-icons';
 
-function Login() {
+function Login({ userType = 'owners' }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +31,7 @@ function Login() {
 
     const handlePasswordLogin = () => {
         if (password) {
-            router.push('/dashboard');
+            router.push(`/${userType}`);
         }
     };
 
@@ -499,8 +499,8 @@ function Login() {
                                     {/* Logo */}
                                     <div className="login-logo-container-mobile" style={{ paddingTop: '1px', paddingBottom: '8px' }}>
                                         <img
-                                            src="/logos/shopify-logo.svg"
-                                            alt="Shopify"
+                                            src="/logos/nest-quest.svg"
+                                            alt="Nest Quest"
                                             style={{ height: '26px', width: 'auto' }}
                                         />
                                     </div>
@@ -688,8 +688,8 @@ function Login() {
                                     {/* Logo */}
                                     <div className="login-logo-container-mobile" style={{ paddingTop: '4px' }}>
                                         <img
-                                            src="/logos/shopify-logo.svg"
-                                            alt="Shopify"
+                                            src="/logos/nest-quest.svg"
+                                            alt="Nest Quest"
                                             style={{ height: '26px', width: 'auto' }}
                                         />
                                     </div>

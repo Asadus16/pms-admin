@@ -35,10 +35,39 @@ body {
 /* Navigation background - matches our content area */
 .Polaris-Frame__Navigation {
   background: #ebebeb !important;
+  width: 240px !important;
+  min-width: 240px !important;
+  max-width: 240px !important;
 }
 
 .Polaris-Navigation {
   background: #ebebeb !important;
+  width: 240px !important;
+  min-width: 240px !important;
+  max-width: 240px !important;
+}
+
+.Polaris-Navigation__PrimaryNavigation {
+  width: 240px !important;
+  max-width: 240px !important;
+}
+
+.Polaris-Navigation__Section {
+  width: 240px !important;
+  max-width: 240px !important;
+}
+
+.Polaris-Navigation__SectionItems {
+  width: 100% !important;
+  max-width: 240px !important;
+}
+
+.Polaris-Navigation__ItemWrapper {
+  padding: 0px 12px !important;
+}
+
+.Polaris-Navigation__Item {
+  padding: 0px 4px 0px 8px !important;
 }
 
 /* Content scrolling area */

@@ -7,12 +7,13 @@ const nextConfig = {
   },
   // Handle CSS imports
   webpack: (config) => {
+    const path = require('path');
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@components': require('path').resolve(__dirname, 'src/components'),
-      '@pages': require('path').resolve(__dirname, 'src/pages'),
-      '@styles': require('path').resolve(__dirname, 'src/styles'),
-      '@': require('path').resolve(__dirname, 'src'),
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@pages': path.resolve(__dirname, 'src/pages'),
+      '@styles': path.resolve(__dirname, 'src/styles'),
+      '@': path.resolve(__dirname, 'src'),
     };
     return config;
   },

@@ -19,6 +19,7 @@ import {
   PaymentIcon,
   PaymentFilledIcon,
   ChevronRightIcon,
+  LockIcon,
 } from '@shopify/polaris-icons';
 
 // Settings navigation items (simplified)
@@ -79,9 +80,23 @@ function SettingsNavigation({
   setSearchQuery,
   onNavClick,
   isMobile = false,
-  onMobileItemClick
+  onMobileItemClick,
+  showRolesPermissions = false
 }) {
-  const filteredNavItems = settingsNavItems.filter(item =>
+  // For property-developer, only show Roles & Permissions
+  // For other user types, show all settings nav items
+  const navItems = showRolesPermissions
+    ? [
+        {
+          id: 'roles-permissions',
+          label: 'Roles & Permissions',
+          icon: LockIcon,
+          iconFilled: LockIcon
+        }
+      ]
+    : settingsNavItems;
+
+  const filteredNavItems = navItems.filter(item =>
     item.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 

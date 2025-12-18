@@ -119,10 +119,11 @@ function CreateOrder({ onClose }) {
   const [tempCheckInTime, setTempCheckInTime] = useState('');
   const [tempCheckOutDate, setTempCheckOutDate] = useState('');
   const [tempCheckOutTime, setTempCheckOutTime] = useState('');
-  const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
-  const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
+  const [calendarMonth, setCalendarMonth] = useState(0);
+  const [calendarYear, setCalendarYear] = useState(2025);
   const [timePickerOpen, setTimePickerOpen] = useState(null); // 'checkin' or 'checkout' or null
   const datePickerRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
   const checkInTimeRef = useRef(null);
   const checkOutTimeRef = useRef(null);
 
@@ -766,13 +767,22 @@ function CreateOrder({ onClose }) {
     };
   }, [tagsModalOpen]);
 
+  // Set isMounted flag and initialize calendar dates on client-side only
+  useEffect(() => {
+    setIsMounted(true);
+    const now = new Date();
+    setCalendarMonth(now.getMonth());
+    setCalendarYear(now.getFullYear());
+  }, []);
+
   // Set data attribute on body when CreateOrder is mounted
   useEffect(() => {
+    if (!isMounted) return;
     document.body.setAttribute('data-create-order-open', 'true');
     return () => {
       document.body.removeAttribute('data-create-order-open');
     };
-  }, []);
+  }, [isMounted]);
 
   // Close time picker when clicking outside or scrolling
   useEffect(() => {
