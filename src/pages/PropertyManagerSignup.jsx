@@ -10,6 +10,7 @@ import {
   Text,
   BlockStack,
   Select,
+  InlineStack,
 } from '@shopify/polaris';
 import './PropertyManagerSignup.css';
 
@@ -568,6 +569,19 @@ function PropertyManagerSignup() {
               alt="Nest Quest"
               style={{ height: '24px', width: 'auto' }}
             />
+          </div>
+          <div style={{ marginLeft: 'auto' }}>
+            <Button
+              onClick={() => router.push('/property-manager/login')}
+              variant="secondary"
+              style={{
+                backgroundColor: '#ffffff',
+                color: '#202223',
+                border: '1px solid #d1d5db'
+              }}
+            >
+              Back to login
+            </Button>
           </div>
         </header>
 

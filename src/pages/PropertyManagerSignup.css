@@ -18,6 +18,7 @@
   background: #1a1812;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 16px;
   z-index: 520;
   position: relative;
