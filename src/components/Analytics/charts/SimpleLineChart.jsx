@@ -3,8 +3,17 @@
 import { useState } from 'react';
 import { Text } from '@shopify/polaris';
 
-const SimpleLineChart = ({ height = 320, color = '#12acf0', yLabels = ['60', '40', '20', '0'] }) => {
+const SimpleLineChart = ({ height = 320, color = '#12acf0', yLabels = ['60', '40', '20', '0'], data = null }) => {
     const [hoverData, setHoverData] = useState(null);
+
+    // Generate points from data if provided
+    const linePoints = data ? data.map((value, index) => {
+        const x = (index / (data.length - 1)) * 300;
+        const maxValue = Math.max(...data);
+        const minValue = Math.min(...data);
+        const y = 90 - ((value - minValue) / (maxValue - minValue)) * 70;
+        return { x, y: Math.max(10, Math.min(90, y)), value };
+    }) : null;
 
     const handleMouseMove = (e) => {
         const svg = e.currentTarget;
@@ -17,7 +26,7 @@ const SimpleLineChart = ({ height = 320, color = '#12acf0', yLabels = ['60', '40
         const displayHour = clampedHour % 12 || 12;
         const time = `${displayHour}:00 ${period}`;
 
-        const mainY = 80 - (svgX / 300) * 60;
+        const mainY = linePoints ? (linePoints.find((p, i) => i === Math.round((svgX / 300) * (linePoints.length - 1)))?.y || 50) : (80 - (svgX / 300) * 60);
         const compareY = 70 - (svgX / 300) * 35;
 
         setHoverData({
@@ -46,9 +55,9 @@ const SimpleLineChart = ({ height = 320, color = '#12acf0', yLabels = ['60', '40
                 paddingBottom: '24px'
             }}>
                 {yLabels.map((label, i) => (
-                    <Text key={i} variant="bodySm" as="span" tone="subdued" alignment="end">
+                    <span key={i} style={{ fontSize: '11px', color: '#6d7175', textAlign: 'right', display: 'block' }}>
                         {label}
-                    </Text>
+                    </span>
                 ))}
             </div>
 
@@ -77,7 +86,9 @@ const SimpleLineChart = ({ height = 320, color = '#12acf0', yLabels = ['60', '40
                     />
 
                     <path
-                        d="M 0 80 C 40 75, 80 60, 120 50 S 200 35, 250 28 S 280 22, 300 18"
+                        d={linePoints ? linePoints.map((point, i) => 
+                            `${i === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
+                        ).join(' ') : "M 0 80 C 40 75, 80 60, 120 50 S 200 35, 250 28 S 280 22, 300 18"}
                         fill="none"
                         stroke={color}
                         strokeWidth="2"
@@ -101,11 +112,11 @@ const SimpleLineChart = ({ height = 320, color = '#12acf0', yLabels = ['60', '40
                 </svg>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '4px' }}>
-                    <Text variant="bodySm" as="span" tone="subdued">12 AM</Text>
-                    <Text variant="bodySm" as="span" tone="subdued">5 AM</Text>
-                    <Text variant="bodySm" as="span" tone="subdued">10 AM</Text>
-                    <Text variant="bodySm" as="span" tone="subdued">3 PM</Text>
-                    <Text variant="bodySm" as="span" tone="subdued">8 PM</Text>
+                    <span style={{ fontSize: '11px', color: '#6d7175' }}>12 AM</span>
+                    <span style={{ fontSize: '11px', color: '#6d7175' }}>5 AM</span>
+                    <span style={{ fontSize: '11px', color: '#6d7175' }}>10 AM</span>
+                    <span style={{ fontSize: '11px', color: '#6d7175' }}>3 PM</span>
+                    <span style={{ fontSize: '11px', color: '#6d7175' }}>8 PM</span>
                 </div>
             </div>
         </div>

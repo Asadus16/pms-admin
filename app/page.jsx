@@ -20,7 +20,6 @@ export default function Home() {
         { label: 'Owners', value: 'owners' },
         { label: 'Guests', value: 'guests' },
         { label: 'Property Manager', value: 'property-manager' },
-        { label: 'Property Developer', value: 'property-developer' },
     ];
 
     const handleContinue = () => {

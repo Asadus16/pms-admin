@@ -8,10 +8,10 @@ const DeviceTypeChart = () => {
     const [hoveredDevice, setHoveredDevice] = useState(null);
 
     const devices = [
-        { label: 'Mobile', count: 205, change: '39%', changeType: 'positive', color: '#12acf0', percentage: 73 },
-        { label: 'Desk...', count: 73, change: '630%', changeType: 'positive', color: '#8b5cf6', percentage: 26 },
-        { label: 'Tablet', count: 1, color: '#60a5fa', percentage: 0.4 },
-        { label: 'Other', count: 0, color: '#f472b6', percentage: 0 },
+        { label: 'Occupied', count: 45, change: '12%', changeType: 'positive', color: '#1e40af', percentage: 60 },
+        { label: 'Vacant', count: 20, change: '5%', changeType: 'positive', color: '#3b82f6', percentage: 27 },
+        { label: 'Under Maint.', count: 8, color: '#60a5fa', percentage: 10 },
+        { label: 'Reserved', count: 2, color: '#93c5fd', percentage: 3 },
     ];
 
     const size = 180;
@@ -23,7 +23,7 @@ const DeviceTypeChart = () => {
 
     return (
         <BlockStack gap="300">
-            <ChartHeading title="Sessions by device type" />
+            <ChartHeading title="Occupancy Rate (Unit Type Breakdown)" />
             <InlineStack gap="500" blockAlign="center">
                 <div style={{ position: 'relative', width: size, height: size }}>
                     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
@@ -62,16 +62,6 @@ const DeviceTypeChart = () => {
                                 />
                             );
                         })}
-
-                        <line
-                            x1={size / 2}
-                            y1={20}
-                            x2={size / 2 - 5}
-                            y2={20}
-                            stroke="white"
-                            strokeWidth="3"
-                            transform={`rotate(${devices[0].percentage * 3.6}, ${size / 2}, ${size / 2})`}
-                        />
                     </svg>
 
                     <div style={{
@@ -81,8 +71,8 @@ const DeviceTypeChart = () => {
                         transform: 'translate(-50%, -50%)',
                         textAlign: 'center'
                     }}>
-                        <Text variant="headingXl" as="p" fontWeight="bold">279</Text>
-                        <Text variant="bodySm" as="p" tone="success">↗ 78%</Text>
+                        <Text variant="headingXl" as="p" fontWeight="bold">75</Text>
+                        <Text variant="bodySm" as="p" tone="success">↗ 12%</Text>
                     </div>
                 </div>
 

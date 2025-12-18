@@ -3,18 +3,18 @@ import ChartHeading from '../ChartHeading';
 
 const SessionsByLandingPage = () => {
     const pages = [
-        { label: 'Homepage · /', value: '185', change: '43%', changeType: 'positive' },
-        { label: 'Product · /products/lip-stain-50-ayurvedic-herbs-infused', value: '24', change: '118%', changeType: 'positive' },
-        { label: 'Product · /products/tinted-lip-oil-with-50-herbs-colour-meets-care', value: '7', change: null, changeType: 'neutral' },
-        { label: 'Product · /products/clear-complexion-essence-40-herbs', value: '5', change: '67%', changeType: 'positive' },
-        { label: 'Product · /products/buttercream-blush-infused-with-50-ayurvedic-herbs', value: '5', change: null, changeType: 'neutral' },
-        { label: 'Collection · /collections/ayurvedic-skin-care-products', value: '4', change: '300%', changeType: 'positive' },
-        { label: 'Product · /products/clear-complexion-brightening-elixir-powered-by-50-...', value: '4', change: '33%', changeType: 'critical' },
+        { label: 'Project A · DHA Phase 8', value: '120', change: '45%', changeType: 'positive' },
+        { label: 'Project B · Bahria Town', value: '95', change: '32%', changeType: 'positive' },
+        { label: 'Villa X · Emirates Hills', value: '70', change: '18%', changeType: 'positive' },
+        { label: 'Apartment · Downtown Dubai', value: '52', change: '24%', changeType: 'positive' },
+        { label: 'Tower Y · Business Bay', value: '38', change: null, changeType: 'neutral' },
+        { label: 'Villa Z · Palm Jumeirah', value: '28', change: '56%', changeType: 'positive' },
+        { label: 'Penthouse · Marina', value: '15', change: '12%', changeType: 'positive' },
     ];
 
     return (
         <BlockStack gap="300">
-            <ChartHeading title="Sessions by landing page" />
+            <ChartHeading title="Top Viewed Properties / Projects" />
             <BlockStack gap="0">
                 {pages.map((page, index) => (
                     <div

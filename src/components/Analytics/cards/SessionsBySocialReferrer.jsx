@@ -8,13 +8,16 @@ const SessionsBySocialReferrer = () => {
     const [hoveredIndex, setHoveredIndex] = useState(null);
 
     const referrers = [
-        { label: 'instagram', value: 161, compare: 249, change: '34%', changeType: 'positive', barWidth: 65 },
-        { label: 'facebook', value: 21, compare: 14, change: '200%', changeType: 'positive', barWidth: 8 },
+        { label: 'Direct', value: 85, compare: 70, change: '21%', changeType: 'positive', barWidth: 60 },
+        { label: 'Partner Broker', value: 52, compare: 45, change: '16%', changeType: 'positive', barWidth: 37 },
+        { label: 'Owner Referral', value: 28, compare: 22, change: '27%', changeType: 'positive', barWidth: 20 },
+        { label: 'Repeat Client', value: 18, compare: 12, change: '50%', changeType: 'positive', barWidth: 13 },
     ];
 
     return (
         <BlockStack gap="300">
-            <ChartHeading title="Sessions by social referrer" />
+            <ChartHeading title="Leads by Referral Type" />
+            <div style={{ maxHeight: '320px', overflowY: 'auto', paddingRight: '4px' }}>
             <BlockStack gap="300">
                 {referrers.map((referrer, index) => (
                     <div
@@ -55,6 +58,7 @@ const SessionsBySocialReferrer = () => {
                     </div>
                 ))}
             </BlockStack>
+            </div>
         </BlockStack>
     );
 };

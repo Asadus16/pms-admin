@@ -8,13 +8,16 @@ const TotalSalesByReferrer = () => {
     const [hoveredIndex, setHoveredIndex] = useState(null);
 
     const referrers = [
-        { label: 'None · None', value: '₹8,432.35', compare: '₹10,940.46', change: '204%', barWidth: 75, compareWidth: 100 },
-        { label: 'social · instagram', value: '₹699.00', compare: '₹0.00', change: null, barWidth: 6, compareWidth: 0 },
+        { label: 'Hashim', value: '45', compare: '38', change: '18%', barWidth: 90, compareWidth: 76 },
+        { label: 'Adeel', value: '32', compare: '28', change: '14%', barWidth: 64, compareWidth: 56 },
+        { label: 'Raza', value: '24', compare: '20', change: '20%', barWidth: 48, compareWidth: 40 },
+        { label: 'Partner Brokers', value: '18', compare: '15', change: '20%', barWidth: 36, compareWidth: 30 },
     ];
 
     return (
         <BlockStack gap="300">
-            <ChartHeading title="Total sales by referrer" />
+            <ChartHeading title="Deals Closed by Agent" />
+            <div style={{ maxHeight: '320px', overflowY: 'auto', paddingRight: '4px' }}>
             <BlockStack gap="300">
                 {referrers.map((referrer, index) => (
                     <div
@@ -64,9 +67,10 @@ const TotalSalesByReferrer = () => {
                 {/* Y-axis line */}
                 <div style={{ display: 'flex', alignItems: 'flex-end', height: '20px', marginTop: '8px' }}>
                     <div style={{ width: '2px', height: '100%', background: '#12acf0', marginRight: '8px' }} />
-                    <Text variant="bodySm" as="span" tone="subdued">₹0.00</Text>
+                    <Text variant="bodySm" as="span" tone="subdued">0 deals</Text>
                 </div>
             </BlockStack>
+            </div>
         </BlockStack>
     );
 };
