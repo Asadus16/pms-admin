@@ -163,7 +163,7 @@ export default function LoginComponent({ userType }) {
 
     const handleGetStarted = () => {
         if (userType === 'property-manager') {
-            router.push('/property-manager-signup');
+            router.push('/property-manager/signup');
         } else {
             router.push(`/${userType}/signup`);
         }

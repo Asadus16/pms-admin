@@ -101,11 +101,51 @@ export const deletePropertyManagerTransaction = createAsyncThunk(
 );
 
 // Inventory
-export const fetchPropertyManagerInventory = createAsyncThunk(
-  'propertyManager/fetchInventory',
+export const fetchPropertyManagerInventories = createAsyncThunk(
+  'propertyManager/fetchInventories',
   async (params) => {
-    const response = await api.get('/property-manager/inventory', {
+    const response = await api.get('/property-manager/inventories', {
       params,
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const fetchPropertyManagerInventoryById = createAsyncThunk(
+  'propertyManager/fetchInventoryById',
+  async (id) => {
+    const response = await api.get(`/property-manager/inventories/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const createPropertyManagerInventory = createAsyncThunk(
+  'propertyManager/createInventory',
+  async (data) => {
+    const response = await api.post('/property-manager/inventories', data, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const updatePropertyManagerInventory = createAsyncThunk(
+  'propertyManager/updateInventory',
+  async ({ id, data }) => {
+    const response = await api.post(`/property-manager/inventories/${id}`, data, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const deletePropertyManagerInventory = createAsyncThunk(
+  'propertyManager/deleteInventory',
+  async (id) => {
+    const response = await api.delete(`/property-manager/inventories/${id}`, {
       returnRaw: true,
     });
     return response;
@@ -387,10 +427,116 @@ export const fetchPropertyManagerContacts = createAsyncThunk(
   }
 );
 
+export const fetchPropertyManagerContactById = createAsyncThunk(
+  'propertyManager/fetchContactById',
+  async (id) => {
+    const response = await api.get(`/property-manager/contacts/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
 export const createPropertyManagerContact = createAsyncThunk(
   'propertyManager/createContact',
   async (data) => {
     const response = await api.post('/property-manager/contacts', data, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const updatePropertyManagerContact = createAsyncThunk(
+  'propertyManager/updateContact',
+  async ({ id, data }) => {
+    const response = await api.post(`/property-manager/contacts/${id}`, data, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const deletePropertyManagerContact = createAsyncThunk(
+  'propertyManager/deleteContact',
+  async (id) => {
+    const response = await api.delete(`/property-manager/contacts/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const updatePropertyManagerContactStatus = createAsyncThunk(
+  'propertyManager/updateContactStatus',
+  async ({ id, status }) => {
+    const response = await api.post(`/property-manager/contacts/${id}/status`, {
+      status,
+    }, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+// Owners (property manager manages owners)
+export const fetchPropertyManagerOwners = createAsyncThunk(
+  'propertyManager/fetchOwners',
+  async (params) => {
+    const response = await api.get('/property-manager/owners', {
+      params,
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const fetchPropertyManagerOwnerById = createAsyncThunk(
+  'propertyManager/fetchOwnerById',
+  async (id) => {
+    const response = await api.get(`/property-manager/owners/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const createPropertyManagerOwner = createAsyncThunk(
+  'propertyManager/createOwner',
+  async (data) => {
+    const response = await api.post('/property-manager/owners', data, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const updatePropertyManagerOwner = createAsyncThunk(
+  'propertyManager/updateOwner',
+  async ({ id, data }) => {
+    const response = await api.post(`/property-manager/owners/${id}`, data, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const deletePropertyManagerOwner = createAsyncThunk(
+  'propertyManager/deleteOwner',
+  async (id) => {
+    const response = await api.delete(`/property-manager/owners/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const updatePropertyManagerOwnerStatus = createAsyncThunk(
+  'propertyManager/updateOwnerStatus',
+  async ({ id, status }) => {
+    const response = await api.post(`/property-manager/owners/${id}/status`, {
+      status,
+    }, {
       returnRaw: true,
     });
     return response;

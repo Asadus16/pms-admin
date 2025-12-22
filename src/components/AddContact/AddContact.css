@@ -1,0 +1,105 @@
+/**
+ * AddContact Component Styles
+ */
+
+.add-contact-wrapper {
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.add-contact-wrapper .Polaris-Page {
+  max-width: 100% !important;
+}
+
+.add-contact-wrapper .new-contact-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  line-height: 24px !important;
+  color: var(--color-text-primary) !important;
+}
+
+.add-contact-wrapper .Polaris-Page__Header {
+  padding-bottom: var(--spacing-lg) !important;
+  margin-bottom: 0 !important;
+}
+
+/* Custom header for ViewContact - aligns with content */
+.add-contact-wrapper .view-user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg, 20px) 56px var(--spacing-lg, 20px) 20px;
+  margin-bottom: 0;
+}
+
+/* Hide empty Page header when using custom header */
+.add-contact-wrapper .view-user-header + .Polaris-Page .Polaris-Page__Header {
+  display: none;
+}
+
+.add-contact-wrapper .Polaris-Page__Content {
+  padding-top: 0 !important;
+  padding-bottom: var(--spacing-xl) !important;
+  margin-top: 0 !important;
+}
+
+.add-contact-wrapper .Polaris-Layout {
+  display: flex;
+  gap: var(--spacing-md) !important;
+}
+
+.add-contact-wrapper .Polaris-Layout__Section:first-child .Polaris-Card:last-child {
+  margin-bottom: 120px !important;
+}
+
+.add-contact-wrapper .Polaris-Layout__Section {
+  flex: 0 1 62% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 62% !important;
+}
+
+.add-contact-wrapper .Polaris-Layout__Section:first-child {
+  padding-bottom: 120px !important;
+}
+
+.add-contact-wrapper .Polaris-Layout__Section--secondary,
+.add-contact-wrapper .Polaris-Layout__Section[class*="oneThird"] {
+  flex: 0 0 33.333% !important;
+  max-width: 33.333% !important;
+  min-width: 33.333% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .add-contact-wrapper {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .add-contact-wrapper .Polaris-Layout {
+    flex-direction: column !important;
+    gap: var(--spacing-md) !important;
+  }
+
+  .add-contact-wrapper .Polaris-Layout__Section {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .add-contact-wrapper .Polaris-Layout__Section--secondary,
+  .add-contact-wrapper .Polaris-Layout__Section[class*="oneThird"] {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    width: 100% !important;
+  }
+}

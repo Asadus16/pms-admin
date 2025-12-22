@@ -7,19 +7,17 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import authReducer from './slices/authSlice.js';
 import loadingReducer from './slices/loadingSlice.js';
-
-// Import reducers (will be created)
-// import propertyManagerReducer from './slices/propertyManagerSlice';
-// import ownerReducer from './slices/ownerSlice';
-// etc.
+import ownersReducer from './slices/ownersSlice.js';
+import contactsReducer from './slices/contactsSlice.js';
+import inventoryReducer from './slices/inventorySlice.js';
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
         loading: loadingReducer,
-        // Add reducers here as they are created
-        // propertyManager: propertyManagerReducer,
-        // owner: ownerReducer,
+        owners: ownersReducer,
+        contacts: contactsReducer,
+        inventory: inventoryReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
