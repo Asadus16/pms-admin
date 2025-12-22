@@ -100,12 +100,14 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     }
   };
 
-  // Check if we should show unsaved changes (either via prop or by checking if we're on add customer page or create order page or add developer page)
+  // Check if we should show unsaved changes (either via prop or by checking if we're on add customer page or create order page or add developer page or add project page)
   const isOnCustomerNew = pathname.includes('/customers/new');
   const isOnBookingsNew = pathname.includes('/bookings/new');
   const isOnDeveloperNew = pathname.includes('/developers/new');
   const isOnDeveloperEdit = pathname.includes('/developers/') && pathname.includes('/edit');
-  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew || isOnDeveloperNew || isOnDeveloperEdit;
+  const isOnProjectNew = pathname.includes('/projects/new');
+  const isOnProjectEdit = pathname.includes('/projects/') && pathname.includes('/edit');
+  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew || isOnDeveloperNew || isOnDeveloperEdit || isOnProjectNew || isOnProjectEdit;
 
   // Get the appropriate text based on the current page
   const getUnsavedChangesText = () => {
@@ -113,6 +115,8 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     if (isOnCustomerNew) return 'Unsaved changes';
     if (isOnDeveloperNew) return 'Unsaved changes';
     if (isOnDeveloperEdit) return 'Unsaved changes';
+    if (isOnProjectNew) return 'Unsaved changes';
+    if (isOnProjectEdit) return 'Unsaved changes';
     return 'Unsaved changes';
   };
 
@@ -131,12 +135,20 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
       // Dispatch custom event to close EditDeveloper
       window.dispatchEvent(new CustomEvent('closeEditDeveloper'));
       router.push(`${basePath}/developers`);
+    } else if (isOnProjectNew) {
+      // Dispatch custom event to close AddProject
+      window.dispatchEvent(new CustomEvent('closeAddProject'));
+      router.push(`${basePath}/projects`);
+    } else if (isOnProjectEdit) {
+      // Dispatch custom event to close EditProject
+      window.dispatchEvent(new CustomEvent('closeEditProject'));
+      router.push(`${basePath}/projects`);
     } else {
       // Dispatch custom event to close AddCustomer
       window.dispatchEvent(new CustomEvent('closeAddCustomer'));
       router.push(`${basePath}/customers`);
     }
-  }, [onDiscard, router, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, basePath]);
+  }, [onDiscard, router, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, isOnProjectNew, isOnProjectEdit, basePath]);
 
   const handleSave = useCallback(() => {
     if (onSave) {
@@ -150,11 +162,17 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     } else if (isOnDeveloperEdit) {
       // Dispatch custom event to save developer edits
       window.dispatchEvent(new CustomEvent('saveEditDeveloper'));
+    } else if (isOnProjectNew) {
+      // Dispatch custom event to save project
+      window.dispatchEvent(new CustomEvent('saveAddProject'));
+    } else if (isOnProjectEdit) {
+      // Dispatch custom event to save project edits
+      window.dispatchEvent(new CustomEvent('saveEditProject'));
     } else {
       // Dispatch custom event to save customer
       window.dispatchEvent(new CustomEvent('saveAddCustomer'));
     }
-  }, [onSave, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit]);
+  }, [onSave, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, isOnProjectNew, isOnProjectEdit]);
 
 
   const toggleProfilePopover = useCallback(

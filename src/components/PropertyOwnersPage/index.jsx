@@ -35,7 +35,14 @@ import {
   PlusIcon,
 } from '@shopify/polaris-icons';
 import './CustomersPage.css';
-import { developersData } from '../../data/developers';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { fetchPropertyManagerDevelopers } from '@/store/thunks/property-manager/propertyManagerThunks';
+import {
+  selectDevelopers,
+  selectDevelopersPagination,
+  selectDevelopersLoading,
+  selectDevelopersError,
+} from '@/store/slices/property-manager';
 
 // All available columns for developers
 const allColumns = [
@@ -104,9 +111,16 @@ const getStoredSort = () => {
 function PropertyOwnersPage() {
   const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
 
   // Get the base path (userType) from the current pathname
   const basePath = pathname.split('/')[1] ? `/${pathname.split('/')[1]}` : '/property-manager';
+
+  // Redux state
+  const developers = useAppSelector(selectDevelopers);
+  const pagination = useAppSelector(selectDevelopersPagination);
+  const loading = useAppSelector(selectDevelopersLoading);
+  const error = useAppSelector(selectDevelopersError);
 
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -144,7 +158,21 @@ function PropertyOwnersPage() {
     }
   }, []);
 
-  const itemsPerPage = 50;
+  // Fetch developers from API with debounced search
+  useEffect(() => {
+    // Debounce search to avoid too many API calls
+    const timeoutId = setTimeout(() => {
+      dispatch(fetchPropertyManagerDevelopers({
+        per_page: 15,
+        page: currentPage,
+        search: searchValue || undefined,
+      }));
+    }, searchValue ? 500 : 0); // 500ms delay for search, immediate for page changes
+
+    return () => clearTimeout(timeoutId);
+  }, [currentPage, searchValue, dispatch]);
+
+  const itemsPerPage = pagination.per_page || 15;
 
   const resourceName = {
     singular: 'developer',
@@ -152,14 +180,17 @@ function PropertyOwnersPage() {
   };
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(developersData);
+    useIndexResourceState(developers);
 
   const handleSearchChange = useCallback((value) => {
     setSearchValue(value);
+    // Reset to page 1 when search changes
+    setCurrentPage(1);
   }, []);
 
   const handleSearchClear = useCallback(() => {
     setSearchValue('');
+    setCurrentPage(1);
   }, []);
 
   const toggleSortPopover = useCallback(() => {
@@ -263,13 +294,8 @@ function PropertyOwnersPage() {
     setImportFile(null);
   }, [importFile]);
 
-  // Filter developers based on search
-  const filteredDevelopers = developersData.filter((developer) =>
-    developer.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-    developer.primaryContactName.toLowerCase().includes(searchValue.toLowerCase()) ||
-    developer.primaryContactEmail.toLowerCase().includes(searchValue.toLowerCase()) ||
-    developer.primaryContactNumber.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  // API already filters by search, so use developers directly
+  const filteredDevelopers = developers;
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
@@ -300,7 +326,8 @@ function PropertyOwnersPage() {
     return sortDirection === 'desc' ? -comparison : comparison;
   });
 
-  const totalDevelopers = developersData.length;
+  const totalDevelopers = pagination.total || developers.length;
+  const activeDevelopersCount = developers.filter(d => d.status === 'active').length;
 
   // Get current visible columns for normal view
   const currentVisibleColumns = allColumns.filter(col => visibleColumns.includes(col.id));
@@ -458,7 +485,7 @@ function PropertyOwnersPage() {
                   |
                 </Text>
                 <Text variant="bodyMd" as="span" tone="subdued">
-                  {developersData.filter(d => d.status === 'active').length} active
+                  {activeDevelopersCount} active
                 </Text>
               </InlineStack>
             </Card>
@@ -577,16 +604,16 @@ function PropertyOwnersPage() {
               <Box padding="400" borderBlockStartWidth="025" borderColor="border">
                 <InlineStack align="space-between" blockAlign="center">
                   <Pagination
-                    hasPrevious={currentPage > 1}
+                    hasPrevious={pagination.current_page > 1}
                     onPrevious={() => setCurrentPage(currentPage - 1)}
-                    hasNext={currentPage * itemsPerPage < totalDevelopers}
+                    hasNext={pagination.current_page < pagination.last_page}
                     onNext={() => setCurrentPage(currentPage + 1)}
                   />
                   <Text variant="bodySm" as="span" tone="subdued">
-                    {`${(currentPage - 1) * itemsPerPage + 1}-${Math.min(
-                      currentPage * itemsPerPage,
-                      totalDevelopers
-                    )}`}
+                    {loading ? 'Loading...' : `${((pagination.current_page - 1) * itemsPerPage) + 1}-${Math.min(
+                      pagination.current_page * itemsPerPage,
+                      pagination.total
+                    )} of ${pagination.total}`}
                   </Text>
                 </InlineStack>
               </Box>

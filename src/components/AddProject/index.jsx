@@ -27,9 +27,16 @@ import {
   CalendarIcon,
 } from '@shopify/polaris-icons';
 import { Editor } from '@tinymce/tinymce-react';
-import { developersData } from '../../data/developers';
 import GoogleMapPicker from '../GoogleMapPicker';
 import './AddProject.css';
+import { useAppDispatch, useAppSelector } from '@/store';
+import {
+  createPropertyManagerProject,
+  updatePropertyManagerProject,
+} from '@/store/thunks/property-manager/propertyManagerThunks';
+import { createProjectFormData } from '@/lib/services/projectsService';
+import { fetchPropertyManagerDevelopers } from '@/store/thunks/property-manager/propertyManagerThunks';
+import { selectDevelopers } from '@/store/slices/property-manager';
 
 // Generate a unique project ID
 const generateProjectId = () => {
@@ -40,8 +47,12 @@ const generateProjectId = () => {
 
 function AddProject({ onClose, mode = 'create', initialProject = null }) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const editorRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
+  
+  // Get developers from Redux
+  const developers = useAppSelector(selectDevelopers);
 
   // Track client-side mounting for TinyMCE
   useEffect(() => {
@@ -49,13 +60,16 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
   }, []);
 
   // Generate project ID on mount (or use existing for edit)
-  const [projectId] = useState(() => initialProject?.projectId || generateProjectId());
+  const [projectId] = useState(() => {
+    const id = initialProject?.projectId || generateProjectId();
+    return id ? String(id) : generateProjectId();
+  });
 
   // Project Details state
   const [selectedDeveloper, setSelectedDeveloper] = useState('');
   const [projectName, setProjectName] = useState('');
   const [projectType, setProjectType] = useState('');
-  const [status, setStatus] = useState('active');
+  const [status, setStatus] = useState('');
   const [expectedHandoverDate, setExpectedHandoverDate] = useState('');
   const [constructionProgress, setConstructionProgress] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
@@ -98,19 +112,19 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
   useEffect(() => {
     if (mode !== 'edit' || !initialProject) return;
 
-    setSelectedDeveloper(initialProject.developer || '');
+    setSelectedDeveloper(initialProject.developerId ? String(initialProject.developerId) : (initialProject.developer?.id ? String(initialProject.developer.id) : ''));
     setProjectName(initialProject.projectName || '');
     setProjectType(initialProject.projectType || '');
-    setStatus(initialProject.status || 'active');
+    setStatus(initialProject.status || '');
     setExpectedHandoverDate(initialProject.expectedHandoverDate || '');
-    setConstructionProgress(String(initialProject.constructionProgress || ''));
+    setConstructionProgress(initialProject.constructionProgress != null ? String(initialProject.constructionProgress) : '');
     setProjectDescription(initialProject.projectDescription || '');
-    setReraNumber(initialProject.reraNumber || '');
+    setReraNumber(initialProject.reraNumber != null ? String(initialProject.reraNumber) : '');
     setSelectedCountry(initialProject.selectedCountry || '');
     setSelectedCity(initialProject.selectedCity || '');
     setCommunity(initialProject.community || '');
     setSubCommunity(initialProject.subCommunity || '');
-    setMapCoordinates(initialProject.mapCoordinates || '');
+    setMapCoordinates(initialProject.mapCoordinates != null ? String(initialProject.mapCoordinates) : '');
     setAmenities(initialProject.amenities || {
       park: false,
       gym: false,
@@ -120,10 +134,10 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
     });
     setDldWaiver(initialProject.dldWaiver || false);
     setPostHandoverPlan(initialProject.postHandoverPlan || false);
-    setPriceMin(initialProject.priceMin || '');
-    setPriceMax(initialProject.priceMax || '');
-    setServiceChargePerSqft(initialProject.serviceChargePerSqft || '');
-    setEstimatedROI(initialProject.estimatedROI || '');
+    setPriceMin(initialProject.priceMin != null ? String(initialProject.priceMin) : '');
+    setPriceMax(initialProject.priceMax != null ? String(initialProject.priceMax) : '');
+    setServiceChargePerSqft(initialProject.serviceChargePerSqft != null ? String(initialProject.serviceChargePerSqft) : '');
+    setEstimatedROI(initialProject.estimatedROI != null ? String(initialProject.estimatedROI) : '');
     setPaymentPlanType(initialProject.paymentPlanType || 'set');
     setPaymentPlanDetails(initialProject.paymentPlanDetails || '');
   }, [mode, initialProject]);
@@ -136,31 +150,34 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
     }
   }, [onClose, router]);
 
-  // Developer options from developersData
+  // Developer options from Redux
   const developerOptions = [
     { label: 'Select developer', value: '' },
-    ...developersData.map(dev => ({
+    ...developers.map(dev => ({
       label: dev.name,
-      value: dev.id,
+      value: String(dev.id),
     })),
   ];
 
-  // Project Type options
+  // Project Type options (must match API exactly)
   const projectTypeOptions = [
     { label: 'Select project type', value: '' },
-    { label: 'Residential', value: 'residential' },
-    { label: 'Commercial', value: 'commercial' },
-    { label: 'Mixed Use', value: 'mixed_use' },
-    { label: 'Industrial', value: 'industrial' },
-    { label: 'Hospitality', value: 'hospitality' },
+    { label: 'Residential', value: 'Residential' },
+    { label: 'Commercial', value: 'Commercial' },
+    { label: 'Mixed Use', value: 'Mixed Use' },
+    { label: 'Industrial', value: 'Industrial' },
+    { label: 'Hospitality', value: 'Hospitality' },
   ];
 
-  // Status options
+  // Status options (must match API exactly)
   const statusOptions = [
-    { label: 'Active', value: 'active' },
-    { label: 'Inactive', value: 'inactive' },
-    { label: 'Completed', value: 'completed' },
-    { label: 'Under Construction', value: 'under_construction' },
+    { label: 'Select status', value: '' },
+    { label: 'Planning', value: 'Planning' },
+    { label: 'Under Construction', value: 'Under Construction' },
+    { label: 'Near Completion', value: 'Near Completion' },
+    { label: 'Completed', value: 'Completed' },
+    { label: 'On Hold', value: 'On Hold' },
+    { label: 'Cancelled', value: 'Cancelled' },
   ];
 
   // Country options
@@ -371,38 +388,123 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
     }));
   }, []);
 
+  // Save state
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(null);
+
+  // Fetch developers on mount
+  useEffect(() => {
+    dispatch(fetchPropertyManagerDevelopers({ per_page: 100 }));
+  }, [dispatch]);
+
   // Save handler
-  const handleSave = useCallback(() => {
-    console.log('Saving project:', {
-      projectId,
-      selectedDeveloper,
-      projectName,
-      projectType,
-      status,
-      expectedHandoverDate,
-      constructionProgress,
-      projectDescription,
-      reraNumber,
-      masterplanFile,
-      floorPlanFile,
-      projectImages,
-      projectVideo,
-      selectedCountry,
-      selectedCity,
-      community,
-      subCommunity,
-      mapCoordinates,
-      amenities,
-      dldWaiver,
-      postHandoverPlan,
-      priceMin,
-      priceMax,
-      serviceChargePerSqft,
-      estimatedROI,
-      paymentPlanType,
-      paymentPlanPdf,
-      paymentPlanDetails,
-    });
+  const handleSave = useCallback(async () => {
+    // Validation
+    if (!projectName.trim()) {
+      setSaveError('Project name is required');
+      return;
+    }
+
+    setSaving(true);
+    setSaveError(null);
+
+    try {
+      // Convert amenities object to array
+      const amenitiesArray = Object.entries(amenities)
+        .filter(([_, value]) => value)
+        .map(([key, _]) => key.charAt(0).toUpperCase() + key.slice(1));
+
+      // Parse map coordinates if provided
+      let googleMapCoordinates = null;
+      if (mapCoordinates) {
+        try {
+          const coords = JSON.parse(mapCoordinates);
+          if (Array.isArray(coords) && coords.length === 2) {
+            googleMapCoordinates = { latitude: coords[0], longitude: coords[1] };
+          } else if (coords.latitude && coords.longitude) {
+            googleMapCoordinates = coords;
+          }
+        } catch (e) {
+          // If parsing fails, try to extract from string format
+          const match = mapCoordinates.match(/(-?\d+\.?\d*),\s*(-?\d+\.?\d*)/);
+          if (match) {
+            googleMapCoordinates = { latitude: parseFloat(match[1]), longitude: parseFloat(match[2]) };
+          }
+        }
+      }
+
+      // Prepare payment plans
+      let paymentPlans = null;
+      if (paymentPlanType === 'set' && paymentPlanDetails) {
+        try {
+          paymentPlans = JSON.parse(paymentPlanDetails);
+        } catch (e) {
+          // If not JSON, create a simple plan
+          paymentPlans = [{ name: paymentPlanDetails, installments: 1, duration_months: 12 }];
+        }
+      }
+
+      // Prepare project data
+      const projectData = {
+        developer_id: selectedDeveloper ? parseInt(selectedDeveloper) : undefined,
+        project_name: projectName,
+        project_type: projectType || undefined,
+        status: status || 'Planning',
+        expected_handover_date: expectedHandoverDate || undefined,
+        construction_progress: constructionProgress ? parseFloat(constructionProgress) : undefined,
+        project_description: projectDescription || undefined,
+        rera_municipality_number: reraNumber || undefined,
+        country: selectedCountry || undefined,
+        city: selectedCity || undefined,
+        community: community || undefined,
+        sub_community: subCommunity || undefined,
+        google_map_coordinates: googleMapCoordinates,
+        amenities: amenitiesArray.length > 0 ? amenitiesArray : undefined,
+        dld_waiver: dldWaiver ? 'DLD waiver available' : undefined,
+        post_handover_plan: postHandoverPlan ? 'Post-handover plan included' : undefined,
+        price_range_min: priceMin ? parseFloat(priceMin) : undefined,
+        price_range_max: priceMax ? parseFloat(priceMax) : undefined,
+        service_charge_per_sqft: serviceChargePerSqft ? parseFloat(serviceChargePerSqft) : undefined,
+        estimated_roi: estimatedROI ? parseFloat(estimatedROI) : undefined,
+        payment_plans: paymentPlans,
+        masterplan: masterplanFile?.file,
+        floor_plans: floorPlanFile ? [floorPlanFile.file] : undefined,
+        images: projectImages.filter(f => f.file).map(f => f.file),
+        videos: projectVideo ? [projectVideo.file] : undefined,
+      };
+
+      const formData = createProjectFormData(projectData, []);
+
+      let result;
+      if (mode === 'edit' && initialProject?.id) {
+        result = await dispatch(updatePropertyManagerProject({
+          id: initialProject.id,
+          formData,
+        }));
+      } else {
+        result = await dispatch(createPropertyManagerProject(formData));
+      }
+
+      // Check if the action was fulfilled
+      if (result.type.endsWith('/fulfilled')) {
+        setSaving(false);
+        // Success - redirect or close
+        if (onClose) {
+          onClose();
+        } else {
+          router.push('/property-manager/projects');
+        }
+      } else {
+        // Handle rejection
+        const errorMessage = result.error?.message || 'Failed to save project. Please try again.';
+        setSaveError(errorMessage);
+        setSaving(false);
+      }
+    } catch (err) {
+      console.error('Error saving project:', err);
+      setSaveError(err.message || 'Failed to save project. Please try again.');
+      setSaving(false);
+    }
   }, [
     projectId, selectedDeveloper, projectName, projectType, status,
     expectedHandoverDate, constructionProgress, projectDescription, reraNumber,
@@ -411,6 +513,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
     amenities, dldWaiver, postHandoverPlan,
     priceMin, priceMax, serviceChargePerSqft, estimatedROI,
     paymentPlanType, paymentPlanPdf, paymentPlanDetails,
+    mode, initialProject, onClose, router, dispatch
   ]);
 
   // Set data attribute on body when AddProject is mounted
@@ -552,7 +655,22 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
             <span className="new-developer-title">{mode === 'edit' ? 'Edit project' : 'New project'}</span>
           </InlineStack>
         }
+       
       >
+        {saveError && (
+          <Box paddingBlockEnd="400">
+            <Banner tone="critical" onDismiss={() => setSaveError(null)}>
+              {saveError}
+            </Banner>
+          </Box>
+        )}
+        {saving && (
+          <Box paddingBlockEnd="400">
+            <Banner tone="info">
+              {mode === 'edit' ? 'Updating project...' : 'Creating project...'}
+            </Banner>
+          </Box>
+        )}
         <Layout>
           {/* Main content - Left column */}
           <Layout.Section>
@@ -567,7 +685,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                   {/* Project ID - System generated */}
                   <TextField
                     label="Project ID"
-                    value={projectId}
+                    value={projectId || ''}
                     disabled
                     helpText="System generated ID"
                     autoComplete="off"
@@ -576,7 +694,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                   {/* Project Name */}
                   <TextField
                     label="Project name"
-                    value={projectName}
+                    value={projectName || ''}
                     onChange={setProjectName}
                     autoComplete="off"
                     placeholder="Enter project name"
@@ -603,7 +721,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                     <TextField
                       label="Expected handover date"
                       type="date"
-                      value={expectedHandoverDate}
+                      value={expectedHandoverDate || ''}
                       onChange={setExpectedHandoverDate}
                       autoComplete="off"
                       suffix={<Icon source={CalendarIcon} tone="subdued" />}
@@ -614,7 +732,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                   <TextField
                     label="Construction progress (%)"
                     type="number"
-                    value={constructionProgress}
+                    value={constructionProgress || ''}
                     onChange={setConstructionProgress}
                     autoComplete="off"
                     placeholder="0-100"
@@ -663,7 +781,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                   <TextField
                     label="RERA / Municipality number"
                     type="text"
-                    value={reraNumber}
+                    value={reraNumber || ''}
                     onChange={setReraNumber}
                     autoComplete="off"
                     placeholder="Enter RERA or Municipality number"
@@ -832,14 +950,14 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                       <Select
                         label="Community"
                         options={communityOptions}
-                        value={community}
+                        value={community || ''}
                         onChange={setCommunity}
                       />
                     </Box>
                     <Box width="50%">
                       <TextField
                         label="Sub-community"
-                        value={subCommunity}
+                        value={subCommunity || ''}
                         onChange={setSubCommunity}
                         autoComplete="off"
                         placeholder="Enter sub-community"
@@ -850,7 +968,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                   {/* Google Map Coordinates */}
                   <TextField
                     label="Google map coordinates"
-                    value={mapCoordinates}
+                    value={mapCoordinates || ''}
                     onChange={setMapCoordinates}
                     autoComplete="off"
                     placeholder="e.g., 25.2048, 55.2708"
@@ -970,7 +1088,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                       <TextField
                         label="Price range (Min)"
                         type="number"
-                        value={priceMin}
+                        value={priceMin || ''}
                         onChange={setPriceMin}
                         autoComplete="off"
                         placeholder="Minimum price"
@@ -981,7 +1099,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                       <TextField
                         label="Price range (Max)"
                         type="number"
-                        value={priceMax}
+                        value={priceMax || ''}
                         onChange={setPriceMax}
                         autoComplete="off"
                         placeholder="Maximum price"
@@ -994,7 +1112,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                   <TextField
                     label="Service charge per sqft"
                     type="number"
-                    value={serviceChargePerSqft}
+                    value={serviceChargePerSqft || ''}
                     onChange={setServiceChargePerSqft}
                     autoComplete="off"
                     placeholder="Enter service charge"
@@ -1006,7 +1124,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                   <TextField
                     label="Estimated ROI (%)"
                     type="number"
-                    value={estimatedROI}
+                    value={estimatedROI || ''}
                     onChange={setEstimatedROI}
                     autoComplete="off"
                     placeholder="Enter estimated ROI"
@@ -1058,7 +1176,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                         <TextField
                           label="Payment plan details"
                           multiline={4}
-                          value={paymentPlanDetails}
+                          value={paymentPlanDetails || ''}
                           onChange={setPaymentPlanDetails}
                           autoComplete="off"
                           placeholder="Enter payment plan details..."

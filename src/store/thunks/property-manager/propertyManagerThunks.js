@@ -224,7 +224,16 @@ export const fetchPropertyManagerProjects = createAsyncThunk(
   'propertyManager/fetchProjects',
   async (params) => {
     const response = await api.get('/property-manager/projects', {
-      params,
+      params: {
+        per_page: params?.per_page || 15,
+        ...(params?.search && { search: params.search }),
+        ...(params?.project_type && { project_type: params.project_type }),
+        ...(params?.status && { status: params.status }),
+        ...(params?.developer_id && { developer_id: params.developer_id }),
+        ...(params?.country && { country: params.country }),
+        ...(params?.city && { city: params.city }),
+        ...(params?.page && { page: params.page }),
+      },
       returnRaw: true,
     });
     return response;
@@ -243,8 +252,9 @@ export const fetchPropertyManagerProjectById = createAsyncThunk(
 
 export const createPropertyManagerProject = createAsyncThunk(
   'propertyManager/createProject',
-  async (data) => {
-    const response = await api.post('/property-manager/projects', data, {
+  async (formData) => {
+    const response = await api.post('/property-manager/projects', formData, {
+      showProgress: true,
       returnRaw: true,
     });
     return response;
@@ -253,8 +263,9 @@ export const createPropertyManagerProject = createAsyncThunk(
 
 export const updatePropertyManagerProject = createAsyncThunk(
   'propertyManager/updateProject',
-  async ({ id, data }) => {
-    const response = await api.post(`/property-manager/projects/${id}`, data, {
+  async ({ id, formData }) => {
+    const response = await api.post(`/property-manager/projects/${id}`, formData, {
+      showProgress: true,
       returnRaw: true,
     });
     return response;
@@ -391,6 +402,66 @@ export const createPropertyManagerContact = createAsyncThunk(
   'propertyManager/createContact',
   async (data) => {
     const response = await api.post('/property-manager/contacts', data, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+// Property Developers
+export const fetchPropertyManagerDevelopers = createAsyncThunk(
+  'propertyManager/fetchDevelopers',
+  async (params) => {
+    const response = await api.get('/property-manager/property-developers', {
+      params: {
+        per_page: params?.per_page || 15,
+        ...(params?.search && { search: params.search }),
+        ...(params?.country && { country: params.country }),
+        ...(params?.city && { city: params.city }),
+        ...(params?.page && { page: params.page }),
+      },
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const fetchPropertyManagerDeveloperById = createAsyncThunk(
+  'propertyManager/fetchDeveloperById',
+  async (id) => {
+    const response = await api.get(`/property-manager/property-developers/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const createPropertyManagerDeveloper = createAsyncThunk(
+  'propertyManager/createDeveloper',
+  async (formData) => {
+    const response = await api.post('/property-manager/property-developers', formData, {
+      showProgress: true,
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const updatePropertyManagerDeveloper = createAsyncThunk(
+  'propertyManager/updateDeveloper',
+  async ({ id, formData }) => {
+    const response = await api.post(`/property-manager/property-developers/${id}`, formData, {
+      showProgress: true,
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const deletePropertyManagerDeveloper = createAsyncThunk(
+  'propertyManager/deleteDeveloper',
+  async (id) => {
+    const response = await api.delete(`/property-manager/property-developers/${id}`, {
       returnRaw: true,
     });
     return response;

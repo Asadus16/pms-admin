@@ -10,8 +10,12 @@ export const CustomTextField = ({
   helpText,
   error,
   className = '',
+  value,
   ...props 
 }) => {
+  // Ensure value is always a string to prevent Polaris TextField errors
+  const normalizedValue = value == null ? '' : String(value);
+  
   return (
     <TextField
       label={label}
@@ -19,6 +23,7 @@ export const CustomTextField = ({
       helpText={helpText}
       error={error}
       className={`custom-text-field ${className}`}
+      value={normalizedValue}
       {...props}
     />
   );

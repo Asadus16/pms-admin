@@ -27,6 +27,12 @@ import {
 } from '@shopify/polaris-icons';
 import { Editor } from '@tinymce/tinymce-react';
 import './AddDeveloper.css';
+import { createDeveloperFormData } from '@/lib/services/propertyDevelopersService';
+import { useAppDispatch } from '@/store';
+import {
+  createPropertyManagerDeveloper,
+  updatePropertyManagerDeveloper,
+} from '@/store/thunks/property-manager/propertyManagerThunks';
 
 // Generate a unique developer ID
 const generateDeveloperId = () => {
@@ -37,6 +43,7 @@ const generateDeveloperId = () => {
 
 function AddDeveloper({ onClose, mode = 'create', initialDeveloper = null }) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const editorRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -278,32 +285,112 @@ function AddDeveloper({ onClose, mode = 'create', initialDeveloper = null }) {
     setBrochureFile(null);
   }, []);
 
+  // Save state
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(null);
+
   // Save handler
-  const handleSave = useCallback(() => {
-    console.log('Saving developer:', {
-      developerId,
-      developerName,
-      selectedCountry,
-      selectedCity,
-      registeredAddress,
-      websiteUrl,
-      logoFile,
-      reraNumber,
-      description,
-      contactName,
-      contactEmail,
-      contactPhone,
-      phoneCountryCode,
-      mediaFiles,
-      brochureFile,
-      status,
-      notes,
-    });
+  const handleSave = useCallback(async () => {
+    // Validation
+    if (!developerName.trim()) {
+      setSaveError('Developer name is required');
+      return;
+    }
+    if (!selectedCountry) {
+      setSaveError('Country is required');
+      return;
+    }
+    if (!selectedCity) {
+      setSaveError('City is required');
+      return;
+    }
+    if (!registeredAddress.trim()) {
+      setSaveError('Registered address is required');
+      return;
+    }
+    if (!contactName.trim()) {
+      setSaveError('Contact name is required');
+      return;
+    }
+    if (!contactEmail.trim()) {
+      setSaveError('Contact email is required');
+      return;
+    }
+    if (!contactPhone.trim()) {
+      setSaveError('Contact phone is required');
+      return;
+    }
+
+    setSaving(true);
+    setSaveError(null);
+
+    try {
+      // Separate photos, videos, and brochures from mediaFiles
+      const photos = mediaFiles.filter(f => f.file.type.startsWith('image/')).map(f => f.file);
+      const videos = mediaFiles.filter(f => f.file.type.startsWith('video/')).map(f => f.file);
+      const brochures = brochureFile ? [brochureFile.file] : [];
+
+      // Prepare developer data
+      const developerData = {
+        developer_name: developerName,
+        country: selectedCountry,
+        city: selectedCity,
+        registered_address: registeredAddress,
+        website_url: websiteUrl || undefined,
+        logo: logoFile?.file,
+        rera_registration_number: reraNumber || undefined,
+        description: description || undefined,
+        contact_name: contactName,
+        contact_email: contactEmail,
+        contact_phone: contactPhone,
+        photos,
+        videos,
+        brochures,
+      };
+
+      // Get deleted media IDs if in edit mode
+      // Note: mediaFiles in edit mode should preserve existing media IDs
+      // For now, we'll track deleted media separately if needed
+      const deletedMediaIds = [];
+
+      const formData = createDeveloperFormData(developerData, deletedMediaIds);
+
+      let result;
+      if (mode === 'edit' && initialDeveloper?.id) {
+        result = await dispatch(updatePropertyManagerDeveloper({
+          id: initialDeveloper.id,
+          formData,
+        }));
+      } else {
+        result = await dispatch(createPropertyManagerDeveloper(formData));
+      }
+
+      // Check if the action was fulfilled
+      if (result.type.endsWith('/fulfilled')) {
+        setSaving(false);
+        // Success - redirect or close
+        if (onClose) {
+          onClose();
+        } else {
+          router.push('/property-manager/developers');
+        }
+      } else {
+        // Handle rejection
+        const errorMessage = result.error?.message || 'Failed to save developer. Please try again.';
+        setSaveError(errorMessage);
+        setSaving(false);
+      }
+    } catch (err) {
+      console.error('Error saving developer:', err);
+      setSaveError(err.message || 'Failed to save developer. Please try again.');
+      setSaving(false);
+    }
   }, [
     developerId, developerName, selectedCountry, selectedCity,
     registeredAddress, websiteUrl, logoFile, reraNumber, description,
     contactName, contactEmail, contactPhone, phoneCountryCode,
-    mediaFiles, brochureFile, status, notes
+    mediaFiles, brochureFile, status, notes, mode, initialDeveloper,
+    onClose, router, dispatch
   ]);
 
   // Set data attribute on body when AddDeveloper is mounted
@@ -413,6 +500,20 @@ function AddDeveloper({ onClose, mode = 'create', initialDeveloper = null }) {
           </InlineStack>
         }
       >
+        {saveError && (
+          <Box paddingBlockEnd="400">
+            <Banner tone="critical" onDismiss={() => setSaveError(null)}>
+              {saveError}
+            </Banner>
+          </Box>
+        )}
+        {saving && (
+          <Box paddingBlockEnd="400">
+            <Banner tone="info">
+              {mode === 'edit' ? 'Updating developer...' : 'Creating developer...'}
+            </Banner>
+          </Box>
+        )}
         <Layout>
           {/* Main content - Left column */}
           <Layout.Section>
