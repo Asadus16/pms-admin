@@ -1,0 +1,8 @@
+'use client';
+
+import AnalyticsPage from '@/components/AnalyticsPage';
+
+export default function AnalyticsPageRoute() {
+  return <AnalyticsPage />;
+}
+
