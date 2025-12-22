@@ -20,8 +20,15 @@ import {
   Banner,
 } from '@shopify/polaris';
 import { TeamIcon, ChevronRightIcon, ArrowLeftIcon } from '@shopify/polaris-icons';
-import { developersData } from '../../data/developers';
 import './AddDeveloper.css';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { fetchPropertyManagerDeveloperById } from '@/store/thunks/property-manager/propertyManagerThunks';
+import {
+  selectDeveloper,
+  selectDevelopersLoading,
+  selectDevelopersError,
+} from '@/store/slices/property-manager';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -33,17 +40,24 @@ function formatDate(dateStr) {
 export default function DeveloperViewPage({ developerId }) {
   const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
   const [actionsPopoverActive, setActionsPopoverActive] = useState(false);
+
+  // Redux state
+  const developer = useAppSelector(selectDeveloper);
+  const loading = useAppSelector(selectDevelopersLoading);
+  const error = useAppSelector(selectDevelopersError);
 
   const basePath = useMemo(() => {
     const seg = pathname?.split('/')?.[1];
     return seg ? `/${seg}` : '/property-manager';
   }, [pathname]);
 
-  const developer = useMemo(
-    () => developersData.find((d) => String(d.id) === String(developerId)),
-    [developerId]
-  );
+  // Fetch developer from API
+  useEffect(() => {
+    if (!developerId) return;
+    dispatch(fetchPropertyManagerDeveloperById(developerId));
+  }, [developerId, dispatch]);
 
   const handleBack = useCallback(() => {
     router.push(`${basePath}/developers`);
@@ -53,7 +67,22 @@ export default function DeveloperViewPage({ developerId }) {
     setActionsPopoverActive((active) => !active);
   }, []);
 
-  if (!developer) {
+  if (loading) {
+    return (
+      <Page
+        title="Developer"
+        backAction={{ content: 'Developers', onAction: handleBack }}
+      >
+        <Card>
+          <Box padding="400">
+            <Text>Loading developer...</Text>
+          </Box>
+        </Card>
+      </Page>
+    );
+  }
+
+  if (error || !developer) {
     return (
       <Page
         title="Developer"
@@ -63,10 +92,10 @@ export default function DeveloperViewPage({ developerId }) {
           <Box padding="400">
             <BlockStack gap="200">
               <Text variant="headingMd" as="h2">
-                Developer not found
+                {error ? 'Error loading developer' : 'Developer not found'}
               </Text>
               <Text variant="bodyMd" as="p" tone="subdued">
-                We couldn&apos;t find a developer with ID: {developerId}
+                {error || `We couldn't find a developer with ID: ${developerId}`}
               </Text>
               <div>
                 <Button icon={ArrowLeftIcon} onClick={handleBack}>
@@ -395,10 +424,10 @@ export default function DeveloperViewPage({ developerId }) {
                     Marketing material
                   </Text>
 
-                  {/* Media */}
+                  {/* Photos */}
                   <BlockStack gap="200">
                     <Text variant="bodyMd" as="span">
-                      Media
+                      Photos
                     </Text>
 
                     {Array.isArray(developer.mediaUrls) && developer.mediaUrls.length > 0 ? (
@@ -406,15 +435,15 @@ export default function DeveloperViewPage({ developerId }) {
                         <BlockStack gap="300">
                           <InlineStack align="space-between">
                             <Text variant="bodyMd" as="span">
-                              {developer.mediaUrls.length} file{developer.mediaUrls.length > 1 ? 's' : ''} selected
+                              {developer.mediaUrls.length} photo{developer.mediaUrls.length > 1 ? 's' : ''}
                             </Text>
                           </InlineStack>
                           <InlineStack gap="300" wrap>
                             {developer.mediaUrls.map((url, idx) => (
                               <Thumbnail
-                                key={`${developer.id}-media-${idx}`}
+                                key={`${developer.id}-photo-${idx}`}
                                 size="large"
-                                alt={`Media ${idx + 1}`}
+                                alt={`Photo ${idx + 1}`}
                                 source={url}
                               />
                             ))}
@@ -423,10 +452,37 @@ export default function DeveloperViewPage({ developerId }) {
                       </Card>
                     ) : (
                       <Banner tone="info">
-                        <p>No media uploaded.</p>
+                        <p>No photos uploaded.</p>
                       </Banner>
                     )}
                   </BlockStack>
+
+                  {/* Videos */}
+                  {developer._apiData?.videos && developer._apiData.videos.length > 0 && (
+                    <BlockStack gap="200">
+                      <Text variant="bodyMd" as="span">
+                        Videos
+                      </Text>
+                      <Card>
+                        <BlockStack gap="300">
+                          <Text variant="bodyMd" as="span">
+                            {developer._apiData.videos.length} video{developer._apiData.videos.length > 1 ? 's' : ''}
+                          </Text>
+                          <InlineStack gap="300" wrap>
+                            {developer._apiData.videos.map((video, idx) => (
+                              <div key={`${developer.id}-video-${idx}`}>
+                                <Text variant="bodySm" as="p">
+                                  <a href={video.file_path} target="_blank" rel="noopener noreferrer">
+                                    Video {idx + 1}
+                                  </a>
+                                </Text>
+                              </div>
+                            ))}
+                          </InlineStack>
+                        </BlockStack>
+                      </Card>
+                    </BlockStack>
+                  )}
 
                   {/* Brochure */}
                   <BlockStack gap="200">
@@ -434,14 +490,16 @@ export default function DeveloperViewPage({ developerId }) {
                       Brochure
                     </Text>
                     <Card>
-                      {developer.brochure?.name ? (
+                      {developer.brochure ? (
                         <LegacyStack alignment="center">
                           <div>
                             <Text variant="bodyMd" as="p" fontWeight="semibold">
-                              {developer.brochure.name}
+                              <a href={developer.brochure.file_path} target="_blank" rel="noopener noreferrer">
+                                {developer.brochure.name}
+                              </a>
                             </Text>
                             <Text variant="bodySm" as="p" tone="subdued">
-                              {developer.brochure.sizeKb ? `${developer.brochure.sizeKb} KB` : '—'}
+                              PDF Document
                             </Text>
                           </div>
                         </LegacyStack>
