@@ -25,12 +25,16 @@ import {
   XCircleIcon,
   AlertCircleIcon,
 } from '@shopify/polaris-icons';
+import { useAuth } from '@/composables/useAuth';
+import { useAuthContext } from '@/contexts/AuthContext';
 import './styles/Shopifyheader.css';
 
 function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickOpen, showUnsavedChanges, onDiscard, onSave, userType = 'owners' }) {
   const pathname = usePathname();
   const router = useRouter();
   const basePath = `/${userType}`;
+  const { logout } = useAuth(userType);
+  const { user } = useAuthContext();
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState(null);
@@ -40,6 +44,41 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
   const [notificationPopoverActive, setNotificationPopoverActive] = useState(false);
   const searchRef = useRef(null);
   const searchInputRef = useRef(null);
+
+  // Get user display information
+  const getUserName = () => {
+    if (user?.name) return user.name;
+    if (user?.first_name && user?.last_name) return `${user.first_name} ${user.last_name}`;
+    if (user?.first_name) return user.first_name;
+    return 'User';
+  };
+
+  const getUserEmail = () => {
+    return user?.email || user?.email_address || '';
+  };
+
+  const getUserInitials = () => {
+    const name = getUserName();
+    if (!name || name === 'User') return 'U';
+    const parts = name.trim().split(' ');
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+  };
+
+  const getUserUsername = () => {
+    const email = getUserEmail();
+    if (email) {
+      return email.split('@')[0];
+    }
+    return 'user';
+  };
+
+  const handleLogout = async () => {
+    setProfilePopoverActive(false);
+    await logout();
+  };
 
   // Check if we should show unsaved changes (either via prop or by checking if we're on add customer page or create order page or add developer page)
   const isOnCustomerNew = pathname.includes('/customers/new');
@@ -490,7 +529,7 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
                     <div className="search-dropdown-text">
                       {activeFilter
                         ? `Search in ${activeFilter}`
-                        : 'Find anything in skshafeen'
+                        : `Find anything in ${getUserUsername()}`
                       }
                     </div>
                   </div>
@@ -567,10 +606,10 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
             activator={
               <button className="profile-btn" onClick={toggleProfilePopover}>
                 <div className="profile-avatar">
-                  <div className="profile-avatar-inner">sks</div>
+                  <div className="profile-avatar-inner">{getUserInitials()}</div>
                   <div className="profile-status" />
                 </div>
-                <span className="profile-username">skshafeen</span>
+                <span className="profile-username">{getUserUsername()}</span>
               </button>
             }
             onClose={toggleProfilePopover}
@@ -582,10 +621,10 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
               <div className="profile-dropdown-header">
                 <div className="flex-center-gap-12">
                   <div className="store-avatar-small">
-                    sks
+                    {getUserInitials()}
                   </div>
                   <span className="font-weight-600 font-size-14 color-202223">
-                    skshafeen
+                    {getUserUsername()}
                   </span>
                 </div>
                 <Icon source={CheckSmallIcon} tone="success" />
@@ -611,14 +650,14 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
               {/* User info section */}
               <div className="profile-dropdown-item" onClick={() => console.log('Profile clicked')}>
                 <div className="user-avatar-large">
-                  SK
+                  {getUserInitials()}
                 </div>
                 <div className="flex-column">
                   <span className="font-weight-600 font-size-14 color-202223">
-                    Shafeen Khaan
+                    {getUserName()}
                   </span>
                   <span className="font-size-12 color-6d7175">
-                    skshafeen2022@gmail.com
+                    {getUserEmail()}
                   </span>
                 </div>
               </div>
@@ -630,7 +669,7 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
                   {
                     content: 'Log out',
                     icon: ExitIcon,
-                    onAction: () => console.log('Log out'),
+                    onAction: handleLogout,
                     destructive: false,
                   },
                 ]}

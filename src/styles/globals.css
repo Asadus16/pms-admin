@@ -323,19 +323,93 @@ body {
 
 /* TextField Overrides */
 .Polaris-TextField__Input {
-  border-color: var(--color-border) !important;
-  border-radius: var(--radius-md) !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
-.Polaris-TextField__Input:focus {
+.Polaris-TextField__Backdrop {
+  border-color: var(--color-border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: none !important;
+}
+
+.Polaris-TextField:focus-within .Polaris-TextField__Backdrop {
   border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 1px var(--color-primary) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Remove inner borders between prefix/suffix and input in TextField */
+.Polaris-TextField__Prefix,
+.Polaris-TextField__Suffix {
+  border: none !important;
+}
+
+/* Remove Polaris connected field borders */
+.Polaris-Connected__Item {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.Polaris-TextField {
+  outline: none !important;
 }
 
 /* Select Overrides */
 .Polaris-Select__Input {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.Polaris-Select__Backdrop {
   border-color: var(--color-border) !important;
   border-radius: var(--radius-md) !important;
+  box-shadow: none !important;
+}
+
+.Polaris-Select:focus-within .Polaris-Select__Backdrop {
+  border-color: var(--color-primary) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Search Field Overrides */
+.Polaris-Filters-SearchField__Input {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.Polaris-Filters-SearchField .Polaris-TextField__Backdrop {
+  border-color: var(--color-border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: none !important;
+}
+
+.Polaris-Filters-SearchField:focus-within .Polaris-TextField__Backdrop {
+  border-color: var(--color-primary) !important;
+  box-shadow: none !important;
+}
+
+/* IndexTable Search Overrides */
+.Polaris-IndexFilters__SearchField .Polaris-TextField__Backdrop {
+  border-color: var(--color-border) !important;
+  box-shadow: none !important;
+}
+
+.Polaris-IndexFilters__SearchField:focus-within .Polaris-TextField__Backdrop {
+  border-color: var(--color-primary) !important;
+  box-shadow: none !important;
+}
+
+/* Generic input focus states */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Checkbox Overrides */
@@ -362,6 +436,71 @@ body {
 
 .Polaris-IndexTable__Table {
   border: 1px solid var(--color-border-light) !important;
+}
+
+/* Fix first sticky column alignment and background */
+.Polaris-IndexTable__TableCell--first,
+.Polaris-IndexTable__StickyTableCell {
+  background: var(--color-bg-primary) !important;
+}
+
+.Polaris-IndexTable__StickyTableColumnHeader {
+  background: var(--color-bg-secondary) !important;
+}
+
+.Polaris-IndexTable__TableHeading--first,
+.Polaris-IndexTable__StickyTableHeading {
+  background: var(--color-bg-secondary) !important;
+}
+
+/* Remove extra spacing/borders on sticky column */
+.Polaris-IndexTable__StickyTable {
+  background: transparent !important;
+}
+
+.Polaris-IndexTable__StickyTableHeader {
+  background: var(--color-bg-secondary) !important;
+}
+
+/* Ensure consistent row heights */
+.Polaris-IndexTable__TableRow {
+  background: var(--color-bg-primary) !important;
+}
+
+.Polaris-IndexTable__TableRow:hover {
+  background: var(--color-bg-hover) !important;
+}
+
+.Polaris-IndexTable__TableRow:hover .Polaris-IndexTable__StickyTableCell,
+.Polaris-IndexTable__TableRow:hover .Polaris-IndexTable__TableCell--first {
+  background: var(--color-bg-hover) !important;
+}
+
+/* Selected row background */
+.Polaris-IndexTable__TableRow--selected,
+.Polaris-IndexTable__TableRow--selected .Polaris-IndexTable__TableCell,
+.Polaris-IndexTable__TableRow--selected .Polaris-IndexTable__TableCell--first,
+.Polaris-IndexTable__TableRow--selected .Polaris-IndexTable__StickyTableCell {
+  background: var(--color-bg-tertiary, #ebebeb) !important;
+}
+
+.Polaris-IndexTable__TableRow--selected:hover,
+.Polaris-IndexTable__TableRow--selected:hover .Polaris-IndexTable__TableCell,
+.Polaris-IndexTable__TableRow--selected:hover .Polaris-IndexTable__TableCell--first,
+.Polaris-IndexTable__TableRow--selected:hover .Polaris-IndexTable__StickyTableCell {
+  background: var(--color-bg-active, #e3e3e3) !important;
+}
+
+/* Fix header alignment */
+.Polaris-IndexTable__TableHeading {
+  background: var(--color-bg-secondary) !important;
+  vertical-align: middle !important;
+}
+
+/* Remove any shadow on sticky columns */
+.Polaris-IndexTable__StickyTableCell::after,
+.Polaris-IndexTable__StickyTableColumnHeader::after {
+  display: none !important;
 }
 
 /* Utility Classes */
@@ -393,5 +532,33 @@ body {
 
 .bg-tertiary {
   background-color: var(--color-bg-tertiary);
+}
+
+/* Hide browser date picker icon */
+.date-field-no-browser-icon input[type="date"]::-webkit-calendar-picker-indicator,
+.date-field-no-browser-icon .Polaris-TextField__Input[type="date"]::-webkit-calendar-picker-indicator,
+.date-field-no-browser-icon input::-webkit-calendar-picker-indicator,
+.date-field-no-browser-icon * input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+.date-field-no-browser-icon input[type="date"],
+.date-field-no-browser-icon .Polaris-TextField__Input[type="date"],
+.date-field-no-browser-icon * input[type="date"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+.date-field-no-browser-icon input[type="date"]::-moz-calendar-picker-indicator,
+.date-field-no-browser-icon .Polaris-TextField__Input[type="date"]::-moz-calendar-picker-indicator {
+  display: none !important;
+  opacity: 0 !important;
 }
 
