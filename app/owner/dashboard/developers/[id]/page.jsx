@@ -7,7 +7,7 @@ import DeveloperViewPage from '@/components/DeveloperViewPage';
 export default function DeveloperViewPageRoute() {
   const params = useParams();
   const developerId = params?.id as string;
-  
+
   return (
     <AppProvider i18n={{}}>
       <DeveloperViewPage developerId={developerId} />
