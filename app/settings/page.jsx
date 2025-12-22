@@ -1,6 +1,6 @@
 'use client';
 
-import SettingsPage from '@pages/Settings/SettingsPage';
+import SettingsPage from '@/views/Settings/SettingsPage';
 
 export default function Settings() {
     return <SettingsPage />;

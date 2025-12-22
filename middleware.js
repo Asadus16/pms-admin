@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { ROLE_LOGIN_PATHS, ROLE_DASHBOARD_PATHS, getRoleFromPath, UserRole } from './src/composables/roles';
+import { ROLE_LOGIN_PATHS, ROLE_DASHBOARD_PATHS, getRoleFromPath, UserRole } from './src/lib/constants/roles';
 
 /**
  * Middleware for route protection

@@ -17,7 +17,7 @@ import {
 import ShopifyHeader from '@components/Shopifyheader';
 import SettingsNavigation from '@components/Settings/SettingsNavigation';
 import PhoneInput from '@components/ui/PhoneInput';
-import '@pages/Settings/settings.css';
+import '@/views/Settings/settings.css';
 import '@components/Settings/styles/SettingsLayout.css';
 import '@components/Settings/styles/SettingsResponsive.css';
 import '@components/Settings/styles/BillingSettings.css';

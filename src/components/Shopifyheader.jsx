@@ -25,16 +25,26 @@ import {
   XCircleIcon,
   AlertCircleIcon,
 } from '@shopify/polaris-icons';
-import { useAuth } from '@/composables/useAuth';
-import { useAuthContext } from '@/contexts/AuthContext';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { selectUser, clearAuth } from '@/store/slices/authSlice';
+import { logout as logoutThunk } from '@/store/thunks';
+import { getRoleFromPath } from '@/lib/constants/roles';
 import './styles/Shopifyheader.css';
 
 function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickOpen, showUnsavedChanges, onDiscard, onSave, userType = 'owners' }) {
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
   const router = useRouter();
   const basePath = `/${userType}`;
-  const { logout } = useAuth(userType);
-  const { user } = useAuthContext();
+  const user = useAppSelector(selectUser);
+  
+  // Get role from userType or pathname
+  const getRole = () => {
+    if (userType === 'owners') return 'owner';
+    if (userType === 'guests') return 'guest';
+    const roleFromPath = getRoleFromPath(pathname || '');
+    return roleFromPath || 'property-manager';
+  };
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState(null);
@@ -77,7 +87,17 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
 
   const handleLogout = async () => {
     setProfilePopoverActive(false);
-    await logout();
+    try {
+      const role = getRole();
+      await dispatch(logoutThunk({ role }));
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      dispatch(clearAuth());
+      if (typeof window !== 'undefined') {
+        window.location.href = '/';
+      }
+    }
   };
 
   // Check if we should show unsaved changes (either via prop or by checking if we're on add customer page or create order page or add developer page)

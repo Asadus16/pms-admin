@@ -11,7 +11,7 @@ import {
 } from '@shopify/polaris-icons';
 import ShopifyHeader from '@components/Shopifyheader';
 import SettingsNavigation from '@components/Settings/SettingsNavigation';
-import '@pages/Settings/settings.css';
+import '@/views/Settings/settings.css';
 import '@components/Settings/styles/SettingsLayout.css';
 import '@components/Settings/styles/SettingsResponsive.css';
 import '@components/Settings/styles/WebhooksSettings.css';
