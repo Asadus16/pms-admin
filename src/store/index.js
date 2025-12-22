@@ -6,6 +6,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import authReducer from './slices/authSlice.js';
+import loadingReducer from './slices/loadingSlice.js';
 
 // Import reducers (will be created)
 // import propertyManagerReducer from './slices/propertyManagerSlice';
@@ -15,6 +16,7 @@ import authReducer from './slices/authSlice.js';
 export const store = configureStore({
     reducer: {
         auth: authReducer,
+        loading: loadingReducer,
         // Add reducers here as they are created
         // propertyManager: propertyManagerReducer,
         // owner: ownerReducer,

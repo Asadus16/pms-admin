@@ -12,7 +12,7 @@ import {
   NotificationIcon,
   ArrowLeftIcon,
 } from '@shopify/polaris-icons';
-import ShopifyHeader from '@components/Shopifyheader';
+import ShopifyHeader from '@components/ShopifyHeader';
 import SettingsNavigation, { settingsNavItems } from '@components/Settings/SettingsNavigation';
 import GeneralSettings from '@components/Settings/GeneralSettings';
 import PlanSettings from '@components/Settings/PlanSettings';

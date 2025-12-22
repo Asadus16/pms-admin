@@ -4,6 +4,9 @@
  * Used by Redux thunks instead of composables
  */
 
+import { store } from '@/store';
+import { startLoading, finishLoading, setProgress } from '@/store/slices/loadingSlice';
+
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
 const progressBarEnabled = process.env.NEXT_PUBLIC_PROGRESS_BAR_ENABLED !== 'false';
 
@@ -139,9 +142,19 @@ export const apiRequest = async (
   }
 
   // Progress bar (optional - can be disabled)
+  let progressInterval = null;
   if (showProgress && typeof window !== 'undefined') {
-    // Progress bar can be implemented here if needed
-    // For now, we'll skip it to avoid composable dependency
+    // Start loading
+    store.dispatch(startLoading());
+    
+    // Simulate progress (since fetch doesn't provide real progress)
+    let simulatedProgress = 0;
+    progressInterval = setInterval(() => {
+      simulatedProgress += Math.random() * 15;
+      if (simulatedProgress < 90) {
+        store.dispatch(setProgress(Math.min(90, simulatedProgress)));
+      }
+    }, 200);
   }
 
   try {
@@ -195,7 +208,16 @@ export const apiRequest = async (
       throw error;
     }
 
-    // Progress bar finish (if implemented)
+    // Progress bar finish
+    if (showProgress && typeof window !== 'undefined') {
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
+      store.dispatch(setProgress(100));
+      setTimeout(() => {
+        store.dispatch(finishLoading());
+      }, 100);
+    }
 
     if (returnRaw) {
       return responseData;
@@ -203,7 +225,16 @@ export const apiRequest = async (
 
     return handleResponse(responseData);
   } catch (error) {
-    // Progress bar finish on error (if implemented)
+    // Progress bar finish on error
+    if (showProgress && typeof window !== 'undefined') {
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
+      store.dispatch(setProgress(100));
+      setTimeout(() => {
+        store.dispatch(finishLoading());
+      }, 100);
+    }
 
     const processedError = handleLaravelError(error);
 

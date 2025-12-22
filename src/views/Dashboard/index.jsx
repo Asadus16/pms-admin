@@ -50,7 +50,7 @@ import {
   LockIcon,
   ChatIcon,
 } from '@shopify/polaris-icons'
-import ShopifyHeader from '../../components/Shopifyheader'
+import ShopifyHeader from '../../components/ShopifyHeader'
 import CustomersPage from '../../components/CustomersPage'
 import PropertyOwnersPage from '../../components/PropertyOwnersPage'
 import ProjectsPage from '../../components/ProjectsPage'
@@ -102,16 +102,28 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
   const userType = VALID_USER_TYPES.includes(rawUserType) ? rawUserType : 'owners'
 
   // Base path for this user type (use the raw value from URL for navigation)
-  // With new structure, dashboard routes are /role/dashboard, so we need to adjust
+  // Routes are now /role/... instead of /role/dashboard/...
   const rolePath = rawUserType === 'owners' ? 'owner' : rawUserType === 'guests' ? 'guest' : rawUserType;
-  const basePath = `/${rolePath}/dashboard`
+  const basePath = `/${rolePath}`
 
-  // Get selected page from URL path
-  const getSelectedFromPath = () => {
+  // Get selected page from URL path - memoized to avoid recreation on every render
+  const getSelectedFromPath = useCallback(() => {
+    // Ensure pathname is available (client-side only)
+    if (typeof window === 'undefined' || !pathname) {
+      return 'dashboard'
+    }
+    
     // Remove the basePath prefix from pathname to get the page
-    // pathname is like /property-manager/dashboard or /property-manager/dashboard/bookings
-    const path = pathname.replace(basePath, '').replace(/^\//, '') || 'dashboard'
-    if (path === '') return 'dashboard'
+    // pathname is like /property-manager or /property-manager/bookings
+    // Also handle /property-manager/dashboard for backward compatibility
+    let path = pathname.replace(basePath, '').replace(/^\//, '') || 'dashboard'
+    
+    // Remove /dashboard if present (for backward compatibility)
+    if (path.startsWith('dashboard')) {
+      path = path.replace(/^dashboard\/?/, '') || 'dashboard'
+    }
+    
+    if (path === '' || path === 'dashboard') return 'dashboard'
     if (path === 'customers/new' || path.startsWith('customers/new')) return 'customers/new'
     if (path === 'bookings/new' || path.startsWith('bookings/new')) return 'bookings/new'
     if (path === 'developers/new' || path.startsWith('developers/new')) return 'developers/new'
@@ -120,18 +132,29 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     if (path.startsWith('developers/') && !path.startsWith('developers/new')) return path
     // Projects view route
     if (path.startsWith('projects/') && !path.startsWith('projects/new')) return path
+    // Properties view route
+    if (path.startsWith('properties/') && !path.startsWith('properties/new')) return path
     if (path === 'customers/segments' || path.startsWith('customers/segments')) return 'segments'
     if (path === 'analytics/reports' || path.startsWith('analytics/reports')) return 'reports'
     if (path === 'analytics/live-view' || path.startsWith('analytics/live-view')) return 'live-view'
     return path
-  }
-
-  const [selected, setSelected] = useState(getSelectedFromPath())
-
-  // Update selected when URL changes
-  useEffect(() => {
-    setSelected(getSelectedFromPath())
   }, [pathname, basePath])
+
+  // Initialize with default to avoid hydration mismatch
+  const [selected, setSelected] = useState('dashboard')
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Update selected when URL changes, but only after mount to avoid hydration issues
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Update selected when pathname changes (separate effect to avoid re-mounting)
+  useEffect(() => {
+    if (isMounted) {
+      setSelected(getSelectedFromPath())
+    }
+  }, [isMounted, getSelectedFromPath])
 
   const toggleMobileNavigationActive = useCallback(
     () =>
@@ -157,7 +180,7 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
   const handleNavigation = useCallback((page) => {
     setSelected(page)
     if (page === 'dashboard') {
-      router.push(basePath)
+      router.push(`${basePath}/dashboard`)
     } else if (page === 'segments') {
       router.push(`${basePath}/customers/segments`)
     } else if (page === 'reports') {
@@ -181,70 +204,60 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
             label: 'Dashboard',
             icon: selected === 'dashboard' ? ChartVerticalIcon : ChartVerticalFilledIcon,
             onClick: () => handleNavigation('dashboard'),
-            url: basePath,
             selected: selected === 'dashboard',
           },
           {
             label: 'Developers',
             icon: TeamIcon,
             onClick: () => handleNavigation('developers'),
-            url: `${basePath}/developers`,
             selected: selected === 'developers',
           },
           {
             label: 'Projects',
             icon: selected === 'projects' ? ProductIcon : ProductFilledIcon,
             onClick: () => handleNavigation('projects'),
-            url: `${basePath}/projects`,
             selected: selected === 'projects',
           },
           {
             label: 'Properties',
             icon: selected === 'properties' ? HomeIcon : HomeFilledIcon,
             onClick: () => handleNavigation('properties'),
-            url: `${basePath}/properties`,
             selected: selected === 'properties',
           },
           {
             label: 'Inventory',
             icon: InventoryIcon,
             onClick: () => handleNavigation('inventory'),
-            url: `${basePath}/inventory`,
             selected: selected === 'inventory',
           },
           {
             label: 'Owners',
             icon: selected === 'owners' ? PersonIcon : PersonFilledIcon,
             onClick: () => handleNavigation('owners'),
-            url: `${basePath}/owners`,
             selected: selected === 'owners',
           },
           {
             label: 'Contacts',
             icon: ChatIcon,
             onClick: () => handleNavigation('contacts'),
-            url: `${basePath}/contacts`,
             selected: selected === 'contacts',
           },
           {
             label: 'Leads',
             icon: EmailIcon,
             onClick: () => handleNavigation('leads'),
-            url: `${basePath}/leads`,
             selected: selected === 'leads',
           },
           {
             label: 'Reports',
             icon: ChartLineIcon,
             onClick: () => handleNavigation('reports'),
-            url: `${basePath}/reports`,
             selected: selected === 'reports',
           },
           {
             label: 'Integrations',
             icon: selected === 'integrations' ? AppsIcon : AppsFilledIcon,
             onClick: () => handleNavigation('integrations'),
-            url: `${basePath}/integrations`,
             selected: selected === 'integrations',
           },
         ]}
@@ -255,7 +268,6 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
             label: 'Settings',
             icon: selected === 'settings' || selected === 'roles-permissions' ? SettingsIcon : SettingsFilledIcon,
             onClick: () => handleNavigation('settings'),
-            url: `${basePath}/settings`,
             selected: selected === 'settings' || selected === 'roles-permissions',
           },
         ]}
@@ -272,56 +284,48 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
             label: 'Dashboard',
             icon: selected === 'dashboard' ? ChartVerticalIcon : ChartVerticalFilledIcon,
             onClick: () => handleNavigation('dashboard'),
-            url: basePath,
             selected: selected === 'dashboard',
           },
           {
             label: 'Properties',
             icon: selected === 'properties' ? HomeIcon : HomeFilledIcon,
             onClick: () => handleNavigation('properties'),
-            url: `${basePath}/properties`,
             selected: selected === 'properties',
           },
           {
             label: 'Bookings',
             icon: selected === 'bookings' ? OrderIcon : OrderFilledIcon,
             onClick: () => handleNavigation('bookings'),
-            url: `${basePath}/bookings`,
             selected: selected === 'bookings',
           },
           {
             label: 'Owner',
             icon: selected === 'owner' ? PersonIcon : PersonFilledIcon,
             onClick: () => handleNavigation('owner'),
-            url: `${basePath}/owner`,
             selected: selected === 'owner',
           },
           {
             label: 'Guests',
             icon: selected === 'guests' ? PersonIcon : PersonFilledIcon,
             onClick: () => handleNavigation('guests'),
-            url: `${basePath}/guests`,
             selected: selected === 'guests',
           },
           {
             label: 'Transactions',
             icon: TransactionIcon,
             onClick: () => handleNavigation('transactions'),
-            url: `${basePath}/transactions`,
             selected: selected === 'transactions',
           },
           {
             label: 'Inventory',
             icon: InventoryIcon,
             onClick: () => handleNavigation('inventory'),
-            url: `${basePath}/inventory`,
             selected: selected === 'inventory',
           },
           {
             label: 'Reports',
             icon: ChartLineIcon,
             onClick: () => handleNavigation('reports'),
-            url: `${basePath}/reports`,
             selected: selected === 'reports',
           },
         ]}
@@ -333,7 +337,6 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
             label: 'Google & YouTube',
             icon: LogoGoogleIcon,
             onClick: () => handleNavigation('google-youtube'),
-            url: `${basePath}/google-youtube`,
             selected: selected === 'google-youtube',
             badge: hoveredSalesChannel === 'google-youtube' ? (
               <Icon source={PinIcon} tone="subdued" />
@@ -345,7 +348,6 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
             label: 'Online Store',
             icon: StoreFilledIcon,
             onClick: () => handleNavigation('online-store'),
-            url: `${basePath}/online-store`,
             selected: selected === 'online-store',
             badge: hoveredSalesChannel === 'online-store' ? (
               <Icon source={PinIcon} tone="subdued" />
@@ -367,7 +369,6 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
             label: 'TinySEO',
             icon: RobotIcon,
             onClick: () => handleNavigation('tinyseo'),
-            url: `${basePath}/tinyseo`,
             selected: selected === 'tinyseo',
             badge: hoveredApp === 'tinyseo' ? (
               <Icon source={PinIcon} tone="subdued" />
@@ -383,7 +384,6 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
             label: 'Settings',
             icon: selected === 'settings' ? SettingsIcon : SettingsFilledIcon,
             onClick: () => handleNavigation('settings'),
-            url: `${basePath}/settings`,
             selected: selected === 'settings',
           },
         ]}
