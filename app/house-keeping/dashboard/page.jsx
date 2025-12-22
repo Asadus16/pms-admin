@@ -6,7 +6,7 @@ import { useAppSelector } from '@/store';
 import { selectIsAuthenticated, selectIsLoading, selectCurrentRole } from '@/store/slices/authSlice';
 import Dashboard from '@/views/Dashboard';
 
-export default function SuperAdminDashboardPage() {
+export default function HouseKeepingDashboardPage() {
     const router = useRouter();
     const isAuthenticated = useAppSelector(selectIsAuthenticated);
     const isLoading = useAppSelector(selectIsLoading);
@@ -17,7 +17,7 @@ export default function SuperAdminDashboardPage() {
         if (!isLoading) {
             if (!isAuthenticated) {
                 router.push('/');
-            } else if (currentRole !== 'super-admin') {
+            } else if (currentRole !== 'house-keeping') {
                 // Redirect to correct role dashboard
                 const { ROLE_DASHBOARD_PATHS } = require('@/lib/constants/roles');
                 if (currentRole && ROLE_DASHBOARD_PATHS[currentRole]) {
@@ -39,11 +39,10 @@ export default function SuperAdminDashboardPage() {
     }
 
     // Don't render dashboard if not authenticated or wrong role (will redirect)
-    if (!isAuthenticated || currentRole !== 'super-admin') {
+    if (!isAuthenticated || currentRole !== 'house-keeping') {
         return null;
     }
 
-    // Super admin might have different dashboard, using property-manager for now
     return <Dashboard userType="property-manager" />;
 }
 
