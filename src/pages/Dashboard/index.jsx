@@ -57,6 +57,9 @@ import PropertyOwnersPage from '../../components/PropertyOwnersPage'
 import ProjectsPage from '../../components/ProjectsPage'
 import ProjectViewPage from '../../components/ProjectViewPage'
 import AddProject from '../../components/AddProject'
+import PropertiesPage from '../../components/PropertiesPage'
+import AddProperty from '../../components/AddProperty'
+import PropertyViewPage from '../../components/PropertyViewPage'
 import OrdersPage from '../../components/OrdersPage'
 import AnalyticsPage from '../../components/AnalyticsPage'
 import SidekickPanel from '../../components/SidekickPanel'
@@ -66,6 +69,7 @@ import CreateOrder from '../../components/CreateOrder'
 import DeveloperViewPage from '../../components/DeveloperViewPage'
 import { developersData } from '../../data/developers'
 import { projectsData } from '../../data/projects'
+import { propertiesData } from '../../data/properties'
 import SettingsPage from '../Settings/SettingsPage'
 import PropertyDeveloperDashboard from './PropertyDeveloperDashboard'
 import './dashboard.css'
@@ -475,6 +479,29 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
       return <ProjectsPage />
     }
 
+    // Properties page for property-manager/real-estate-company uses PropertiesPage
+    if (selected === 'properties') {
+      return <PropertiesPage />
+    }
+
+    // Check for properties/new route
+    if (selected === 'properties/new' || pathname.includes('/properties/new')) {
+      return <AddProperty onClose={() => router.push(`${basePath}/properties`)} />
+    }
+
+    // Check for properties/:id/edit route
+    if (selected.startsWith('properties/') && selected.endsWith('/edit')) {
+      const propertyId = selected.split('/')[1];
+      const initialProperty = propertiesData.find((p) => String(p.id) === String(propertyId)) || null;
+      return (
+        <AddProperty
+          mode="edit"
+          initialProperty={initialProperty}
+          onClose={() => router.push(`${basePath}/properties`)}
+        />
+      );
+    }
+
     // Developer view page: /:userType/developers/:id
     if (selected.startsWith('developers/') && selected !== 'developers/new') {
       const developerId = selected.split('/')[1];
@@ -482,9 +509,15 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     }
 
     // Project view page: /:userType/projects/:id
-    if (selected.startsWith('projects/') && selected !== 'projects/new') {
+    if (selected.startsWith('projects/') && selected !== 'projects/new' && !selected.endsWith('/edit')) {
       const projectId = selected.split('/')[1];
       return <ProjectViewPage projectId={projectId} />;
+    }
+
+    // Property view page: /:userType/properties/:id
+    if (selected.startsWith('properties/') && selected !== 'properties/new' && !selected.endsWith('/edit')) {
+      const propertyId = selected.split('/')[1];
+      return <PropertyViewPage propertyId={propertyId} />;
     }
 
     // Bookings shows OrdersPage

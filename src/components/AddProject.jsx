@@ -24,9 +24,11 @@ import {
   ProductIcon,
   ChevronRightIcon,
   NoteIcon,
+  CalendarIcon,
 } from '@shopify/polaris-icons';
 import { Editor } from '@tinymce/tinymce-react';
 import { developersData } from '../data/developers';
+import GoogleMapPicker from './GoogleMapPicker';
 import './styles/AddDeveloper.css';
 
 // Generate a unique project ID
@@ -77,12 +79,11 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
     pool: false,
     security: false,
     parking: false,
-    etc: false,
   });
 
   // Developer Incentives state
   const [dldWaiver, setDldWaiver] = useState(false);
-  const [postHandoverPlan, setPostHandoverPlan] = useState('');
+  const [postHandoverPlan, setPostHandoverPlan] = useState(false);
 
   // Financial Details state
   const [priceMin, setPriceMin] = useState('');
@@ -91,6 +92,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
   const [estimatedROI, setEstimatedROI] = useState('');
   const [paymentPlanType, setPaymentPlanType] = useState('set'); // 'set' or 'upload'
   const [paymentPlanPdf, setPaymentPlanPdf] = useState(null);
+  const [paymentPlanDetails, setPaymentPlanDetails] = useState('');
 
   // Populate form when editing
   useEffect(() => {
@@ -115,15 +117,15 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
       pool: false,
       security: false,
       parking: false,
-      etc: false,
     });
     setDldWaiver(initialProject.dldWaiver || false);
-    setPostHandoverPlan(initialProject.postHandoverPlan || '');
+    setPostHandoverPlan(initialProject.postHandoverPlan || false);
     setPriceMin(initialProject.priceMin || '');
     setPriceMax(initialProject.priceMax || '');
     setServiceChargePerSqft(initialProject.serviceChargePerSqft || '');
     setEstimatedROI(initialProject.estimatedROI || '');
     setPaymentPlanType(initialProject.paymentPlanType || 'set');
+    setPaymentPlanDetails(initialProject.paymentPlanDetails || '');
   }, [mode, initialProject]);
 
   const handleBack = useCallback(() => {
@@ -399,6 +401,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
       estimatedROI,
       paymentPlanType,
       paymentPlanPdf,
+      paymentPlanDetails,
     });
   }, [
     projectId, selectedDeveloper, projectName, projectType, status,
@@ -407,7 +410,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
     selectedCountry, selectedCity, community, subCommunity, mapCoordinates,
     amenities, dldWaiver, postHandoverPlan,
     priceMin, priceMax, serviceChargePerSqft, estimatedROI,
-    paymentPlanType, paymentPlanPdf,
+    paymentPlanType, paymentPlanPdf, paymentPlanDetails,
   ]);
 
   // Set data attribute on body when AddProject is mounted
@@ -460,6 +463,7 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
       });
     };
   }, []);
+
 
   // Upload content renderers
   const masterplanUploadedContent = masterplanFile && (
@@ -569,14 +573,6 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                     autoComplete="off"
                   />
 
-                  {/* Developer Dropdown */}
-                  <Select
-                    label="Developer"
-                    options={developerOptions}
-                    value={selectedDeveloper}
-                    onChange={setSelectedDeveloper}
-                  />
-
                   {/* Project Name */}
                   <TextField
                     label="Project name"
@@ -603,13 +599,16 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                   />
 
                   {/* Expected Handover Date */}
-                  <TextField
-                    label="Expected handover date"
-                    type="date"
-                    value={expectedHandoverDate}
-                    onChange={setExpectedHandoverDate}
-                    autoComplete="off"
-                  />
+                  <Box className="date-field-no-browser-icon">
+                    <TextField
+                      label="Expected handover date"
+                      type="date"
+                      value={expectedHandoverDate}
+                      onChange={setExpectedHandoverDate}
+                      autoComplete="off"
+                      suffix={<Icon source={CalendarIcon} tone="subdued" />}
+                    />
+                  </Box>
 
                   {/* Construction Progress */}
                   <TextField
@@ -855,7 +854,14 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                     onChange={setMapCoordinates}
                     autoComplete="off"
                     placeholder="e.g., 25.2048, 55.2708"
-                    helpText="Enter latitude and longitude separated by comma"
+                    helpText="Enter latitude and longitude separated by comma, or use the map below to search and select a location"
+                  />
+
+                  {/* Google Map Picker */}
+                  <GoogleMapPicker
+                    coordinates={mapCoordinates}
+                    onCoordinatesChange={setMapCoordinates}
+                    apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
                   />
                 </BlockStack>
               </Card>
@@ -867,38 +873,55 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                     Amenities details
                   </Text>
 
-                  <BlockStack gap="200">
-                    <Checkbox
-                      label="Park"
-                      checked={amenities.park}
-                      onChange={() => handleAmenityChange('park')}
-                    />
-                    <Checkbox
-                      label="Gym"
-                      checked={amenities.gym}
-                      onChange={() => handleAmenityChange('gym')}
-                    />
-                    <Checkbox
-                      label="Pool"
-                      checked={amenities.pool}
-                      onChange={() => handleAmenityChange('pool')}
-                    />
-                    <Checkbox
-                      label="Security"
-                      checked={amenities.security}
-                      onChange={() => handleAmenityChange('security')}
-                    />
-                    <Checkbox
-                      label="Parking"
-                      checked={amenities.parking}
-                      onChange={() => handleAmenityChange('parking')}
-                    />
-                    <Checkbox
-                      label="Etc"
-                      checked={amenities.etc}
-                      onChange={() => handleAmenityChange('etc')}
-                    />
-                  </BlockStack>
+                  <Box>
+                    <div className="amenities-list">
+                      <div className="amenity-item">
+                        <div className="amenity-content">
+                          <Checkbox
+                            label="Park"
+                            checked={amenities.park}
+                            onChange={() => handleAmenityChange('park')}
+                          />
+                        </div>
+                      </div>
+                      <div className="amenity-item">
+                        <div className="amenity-content">
+                          <Checkbox
+                            label="Gym"
+                            checked={amenities.gym}
+                            onChange={() => handleAmenityChange('gym')}
+                          />
+                        </div>
+                      </div>
+                      <div className="amenity-item">
+                        <div className="amenity-content">
+                          <Checkbox
+                            label="Pool"
+                            checked={amenities.pool}
+                            onChange={() => handleAmenityChange('pool')}
+                          />
+                        </div>
+                      </div>
+                      <div className="amenity-item">
+                        <div className="amenity-content">
+                          <Checkbox
+                            label="Security"
+                            checked={amenities.security}
+                            onChange={() => handleAmenityChange('security')}
+                          />
+                        </div>
+                      </div>
+                      <div className="amenity-item">
+                        <div className="amenity-content">
+                          <Checkbox
+                            label="Parking"
+                            checked={amenities.parking}
+                            onChange={() => handleAmenityChange('parking')}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Box>
                 </BlockStack>
               </Card>
 
@@ -909,20 +932,28 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                     Developer incentives
                   </Text>
 
-                  <Checkbox
-                    label="DLD Waiver"
-                    checked={dldWaiver}
-                    onChange={setDldWaiver}
-                  />
-
-                  <TextField
-                    label="Post-handover plan"
-                    value={postHandoverPlan}
-                    onChange={setPostHandoverPlan}
-                    multiline={3}
-                    autoComplete="off"
-                    placeholder="Enter post-handover plan details..."
-                  />
+                  <Box>
+                    <div className="amenities-list">
+                      <div className="amenity-item">
+                        <div className="amenity-content">
+                          <Checkbox
+                            label="DLD Waiver"
+                            checked={dldWaiver}
+                            onChange={setDldWaiver}
+                          />
+                        </div>
+                      </div>
+                      <div className="amenity-item">
+                        <div className="amenity-content">
+                          <Checkbox
+                            label="Post-handover plan"
+                            checked={postHandoverPlan}
+                            onChange={setPostHandoverPlan}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Box>
                 </BlockStack>
               </Card>
 
@@ -1027,8 +1058,8 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                         <TextField
                           label="Payment plan details"
                           multiline={4}
-                          value={postHandoverPlan}
-                          onChange={setPostHandoverPlan}
+                          value={paymentPlanDetails}
+                          onChange={setPaymentPlanDetails}
                           autoComplete="off"
                           placeholder="Enter payment plan details..."
                         />
@@ -1058,10 +1089,47 @@ function AddProject({ onClose, mode = 'create', initialProject = null }) {
                   />
                 </BlockStack>
               </Card>
+
+              {/* Developer card */}
+              <Card>
+                <BlockStack gap="200">
+                  <Text variant="headingMd" as="h2">
+                    Developer
+                  </Text>
+                  <Select
+                    label="Developer"
+                    labelHidden
+                    options={developerOptions}
+                    value={selectedDeveloper}
+                    onChange={setSelectedDeveloper}
+                  />
+                </BlockStack>
+              </Card>
             </BlockStack>
           </Layout.Section>
         </Layout>
       </Page>
+      <style dangerouslySetInnerHTML={{__html: `
+        .date-field-no-browser-icon input[type="date"]::-webkit-calendar-picker-indicator,
+        .date-field-no-browser-icon .Polaris-TextField__Input[type="date"]::-webkit-calendar-picker-indicator,
+        .date-field-no-browser-icon input::-webkit-calendar-picker-indicator {
+          display: none !important;
+          -webkit-appearance: none !important;
+          opacity: 0 !important;
+          position: absolute !important;
+          width: 0 !important;
+          height: 0 !important;
+          pointer-events: none !important;
+        }
+        .date-field-no-browser-icon input[type="date"],
+        .date-field-no-browser-icon .Polaris-TextField__Input[type="date"] {
+          -webkit-appearance: none !important;
+          appearance: none !important;
+        }
+        .date-field-no-browser-icon input[type="date"]::-moz-calendar-picker-indicator {
+          display: none !important;
+        }
+      `}} />
     </div>
   );
 }

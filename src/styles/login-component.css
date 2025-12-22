@@ -1,0 +1,259 @@
+.Polaris-TextField__Input,
+input[type="email"],
+input[type="password"],
+input[type="text"],
+.Polaris-TextField input {
+  border-radius: 8px !important;
+  border: 1px solid #8a8a8a !important;
+  height: 36px !important;
+  padding: 10px 16px !important;
+}
+
+.Polaris-TextField__Input:focus,
+.Polaris-TextField input:focus {
+  border-color: #8a8a8a !important;
+  box-shadow: none !important;
+}
+
+.continue-email-button .Polaris-Button {
+  background-color: #424242 !important;
+  padding: 14px 20px !important;
+  height: auto !important;
+  min-height: auto !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.continue-email-button .Polaris-Button span,
+.continue-email-button .Polaris-Button .Polaris-InlineStack span {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.continue-email-button .Polaris-Button:hover {
+  background-color: #4a4a4a !important;
+}
+
+.continue-email-button .Polaris-Button:active {
+  background-color: #3a3a3a !important;
+}
+
+.continue-email-button {
+  position: relative;
+}
+
+.continue-email-button .Polaris-Button .Polaris-InlineStack {
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.continue-email-button .button-arrow {
+  position: absolute;
+  left: calc(50% + 70px);
+  top: 50%;
+  transform: translateY(-50%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.continue-email-button:hover .button-arrow {
+  opacity: 1;
+  transform: translateY(-50%) translateX(4px);
+}
+
+.login-button-wrapper .Polaris-Button {
+  background-color: #424242 !important;
+  padding: 14px 20px !important;
+  height: auto !important;
+  min-height: auto !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.login-button-wrapper .Polaris-Button:hover {
+  background-color: #4a4a4a !important;
+}
+
+.login-button-wrapper .Polaris-Button:active {
+  background-color: #3a3a3a !important;
+}
+
+.passkey-button:active,
+.social-button:active {
+  background-color: #d1d1d1 !important;
+}
+
+.footer-link:hover {
+  text-decoration: underline !important;
+}
+
+.footer-links-container {
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  margin-top: 16px !important;
+}
+
+.login-card-container .Polaris-Card,
+.login-card-container .Polaris-Card > div,
+.login-card-container .Polaris-Card > .Polaris-Box,
+.login-card-container .Polaris-Box {
+  box-sizing: border-box !important;
+}
+
+.login-card-container.email-step .Polaris-Card,
+.login-card-container.email-step .Polaris-Card > div,
+.login-card-container.email-step .Polaris-Card > .Polaris-Box,
+.login-card-container.email-step .Polaris-Box {
+  height: 588px !important;
+  min-height: 588px !important;
+  max-height: 588px !important;
+}
+
+.login-card-container.password-step .Polaris-Card,
+.login-card-container.password-step .Polaris-Card > div,
+.login-card-container.password-step .Polaris-Card > .Polaris-Box,
+.login-card-container.password-step .Polaris-Box {
+  height: 500px !important;
+  min-height: 500px !important;
+  max-height: 500px !important;
+}
+
+.login-card-container .Polaris-Card__Section {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.login-card-container .Polaris-Card > .Polaris-Box {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.login-card-container .Polaris-Card .Polaris-BlockStack {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.footer-links-container {
+  margin-top: auto !important;
+  padding-bottom: 24px !important;
+}
+
+.continue-to-shopify-text,
+.continue-to-shopify-text .Polaris-Text,
+.continue-to-shopify-text p,
+.continue-to-shopify-text span {
+  font-size: 14px !important;
+}
+
+.login-card-container .Polaris-TextField {
+  overflow: visible !important;
+}
+
+.login-card-container .Polaris-TextField__Backdrop {
+  overflow: visible !important;
+}
+
+.login-card-container .Polaris-TextField__Suffix {
+  position: absolute !important;
+  right: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: transparent !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.login-card-container .Polaris-TextField__Input {
+  padding-right: 40px !important;
+}
+
+@media (max-width: 768px) {
+  .login-page-container {
+    background: #ffffff !important;
+    padding: 0 !important;
+    padding-top: 40px !important;
+    align-items: flex-start !important;
+    min-height: 100vh !important;
+    height: auto !important;
+  }
+
+  .login-bg-gradient-1,
+  .login-bg-gradient-2,
+  .login-bg-gradient-3,
+  .login-bg-noise {
+    display: none !important;
+  }
+
+  .login-card-container {
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .login-card-container.email-step,
+  .login-card-container.password-step {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+  }
+
+  .login-card-container *,
+  .login-card-container *::before,
+  .login-card-container *::after {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  .login-card-container .Polaris-Card {
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  .login-card-container .Polaris-Card > .Polaris-Box,
+  .login-card-container .Polaris-Card > div,
+  .login-card-container .Polaris-Card > div > div {
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .footer-links-container {
+    position: fixed !important;
+    bottom: 16px !important;
+    left: 16px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 10 !important;
+    display: block !important;
+    background: transparent !important;
+  }
+
+  .login-card-container .Polaris-TextField__Input,
+  .login-card-container input[type="email"],
+  .login-card-container input[type="password"],
+  .login-card-container input[type="text"] {
+    border: 1px solid #8a8a8a !important;
+  }
+}
+

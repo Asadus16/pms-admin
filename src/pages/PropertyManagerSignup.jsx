@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/composables/useAuth';
+import { useAuthContext } from '@/contexts/AuthContext';
+import { ROLE_DASHBOARD_PATHS } from '@/composables/roles';
 import {
   AppProvider,
   Card,
@@ -11,6 +14,7 @@ import {
   BlockStack,
   Select,
   InlineStack,
+  Banner,
 } from '@shopify/polaris';
 import './PropertyManagerSignup.css';
 
@@ -125,15 +129,25 @@ const steps = [
 
 function PropertyManagerSignup() {
   const router = useRouter();
+  const { isAuthenticated, currentRole } = useAuthContext();
+  const { sendSignupOtp, verifySignupOtp } = useAuth('property-manager');
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && currentRole) {
+      const dashboardPath = ROLE_DASHBOARD_PATHS[currentRole];
+      router.push(dashboardPath);
+    }
+  }, [isAuthenticated, currentRole, router]);
 
   // Account Details state
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
 
   // Company Details state
   const [companyName, setCompanyName] = useState('');
@@ -152,9 +166,6 @@ function PropertyManagerSignup() {
   const [verificationCode, setVerificationCode] = useState('');
   const [resendTimer, setResendTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
-
-  // Success state
-  const [showSuccess, setShowSuccess] = useState(false);
 
   // Resend timer effect
   useEffect(() => {
@@ -204,66 +215,282 @@ function PropertyManagerSignup() {
     }
   };
 
-  const handleResendCode = () => {
-    if (canResend) {
+  // Validation functions
+  const validateName = (name) => {
+    if (!name) return 'Name is required';
+    if (name.length < 2) return 'Name must be at least 2 characters';
+    return '';
+  };
+
+  const validateEmail = (email) => {
+    if (!email) return 'Email is required';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return 'Please enter a valid email address';
+    return '';
+  };
+
+  const validatePassword = (password) => {
+    if (!password) return 'Password is required';
+    if (password.length < 8) return 'Password must be at least 8 characters';
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return 'Password must contain one special character';
+    return '';
+  };
+
+  const validatePhone = (phone) => {
+    if (!phone) return 'Phone number is required';
+    return '';
+  };
+
+  const validateCompanyName = (name) => {
+    if (!name) return 'Company name is required';
+    return '';
+  };
+
+  // Password requirements
+  const passwordRequirements = {
+    length: password.length >= 8,
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  };
+
+  // Form validation
+  const isFormValid = () => {
+    if (currentStep === 1) {
+      return (
+        fullName &&
+        email &&
+        password &&
+        confirmPassword &&
+        password === confirmPassword &&
+        passwordRequirements.length &&
+        passwordRequirements.special &&
+        !errors.name &&
+        !errors.email &&
+        !errors.password &&
+        !errors.password_confirmation
+      );
+    }
+    if (currentStep === 2) {
+      return (
+        companyName &&
+        companyPhone &&
+        !errors.companyName &&
+        !errors.phone
+      );
+    }
+    if (currentStep === 3) {
+      return selectedPlan;
+    }
+    if (currentStep === 4) {
+      return verificationCode && verificationCode.length === 4;
+    }
+    return false;
+  };
+
+  const handleResendCode = async () => {
+    if (!canResend) return;
+
+    if (!companyPhone) {
+      setErrors({ ...errors, phone: 'Phone number is required' });
+      return;
+    }
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      const fullPhone = `${companyCountryCode}${companyPhone}`;
+      const signupData = {
+        name: fullName,
+        email,
+        password,
+        password_confirmation: confirmPassword,
+        phone: fullPhone,
+        company_name: companyName,
+        ...(companyLogo && { company_logo: companyLogo }),
+        ...(selectedPlan && { plan: selectedPlan }),
+        ...(billingPeriod && { billing_interval: billingPeriod }),
+      };
+
+      await sendSignupOtp(signupData);
       setResendTimer(60);
       setCanResend(false);
+    } catch (error) {
+      if (error?.validationErrors) {
+        const newErrors = {};
+        if (error.validationErrors.phone) {
+          newErrors.phone = error.validationErrors.phone[0];
+        } else if (error.validationErrors.message) {
+          newErrors.phone = error.validationErrors.message[0];
+        } else {
+          newErrors.phone = error?.message || 'Failed to resend OTP. Please try again.';
+        }
+        setErrors({ ...errors, ...newErrors });
+      } else {
+        setErrors({ ...errors, phone: error?.message || 'Failed to resend OTP. Please try again.' });
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleNextStep = () => {
-    // Validate step 1
+  const handleNextStep = async () => {
+    setErrors({});
+
+    // Step 1: Account Details
     if (currentStep === 1) {
-      if (password !== confirmPassword) {
-        setPasswordError('Passwords do not match');
+      const nameError = validateName(fullName);
+      const emailError = validateEmail(email);
+      const passwordError = validatePassword(password);
+      let passwordConfirmationError = '';
+
+      if (!confirmPassword) {
+        passwordConfirmationError = 'Please confirm your password';
+      } else if (password !== confirmPassword) {
+        passwordConfirmationError = 'Passwords do not match';
+      }
+
+      if (nameError || emailError || passwordError || passwordConfirmationError) {
+        setErrors({
+          name: nameError,
+          email: emailError,
+          password: passwordError,
+          password_confirmation: passwordConfirmationError,
+        });
         return;
       }
-      if (password.length < 8) {
-        setPasswordError('Password must be at least 8 characters');
-        return;
-      }
-      setPasswordError('');
+
+      setCurrentStep(2);
+      return;
     }
 
-    if (currentStep < 4) {
-      setCurrentStep(currentStep + 1);
+    // Step 2: Company Details
+    if (currentStep === 2) {
+      const companyNameError = validateCompanyName(companyName);
+      const phoneError = validatePhone(companyPhone);
+
+      if (companyNameError || phoneError) {
+        setErrors({
+          companyName: companyNameError,
+          phone: phoneError,
+        });
+        return;
+      }
+
+      setCurrentStep(3);
+      return;
+    }
+
+    // Step 3: Plan Selection - Send OTP
+    if (currentStep === 3) {
+      if (!selectedPlan) {
+        return;
+      }
+
+      setIsLoading(true);
+      setErrors({});
+
+      try {
+        const fullPhone = `${companyCountryCode}${companyPhone}`;
+        const signupData = {
+          name: fullName,
+          email,
+          password,
+          password_confirmation: confirmPassword,
+          phone: fullPhone,
+          company_name: companyName,
+          ...(companyLogo && { company_logo: companyLogo }),
+          ...(selectedPlan && { plan: selectedPlan }),
+          ...(billingPeriod && { billing_interval: billingPeriod }),
+        };
+
+        await sendSignupOtp(signupData);
+        setCurrentStep(4);
+      } catch (error) {
+        if (error?.validationErrors) {
+          const newErrors = {};
+          if (error.validationErrors.phone) {
+            newErrors.phone = error.validationErrors.phone[0];
+          } else if (error.validationErrors.name) {
+            newErrors.name = error.validationErrors.name[0];
+          } else if (error.validationErrors.email) {
+            newErrors.email = error.validationErrors.email[0];
+          } else if (error.validationErrors.password) {
+            newErrors.password = error.validationErrors.password[0];
+          } else if (error.validationErrors.company_name) {
+            newErrors.companyName = error.validationErrors.company_name[0];
+          } else if (error.validationErrors.message) {
+            newErrors.phone = error.validationErrors.message[0];
+          } else {
+            newErrors.phone = error?.message || 'Failed to send OTP. Please try again.';
+          }
+          setErrors(newErrors);
+        } else {
+          setErrors({ phone: error?.message || 'Failed to send OTP. Please try again.' });
+        }
+      } finally {
+        setIsLoading(false);
+      }
+      return;
     }
   };
 
   const handlePrevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      setErrors({});
     }
   };
 
-  const handleCompleteSignup = () => {
-    setShowSuccess(true);
-  };
+  const handleCompleteSignup = async () => {
+    if (!verificationCode || verificationCode.length !== 4) {
+      setErrors({ verificationCode: 'Please enter a valid 4-digit code' });
+      return;
+    }
 
-  const handleSignIn = () => {
-    router.push('/property-manager/login');
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      const fullPhone = `${companyCountryCode}${companyPhone}`;
+      await verifySignupOtp(fullPhone, verificationCode);
+
+      // Registration successful - redirect to dashboard
+      router.push('/property-manager/dashboard');
+    } catch (error) {
+      if (error?.validationErrors) {
+        if (error.validationErrors.verification_code || error.validationErrors.otp) {
+          setErrors({
+            verificationCode: (error.validationErrors.verification_code || error.validationErrors.otp)[0],
+          });
+        } else if (error.validationErrors.phone) {
+          setErrors({ verificationCode: error.validationErrors.phone[0] });
+        } else if (error.validationErrors.message) {
+          setErrors({ verificationCode: error.validationErrors.message[0] });
+        } else {
+          setErrors({ verificationCode: error?.message || 'Invalid OTP. Please try again.' });
+        }
+      } else {
+        setErrors({ verificationCode: error?.message || 'Invalid OTP. Please try again.' });
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const progressPercent = ((currentStep - 1) / (steps.length - 1)) * 100;
 
   const UploadIcon = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" fill="#616161"/>
+      <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" fill="#616161" />
     </svg>
   );
 
   const CheckIcon = () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor" />
     </svg>
   );
 
-  const SuccessCheckIcon = () => (
-    <svg className="success-checkmark" width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle className="success-circle" cx="12" cy="12" r="10" stroke="#303030" strokeWidth="2" fill="none"/>
-      <path className="success-check" d="M7 12l3 3 7-7" stroke="#303030" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  );
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -275,47 +502,69 @@ function PropertyManagerSignup() {
                 Create Account
               </Text>
 
+              {errors.name && (
+                <Banner status="critical">{errors.name}</Banner>
+              )}
+              {errors.email && (
+                <Banner status="critical">{errors.email}</Banner>
+              )}
+              {errors.password && (
+                <Banner status="critical">{errors.password}</Banner>
+              )}
+              {errors.password_confirmation && (
+                <Banner status="critical">{errors.password_confirmation}</Banner>
+              )}
+
               <TextField
                 label="Full Name"
                 type="text"
                 value={fullName}
-                onChange={setFullName}
+                onChange={(val) => {
+                  setFullName(val);
+                  if (errors.name) {
+                    const error = validateName(val);
+                    setErrors({ ...errors, name: error });
+                  }
+                }}
                 placeholder="Enter your full name"
                 requiredIndicator
                 autoComplete="name"
+                error={errors.name}
               />
 
               <TextField
                 label="Email Address"
                 type="email"
                 value={email}
-                onChange={setEmail}
+                onChange={(val) => {
+                  setEmail(val);
+                  if (errors.email) {
+                    const error = validateEmail(val);
+                    setErrors({ ...errors, email: error });
+                  }
+                }}
                 placeholder="Enter your email"
                 requiredIndicator
                 autoComplete="email"
-              />
-
-              <TextField
-                label="Phone Number"
-                type="tel"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                value={phone}
-                onChange={(val) => setPhone(val.replace(/\D/g, ''))}
-                placeholder="Enter your phone number"
-                requiredIndicator
-                autoComplete="tel"
+                error={errors.email}
               />
 
               <TextField
                 label="Password"
                 type="password"
                 value={password}
-                onChange={setPassword}
+                onChange={(val) => {
+                  setPassword(val);
+                  if (errors.password) {
+                    const error = validatePassword(val);
+                    setErrors({ ...errors, password: error });
+                  }
+                }}
                 placeholder="Create a password"
                 requiredIndicator
                 autoComplete="new-password"
-                helpText="Must be at least 8 characters"
+                helpText="Must be at least 8 characters with one special character"
+                error={errors.password}
               />
 
               <TextField
@@ -324,16 +573,25 @@ function PropertyManagerSignup() {
                 value={confirmPassword}
                 onChange={(val) => {
                   setConfirmPassword(val);
-                  if (passwordError) setPasswordError('');
+                  if (errors.password_confirmation) {
+                    const error = password !== val ? 'Passwords do not match' : '';
+                    setErrors({ ...errors, password_confirmation: error });
+                  }
                 }}
                 placeholder="Confirm your password"
                 requiredIndicator
                 autoComplete="new-password"
-                error={passwordError}
+                error={errors.password_confirmation}
               />
 
               <div className="pm-signup-button">
-                <Button onClick={handleNextStep} variant="primary" fullWidth>
+                <Button
+                  onClick={handleNextStep}
+                  variant="primary"
+                  fullWidth
+                  loading={isLoading}
+                  disabled={!isFormValid()}
+                >
                   Continue
                 </Button>
               </div>
@@ -349,14 +607,28 @@ function PropertyManagerSignup() {
                 Company Details
               </Text>
 
+              {errors.companyName && (
+                <Banner status="critical">{errors.companyName}</Banner>
+              )}
+              {errors.phone && (
+                <Banner status="critical">{errors.phone}</Banner>
+              )}
+
               <TextField
                 label="Company Name"
                 type="text"
                 value={companyName}
-                onChange={setCompanyName}
+                onChange={(val) => {
+                  setCompanyName(val);
+                  if (errors.companyName) {
+                    const error = validateCompanyName(val);
+                    setErrors({ ...errors, companyName: error });
+                  }
+                }}
                 placeholder="Enter your company name"
                 requiredIndicator
                 autoComplete="organization"
+                error={errors.companyName}
               />
 
               <div className="phone-field-wrapper">
@@ -381,9 +653,16 @@ function PropertyManagerSignup() {
                       inputMode="numeric"
                       pattern="[0-9]*"
                       value={companyPhone}
-                      onChange={(val) => setCompanyPhone(val.replace(/\D/g, ''))}
+                      onChange={(val) => {
+                        setCompanyPhone(val.replace(/\D/g, ''));
+                        if (errors.phone) {
+                          const error = validatePhone(val.replace(/\D/g, ''));
+                          setErrors({ ...errors, phone: error });
+                        }
+                      }}
                       placeholder="Enter your phone number"
                       autoComplete="tel"
+                      error={errors.phone}
                     />
                   </div>
                 </div>
@@ -422,7 +701,13 @@ function PropertyManagerSignup() {
               </div>
 
               <div className="pm-signup-button">
-                <Button onClick={handleNextStep} variant="primary" fullWidth>
+                <Button
+                  onClick={handleNextStep}
+                  variant="primary"
+                  fullWidth
+                  loading={isLoading}
+                  disabled={!isFormValid()}
+                >
                   Next
                 </Button>
               </div>
@@ -493,7 +778,8 @@ function PropertyManagerSignup() {
                   onClick={handleNextStep}
                   variant="primary"
                   fullWidth
-                  disabled={!selectedPlan}
+                  loading={isLoading}
+                  disabled={!isFormValid()}
                 >
                   Continue
                 </Button>
@@ -519,29 +805,45 @@ function PropertyManagerSignup() {
                 </Text>
               </div>
 
+              {errors.verificationCode && (
+                <Banner status="critical">{errors.verificationCode}</Banner>
+              )}
+
               <TextField
                 label=""
                 labelHidden
                 type="text"
                 value={verificationCode}
-                onChange={(val) => setVerificationCode(val.slice(0, 4))}
+                onChange={(val) => {
+                  setVerificationCode(val.slice(0, 4));
+                  if (errors.verificationCode) {
+                    setErrors({ ...errors, verificationCode: '' });
+                  }
+                }}
                 placeholder="Enter Code"
                 maxLength={4}
                 autoComplete="one-time-code"
+                error={errors.verificationCode}
               />
 
               <div style={{ textAlign: 'center' }}>
                 <button
                   className={`resend-code-btn ${canResend ? 'active' : ''}`}
                   onClick={handleResendCode}
-                  disabled={!canResend}
+                  disabled={!canResend || isLoading}
                 >
                   {canResend ? 'Resend Code' : `Resend Code in ${Math.floor(resendTimer / 60)}:${(resendTimer % 60).toString().padStart(2, '0')}`}
                 </button>
               </div>
 
               <div className="pm-signup-button complete-btn">
-                <Button onClick={handleCompleteSignup} variant="primary" fullWidth>
+                <Button
+                  onClick={handleCompleteSignup}
+                  variant="primary"
+                  fullWidth
+                  loading={isLoading}
+                  disabled={!isFormValid()}
+                >
                   Complete Sign Up
                 </Button>
               </div>
@@ -613,26 +915,7 @@ function PropertyManagerSignup() {
 
             {/* Form content */}
             <div className="pm-signup-content">
-              {showSuccess ? (
-                <Card padding="600">
-                  <div className="success-container">
-                    <SuccessCheckIcon />
-                    <Text variant="headingLg" as="h2" fontWeight="bold">
-                      Account Created Successfully!
-                    </Text>
-                    <Text variant="bodyMd" as="p" tone="subdued" alignment="center">
-                      Your account has been created. You can now sign in to access your dashboard.
-                    </Text>
-                    <div className="pm-signup-button" style={{ marginTop: '24px' }}>
-                      <Button onClick={handleSignIn} variant="primary" fullWidth>
-                        Sign In
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              ) : (
-                renderStepContent()
-              )}
+              {renderStepContent()}
             </div>
           </div>
         </div>
