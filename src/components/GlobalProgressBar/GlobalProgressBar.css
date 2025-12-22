@@ -1,0 +1,36 @@
+.global-progress-bar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 99999;
+  background-color: transparent;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.global-progress-bar {
+  height: 100%;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  transition: width 0.3s ease-out;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Alternative color scheme - uncomment to use */
+/*
+.global-progress-bar {
+  background: linear-gradient(90deg, #0066cc 0%, #0080ff 50%, #0066cc 100%);
+  box-shadow: 0 0 10px rgba(0, 102, 204, 0.5);
+}
+*/
+
