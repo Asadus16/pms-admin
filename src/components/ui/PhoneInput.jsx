@@ -29,7 +29,9 @@ export const PhoneInput = ({
   ...props
 }) => {
   const [countryCode, setCountryCode] = useState(defaultCountryCode);
-  const [phoneNumber, setPhoneNumber] = useState(value);
+  // Ensure value is always a string
+  const normalizedValue = value == null ? '' : String(value);
+  const [phoneNumber, setPhoneNumber] = useState(normalizedValue);
 
   const handleCountryCodeChange = (code) => {
     setCountryCode(code);
@@ -39,9 +41,11 @@ export const PhoneInput = ({
   };
 
   const handlePhoneChange = (newValue) => {
-    setPhoneNumber(newValue);
+    // Ensure newValue is always a string
+    const normalizedNewValue = newValue == null ? '' : String(newValue);
+    setPhoneNumber(normalizedNewValue);
     if (onChange) {
-      onChange(`${countryCode}${newValue}`);
+      onChange(`${countryCode}${normalizedNewValue}`);
     }
   };
 
@@ -49,7 +53,7 @@ export const PhoneInput = ({
     <div className={`phone-input ${className}`}>
       <TextField
         label={label}
-        value={phoneNumber}
+        value={phoneNumber || ''}
         onChange={handlePhoneChange}
         error={error}
         helpText={helpText}

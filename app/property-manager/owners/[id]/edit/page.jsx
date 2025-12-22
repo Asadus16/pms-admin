@@ -8,7 +8,7 @@ import { fetchPropertyManagerOwnerById } from '@/store/thunks';
 import {
   selectCurrentOwner,
   selectOwnersLoading,
-} from '@/store/slices/ownersSlice';
+} from '@/store/slices/property-manager/owners/slice';
 import { Page, Box, BlockStack, Spinner, Text } from '@shopify/polaris';
 
 export default function EditOwnerPage() {

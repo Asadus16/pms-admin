@@ -42,7 +42,7 @@ import {
   selectInventoryLoading,
   selectInventoryError,
   selectInventoryDeleting,
-} from '@/store/slices/inventorySlice';
+} from '@/store/slices/property-manager/inventory/slice';
 import '../PropertyOwnersPage/CustomersPage.css';
 
 // All available columns for inventory

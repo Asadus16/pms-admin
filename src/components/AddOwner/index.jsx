@@ -34,7 +34,7 @@ import {
   selectOwnersError,
   selectOwnersValidationErrors,
   clearError,
-} from '@/store/slices/ownersSlice';
+} from '@/store/slices/property-manager/owners/slice';
 import '../AddDeveloper/AddDeveloper.css';
 
 // Phone code mapping

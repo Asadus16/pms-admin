@@ -33,7 +33,7 @@ import {
   selectContactsUpdating,
   clearCurrentContact,
   clearError,
-} from '@/store/slices/contactsSlice';
+} from '@/store/slices/property-manager/contacts/slice';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';

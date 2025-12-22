@@ -31,7 +31,7 @@ import {
   selectOwnersUpdating,
   selectOwnersError,
   clearCurrentOwner,
-} from '@/store/slices/ownersSlice';
+} from '@/store/slices/property-manager/owners/slice';
 import '../AddDeveloper/AddDeveloper.css';
 
 // Country labels mapping

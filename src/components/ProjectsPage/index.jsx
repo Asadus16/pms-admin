@@ -35,7 +35,14 @@ import {
   PlusIcon,
 } from '@shopify/polaris-icons';
 import './CustomersPage.css';
-import { projectsData } from '../../data/projects';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { fetchPropertyManagerProjects } from '@/store/thunks/property-manager/propertyManagerThunks';
+import {
+  selectProjects,
+  selectProjectsPagination,
+  selectProjectsLoading,
+  selectProjectsError,
+} from '@/store/slices/property-manager';
 
 // All available columns for projects
 const allColumns = [
@@ -104,9 +111,16 @@ const getStoredSort = () => {
 function ProjectsPage() {
   const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
 
   // Get the base path (userType) from the current pathname
   const basePath = pathname.split('/')[1] ? `/${pathname.split('/')[1]}` : '/property-manager';
+
+  // Redux state
+  const projects = useAppSelector(selectProjects);
+  const pagination = useAppSelector(selectProjectsPagination);
+  const loading = useAppSelector(selectProjectsLoading);
+  const error = useAppSelector(selectProjectsError);
 
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -144,7 +158,21 @@ function ProjectsPage() {
     }
   }, []);
 
-  const itemsPerPage = 50;
+  // Fetch projects from API with debounced search
+  useEffect(() => {
+    // Debounce search to avoid too many API calls
+    const timeoutId = setTimeout(() => {
+      dispatch(fetchPropertyManagerProjects({
+        per_page: 15,
+        page: currentPage,
+        search: searchValue || undefined,
+      }));
+    }, searchValue ? 500 : 0); // 500ms delay for search, immediate for page changes
+
+    return () => clearTimeout(timeoutId);
+  }, [currentPage, searchValue, dispatch]);
+
+  const itemsPerPage = pagination.per_page || 15;
 
   const resourceName = {
     singular: 'project',
@@ -152,14 +180,17 @@ function ProjectsPage() {
   };
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(projectsData);
+    useIndexResourceState(projects);
 
   const handleSearchChange = useCallback((value) => {
     setSearchValue(value);
+    // Reset to page 1 when search changes
+    setCurrentPage(1);
   }, []);
 
   const handleSearchClear = useCallback(() => {
     setSearchValue('');
+    setCurrentPage(1);
   }, []);
 
   const toggleSortPopover = useCallback(() => {
@@ -263,14 +294,8 @@ function ProjectsPage() {
     setImportFile(null);
   }, [importFile]);
 
-  // Filter projects based on search
-  const filteredProjects = projectsData.filter((project) =>
-    project.projectId.toLowerCase().includes(searchValue.toLowerCase()) ||
-    project.projectName.toLowerCase().includes(searchValue.toLowerCase()) ||
-    project.developer.toLowerCase().includes(searchValue.toLowerCase()) ||
-    project.community.toLowerCase().includes(searchValue.toLowerCase()) ||
-    project.subCommunity.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  // API already filters by search, so use projects directly
+  const filteredProjects = projects;
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
@@ -284,16 +309,16 @@ function ProjectsPage() {
     let comparison = 0;
     switch (selectedSort) {
       case 'constructionProgress':
-        comparison = a.constructionProgress - b.constructionProgress;
+        comparison = parseFloat(a.constructionProgress || 0) - parseFloat(b.constructionProgress || 0);
         break;
       case 'projectName':
-        comparison = a.projectName.localeCompare(b.projectName);
+        comparison = (a.projectName || '').localeCompare(b.projectName || '');
         break;
       case 'status':
-        comparison = a.status.localeCompare(b.status);
+        comparison = (a.status || '').localeCompare(b.status || '');
         break;
       case 'dateAdded':
-        comparison = new Date(a.dateAdded).getTime() - new Date(b.dateAdded).getTime();
+        comparison = new Date(a.dateAdded || 0).getTime() - new Date(b.dateAdded || 0).getTime();
         break;
       default:
         comparison = 0;
@@ -301,7 +326,8 @@ function ProjectsPage() {
     return sortDirection === 'desc' ? -comparison : comparison;
   });
 
-  const totalProjects = projectsData.length;
+  const totalProjects = pagination.total || projects.length;
+  const activeProjectsCount = projects.filter(p => p.status === 'active' || p.status === 'Under Construction').length;
 
   // Get current visible columns for normal view
   const currentVisibleColumns = allColumns.filter(col => visibleColumns.includes(col.id));
@@ -324,14 +350,14 @@ function ProjectsPage() {
       case 'developer':
         return (
           <Text variant="bodyMd" as="span">
-            {project.developer}
+            {project.developer?.name || project.developer || 'N/A'}
           </Text>
         );
       case 'constructionProgress':
         return (
           <div style={{ minWidth: '120px' }}>
             <Text variant="bodyMd" as="span">
-              {project.constructionProgress}%
+              {project.constructionProgress ? `${parseFloat(project.constructionProgress).toFixed(1)}%` : '0%'}
             </Text>
           </div>
         );
@@ -348,9 +374,12 @@ function ProjectsPage() {
           </Text>
         );
       case 'status':
+        const statusTone = project.status === 'Completed' ? 'info' : 
+                          project.status === 'Under Construction' ? 'success' : 
+                          project.status === 'Near Completion' ? 'attention' : 'subdued';
         return (
-          <Badge tone={project.status === 'active' ? 'success' : project.status === 'completed' ? 'info' : 'subdued'}>
-            {project.status === 'active' ? 'Active' : project.status === 'completed' ? 'Completed' : 'Inactive'}
+          <Badge tone={statusTone}>
+            {project.status || 'N/A'}
           </Badge>
         );
       default:
@@ -461,7 +490,7 @@ function ProjectsPage() {
                   |
                 </Text>
                 <Text variant="bodyMd" as="span" tone="subdued">
-                  {projectsData.filter(p => p.status === 'active').length} active
+                  {activeProjectsCount} active
                 </Text>
               </InlineStack>
             </Card>
@@ -580,16 +609,16 @@ function ProjectsPage() {
               <Box padding="400" borderBlockStartWidth="025" borderColor="border">
                 <InlineStack align="space-between" blockAlign="center">
                   <Pagination
-                    hasPrevious={currentPage > 1}
+                    hasPrevious={pagination.current_page > 1}
                     onPrevious={() => setCurrentPage(currentPage - 1)}
-                    hasNext={currentPage * itemsPerPage < totalProjects}
+                    hasNext={pagination.current_page < pagination.last_page}
                     onNext={() => setCurrentPage(currentPage + 1)}
                   />
                   <Text variant="bodySm" as="span" tone="subdued">
-                    {`${(currentPage - 1) * itemsPerPage + 1}-${Math.min(
-                      currentPage * itemsPerPage,
-                      totalProjects
-                    )}`}
+                    {loading ? 'Loading...' : `${((pagination.current_page - 1) * itemsPerPage) + 1}-${Math.min(
+                      pagination.current_page * itemsPerPage,
+                      pagination.total
+                    )} of ${pagination.total}`}
                   </Text>
                 </InlineStack>
               </Box>

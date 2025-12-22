@@ -11,7 +11,7 @@ import {
   updatePropertyManagerContact,
   deletePropertyManagerContact,
   updatePropertyManagerContactStatus,
-} from '../thunks/property-manager/propertyManagerThunks';
+} from '../../../thunks/property-manager/propertyManagerThunks';
 
 const initialState = {
   contacts: [],
@@ -102,6 +102,9 @@ const contactsSlice = createSlice({
         state.isCreating = false;
         const newContact = action.payload?.data || action.payload;
         if (newContact) {
+          if (!Array.isArray(state.contacts)) {
+            state.contacts = [];
+          }
           state.contacts.unshift(newContact);
           state.pagination.totalItems += 1;
         }
@@ -124,7 +127,7 @@ const contactsSlice = createSlice({
       .addCase(updatePropertyManagerContact.fulfilled, (state, action) => {
         state.isUpdating = false;
         const updatedContact = action.payload?.data || action.payload;
-        if (updatedContact) {
+        if (updatedContact && Array.isArray(state.contacts)) {
           const index = state.contacts.findIndex(c => c.id === updatedContact.id);
           if (index !== -1) {
             state.contacts[index] = updatedContact;
@@ -151,7 +154,9 @@ const contactsSlice = createSlice({
       .addCase(deletePropertyManagerContact.fulfilled, (state, action) => {
         state.isDeleting = false;
         const deletedId = action.meta.arg;
-        state.contacts = state.contacts.filter(c => c.id !== deletedId);
+        if (Array.isArray(state.contacts)) {
+          state.contacts = state.contacts.filter(c => c.id !== deletedId);
+        }
         state.pagination.totalItems = Math.max(0, state.pagination.totalItems - 1);
         if (state.currentContact?.id === deletedId) {
           state.currentContact = null;
@@ -171,7 +176,7 @@ const contactsSlice = createSlice({
       .addCase(updatePropertyManagerContactStatus.fulfilled, (state, action) => {
         state.isUpdating = false;
         const updatedContact = action.payload?.data || action.payload;
-        if (updatedContact) {
+        if (updatedContact && Array.isArray(state.contacts)) {
           const index = state.contacts.findIndex(c => c.id === updatedContact.id);
           if (index !== -1) {
             state.contacts[index] = updatedContact;
@@ -190,15 +195,15 @@ const contactsSlice = createSlice({
 
 export const { clearError, clearCurrentContact, setCurrentPage } = contactsSlice.actions;
 
-// Selectors
-export const selectContacts = (state) => state.contacts.contacts;
-export const selectCurrentContact = (state) => state.contacts.currentContact;
-export const selectContactsPagination = (state) => state.contacts.pagination;
-export const selectContactsLoading = (state) => state.contacts.isLoading;
-export const selectContactsCreating = (state) => state.contacts.isCreating;
-export const selectContactsUpdating = (state) => state.contacts.isUpdating;
-export const selectContactsDeleting = (state) => state.contacts.isDeleting;
-export const selectContactsError = (state) => state.contacts.error;
-export const selectContactsValidationErrors = (state) => state.contacts.validationErrors;
+// Selectors - Updated to use propertyManager namespace
+export const selectContacts = (state) => state.propertyManager.contacts.contacts;
+export const selectCurrentContact = (state) => state.propertyManager.contacts.currentContact;
+export const selectContactsPagination = (state) => state.propertyManager.contacts.pagination;
+export const selectContactsLoading = (state) => state.propertyManager.contacts.isLoading;
+export const selectContactsCreating = (state) => state.propertyManager.contacts.isCreating;
+export const selectContactsUpdating = (state) => state.propertyManager.contacts.isUpdating;
+export const selectContactsDeleting = (state) => state.propertyManager.contacts.isDeleting;
+export const selectContactsError = (state) => state.propertyManager.contacts.error;
+export const selectContactsValidationErrors = (state) => state.propertyManager.contacts.validationErrors;
 
 export default contactsSlice.reducer;

@@ -176,6 +176,7 @@ function EmailCustomerModal({ isOpen, onClose, order }) {
               <div style={{ marginTop: '4px' }}>
                 <TextField
                   multiline={3}
+                  value=""
                   autoComplete="off"
                 />
               </div>

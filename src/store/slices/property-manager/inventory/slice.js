@@ -10,7 +10,7 @@ import {
   createPropertyManagerInventory,
   updatePropertyManagerInventory,
   deletePropertyManagerInventory,
-} from '../thunks/property-manager/propertyManagerThunks';
+} from '../../../thunks/property-manager/propertyManagerThunks';
 
 const initialState = {
   inventories: [],
@@ -171,15 +171,15 @@ const inventorySlice = createSlice({
 
 export const { clearError, clearCurrentInventory, setCurrentPage } = inventorySlice.actions;
 
-// Selectors
-export const selectInventories = (state) => state.inventory.inventories;
-export const selectCurrentInventory = (state) => state.inventory.currentInventory;
-export const selectInventoryPagination = (state) => state.inventory.pagination;
-export const selectInventoryLoading = (state) => state.inventory.isLoading;
-export const selectInventoryCreating = (state) => state.inventory.isCreating;
-export const selectInventoryUpdating = (state) => state.inventory.isUpdating;
-export const selectInventoryDeleting = (state) => state.inventory.isDeleting;
-export const selectInventoryError = (state) => state.inventory.error;
-export const selectInventoryValidationErrors = (state) => state.inventory.validationErrors;
+// Selectors - Updated to use propertyManager namespace
+export const selectInventories = (state) => state.propertyManager.inventory.inventories;
+export const selectCurrentInventory = (state) => state.propertyManager.inventory.currentInventory;
+export const selectInventoryPagination = (state) => state.propertyManager.inventory.pagination;
+export const selectInventoryLoading = (state) => state.propertyManager.inventory.isLoading;
+export const selectInventoryCreating = (state) => state.propertyManager.inventory.isCreating;
+export const selectInventoryUpdating = (state) => state.propertyManager.inventory.isUpdating;
+export const selectInventoryDeleting = (state) => state.propertyManager.inventory.isDeleting;
+export const selectInventoryError = (state) => state.propertyManager.inventory.error;
+export const selectInventoryValidationErrors = (state) => state.propertyManager.inventory.validationErrors;
 
 export default inventorySlice.reducer;

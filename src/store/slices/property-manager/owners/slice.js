@@ -11,7 +11,7 @@ import {
   updatePropertyManagerOwner,
   deletePropertyManagerOwner,
   updatePropertyManagerOwnerStatus,
-} from '../thunks/property-manager/propertyManagerThunks';
+} from '../../../thunks/property-manager/propertyManagerThunks';
 
 const initialState = {
   owners: [],
@@ -196,15 +196,15 @@ const ownersSlice = createSlice({
 
 export const { clearError, clearCurrentOwner, setCurrentPage } = ownersSlice.actions;
 
-// Selectors
-export const selectOwners = (state) => state.owners.owners;
-export const selectCurrentOwner = (state) => state.owners.currentOwner;
-export const selectOwnersPagination = (state) => state.owners.pagination;
-export const selectOwnersLoading = (state) => state.owners.isLoading;
-export const selectOwnersCreating = (state) => state.owners.isCreating;
-export const selectOwnersUpdating = (state) => state.owners.isUpdating;
-export const selectOwnersDeleting = (state) => state.owners.isDeleting;
-export const selectOwnersError = (state) => state.owners.error;
-export const selectOwnersValidationErrors = (state) => state.owners.validationErrors;
+// Selectors - Updated to use propertyManager namespace
+export const selectOwners = (state) => state.propertyManager.owners.owners;
+export const selectCurrentOwner = (state) => state.propertyManager.owners.currentOwner;
+export const selectOwnersPagination = (state) => state.propertyManager.owners.pagination;
+export const selectOwnersLoading = (state) => state.propertyManager.owners.isLoading;
+export const selectOwnersCreating = (state) => state.propertyManager.owners.isCreating;
+export const selectOwnersUpdating = (state) => state.propertyManager.owners.isUpdating;
+export const selectOwnersDeleting = (state) => state.propertyManager.owners.isDeleting;
+export const selectOwnersError = (state) => state.propertyManager.owners.error;
+export const selectOwnersValidationErrors = (state) => state.propertyManager.owners.validationErrors;
 
 export default ownersSlice.reducer;

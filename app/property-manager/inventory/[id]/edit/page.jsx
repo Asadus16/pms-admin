@@ -8,7 +8,7 @@ import { fetchPropertyManagerInventoryById } from '@/store/thunks';
 import {
   selectCurrentInventory,
   selectInventoryLoading,
-} from '@/store/slices/inventorySlice';
+} from '@/store/slices/property-manager/inventory/slice';
 import { Page, Box, BlockStack, Spinner, Text } from '@shopify/polaris';
 
 export default function EditInventoryPage() {

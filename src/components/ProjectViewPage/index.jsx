@@ -21,8 +21,15 @@ import {
   Banner,
 } from '@shopify/polaris';
 import { ProductIcon, ChevronRightIcon, ArrowLeftIcon, NoteIcon } from '@shopify/polaris-icons';
-import { projectsData } from '../../data/projects';
 import './AddDeveloper.css';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { fetchPropertyManagerProjectById } from '@/store/thunks/property-manager/propertyManagerThunks';
+import {
+  selectProject,
+  selectProjectsLoading,
+  selectProjectsError,
+} from '@/store/slices/property-manager';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -34,27 +41,49 @@ function formatDate(dateStr) {
 export default function ProjectViewPage({ projectId }) {
   const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
   const [actionsPopoverActive, setActionsPopoverActive] = useState(false);
+
+  // Redux state
+  const project = useAppSelector(selectProject);
+  const loading = useAppSelector(selectProjectsLoading);
+  const error = useAppSelector(selectProjectsError);
 
   const basePath = useMemo(() => {
     const seg = pathname?.split('/')?.[1];
     return seg ? `/${seg}` : '/property-manager';
   }, [pathname]);
 
-  const project = useMemo(
-    () => projectsData.find((p) => String(p.id) === String(projectId)),
-    [projectId]
-  );
-
   const handleBack = useCallback(() => {
     router.push(`${basePath}/projects`);
   }, [router, basePath]);
+
+  // Fetch project from API
+  useEffect(() => {
+    if (!projectId) return;
+    dispatch(fetchPropertyManagerProjectById(projectId));
+  }, [projectId, dispatch]);
 
   const toggleActionsPopover = useCallback(() => {
     setActionsPopoverActive((active) => !active);
   }, []);
 
-  if (!project) {
+  if (loading) {
+    return (
+      <Page
+        title="Project"
+        backAction={{ content: 'Projects', onAction: handleBack }}
+      >
+        <Card>
+          <Box padding="400">
+            <Text>Loading project...</Text>
+          </Box>
+        </Card>
+      </Page>
+    );
+  }
+
+  if (error || !project) {
     return (
       <Page
         title="Project"
@@ -64,10 +93,10 @@ export default function ProjectViewPage({ projectId }) {
           <Box padding="400">
             <BlockStack gap="200">
               <Text variant="headingMd" as="h2">
-                Project not found
+                {error ? 'Error loading project' : 'Project not found'}
               </Text>
               <Text variant="bodyMd" as="p" tone="subdued">
-                We couldn&apos;t find a project with ID: {projectId}
+                {error || `We couldn't find a project with ID: ${projectId}`}
               </Text>
               <div>
                 <Button icon={ArrowLeftIcon} onClick={handleBack}>
@@ -106,9 +135,9 @@ export default function ProjectViewPage({ projectId }) {
     },
   ];
 
-  // Country and City options (same as AddProject)
+  // Get country label if needed
   const countryOptions = [
-    { label: 'United Arab Emirates', value: 'AE' },
+    { label: 'United Arab Emirates', value: 'UAE' },
     { label: 'Saudi Arabia', value: 'SA' },
     { label: 'Qatar', value: 'QA' },
     { label: 'Bahrain', value: 'BH' },
@@ -118,9 +147,11 @@ export default function ProjectViewPage({ projectId }) {
     { label: 'United States', value: 'US' },
     { label: 'United Kingdom', value: 'GB' },
   ];
-
-  const getLabel = (options, value) => options.find((o) => o.value === value)?.label || value || '';
-  const selectedCountryLabel = getLabel(countryOptions, project.selectedCountry);
+  const getLabel = (options, value) => {
+    const found = options.find((o) => o.value === value);
+    return found?.label || (value != null ? String(value) : '');
+  };
+  const selectedCountryLabel = getLabel(countryOptions, project.country);
 
   return (
     <div className="add-developer-wrapper">
@@ -154,7 +185,7 @@ export default function ProjectViewPage({ projectId }) {
 
                   <TextField
                     label="Project ID"
-                    value={project.projectId || `PRJ-${String(project.id).padStart(4, '0')}`}
+                    value={project.projectId ? String(project.projectId) : (project.id != null ? `PRJ-${String(project.id).padStart(4, '0')}` : '')}
                     readOnly
                     autoComplete="off"
                     helpText="System generated ID"
@@ -162,21 +193,21 @@ export default function ProjectViewPage({ projectId }) {
 
                   <TextField
                     label="Developer"
-                    value={project.developer || ''}
+                    value={project.developer?.name ? String(project.developer.name) : (project.developer ? String(project.developer) : '')}
                     readOnly
                     autoComplete="off"
                   />
 
                   <TextField
                     label="Project Name"
-                    value={project.projectName || ''}
+                    value={project.projectName != null ? String(project.projectName) : ''}
                     readOnly
                     autoComplete="off"
                   />
 
                   <TextField
                     label="Project Type"
-                    value={project.projectType || ''}
+                    value={project.projectType != null ? String(project.projectType) : ''}
                     readOnly
                     autoComplete="off"
                   />
@@ -190,7 +221,7 @@ export default function ProjectViewPage({ projectId }) {
 
                   <TextField
                     label="Construction Progress"
-                    value={`${project.constructionProgress || 0}%`}
+                    value={project.constructionProgress != null ? `${parseFloat(project.constructionProgress).toFixed(1)}%` : '0%'}
                     readOnly
                     autoComplete="off"
                   />
@@ -209,57 +240,82 @@ export default function ProjectViewPage({ projectId }) {
 
                   <TextField
                     label="RERA / Municipality Number"
-                    value={project.reraNumber || ''}
+                    value={project.reraMunicipalityNumber != null ? String(project.reraMunicipalityNumber) : ''}
                     readOnly
                     autoComplete="off"
                   />
 
                   {/* Masterplan */}
-                  {project.masterplanUrl && (
+                  {project.masterplan && (
                     <BlockStack gap="200">
                       <Text variant="bodyMd" as="span">
                         Masterplan
                       </Text>
                       <Card>
-                        <Thumbnail
-                          size="large"
-                          alt="Masterplan"
-                          source={project.masterplanUrl}
-                        />
+                        <LegacyStack alignment="center">
+                          <Thumbnail
+                            size="large"
+                            alt="Masterplan"
+                            source={project.masterplan.file_path}
+                          />
+                          <div>
+                            <Text variant="bodyMd" as="p" fontWeight="semibold">
+                              <a href={project.masterplan.file_path} target="_blank" rel="noopener noreferrer">
+                                {project.masterplan.file_name}
+                              </a>
+                            </Text>
+                            <Text variant="bodySm" as="p" tone="subdued">
+                              {project.masterplan.mime_type}
+                            </Text>
+                          </div>
+                        </LegacyStack>
                       </Card>
                     </BlockStack>
                   )}
 
-                  {/* Floor Plan */}
-                  {project.floorPlanUrl && (
+                  {/* Floor Plans */}
+                  {project.floorPlans && project.floorPlans.length > 0 && (
                     <BlockStack gap="200">
                       <Text variant="bodyMd" as="span">
-                        Floor Plan
+                        Floor Plans ({project.floorPlans.length})
                       </Text>
                       <Card>
-                        <Thumbnail
-                          size="large"
-                          alt="Floor Plan"
-                          source={project.floorPlanUrl}
-                        />
+                        <BlockStack gap="300">
+                          <InlineStack gap="300" wrap>
+                            {project.floorPlans.map((plan, idx) => (
+                              <div key={plan.id || idx}>
+                                <Thumbnail
+                                  size="large"
+                                  alt={`Floor Plan ${idx + 1}`}
+                                  source={plan.file_path}
+                                />
+                                <Text variant="bodySm" as="p">
+                                  <a href={plan.file_path} target="_blank" rel="noopener noreferrer">
+                                    {plan.file_name}
+                                  </a>
+                                </Text>
+                              </div>
+                            ))}
+                          </InlineStack>
+                        </BlockStack>
                       </Card>
                     </BlockStack>
                   )}
 
                   {/* Project Images */}
-                  {project.projectImages && project.projectImages.length > 0 && (
+                  {project.images && project.images.length > 0 && (
                     <BlockStack gap="200">
                       <Text variant="bodyMd" as="span">
-                        Project Images
+                        Project Images ({project.images.length})
                       </Text>
                       <Card>
                         <InlineStack gap="300" wrap>
-                          {project.projectImages.map((url, idx) => (
+                          {project.images.map((image, idx) => (
                             <Thumbnail
-                              key={idx}
+                              key={image.id || idx}
                               size="large"
                               alt={`Project image ${idx + 1}`}
-                              source={url}
+                              source={image.file_path}
                             />
                           ))}
                         </InlineStack>
@@ -267,18 +323,24 @@ export default function ProjectViewPage({ projectId }) {
                     </BlockStack>
                   )}
 
-                  {/* Project Video */}
-                  {project.projectVideoUrl && (
+                  {/* Project Videos */}
+                  {project.videos && project.videos.length > 0 && (
                     <BlockStack gap="200">
                       <Text variant="bodyMd" as="span">
-                        Project Video
+                        Project Videos ({project.videos.length})
                       </Text>
                       <Card>
-                        <Thumbnail
-                          size="large"
-                          alt="Project Video"
-                          source={project.projectVideoUrl}
-                        />
+                        <BlockStack gap="300">
+                          {project.videos.map((video, idx) => (
+                            <div key={video.id || idx}>
+                              <Text variant="bodySm" as="p">
+                                <a href={video.file_path} target="_blank" rel="noopener noreferrer">
+                                  Video {idx + 1} - {video.file_name}
+                                </a>
+                              </Text>
+                            </div>
+                          ))}
+                        </BlockStack>
                       </Card>
                     </BlockStack>
                   )}
@@ -286,7 +348,7 @@ export default function ProjectViewPage({ projectId }) {
                   {/* Date added */}
                   <TextField
                     label="Date added"
-                    value={formatDate(project.dateAdded)}
+                    value={project.dateAdded ? formatDate(project.dateAdded) : ''}
                     readOnly
                     autoComplete="off"
                   />
@@ -304,7 +366,7 @@ export default function ProjectViewPage({ projectId }) {
                     <Box width="50%">
                       <TextField
                         label="Country"
-                        value={selectedCountryLabel}
+                        value={selectedCountryLabel || ''}
                         readOnly
                         autoComplete="off"
                       />
@@ -312,7 +374,7 @@ export default function ProjectViewPage({ projectId }) {
                     <Box width="50%">
                       <TextField
                         label="City"
-                        value={project.selectedCity || ''}
+                        value={project.city != null ? String(project.city) : ''}
                         readOnly
                         autoComplete="off"
                       />
@@ -323,7 +385,7 @@ export default function ProjectViewPage({ projectId }) {
                     <Box width="50%">
                       <TextField
                         label="Community"
-                        value={project.community || ''}
+                        value={project.community != null ? String(project.community) : ''}
                         readOnly
                         autoComplete="off"
                       />
@@ -331,17 +393,17 @@ export default function ProjectViewPage({ projectId }) {
                     <Box width="50%">
                       <TextField
                         label="Sub-Community"
-                        value={project.subCommunity || ''}
+                        value={project.subCommunity != null ? String(project.subCommunity) : ''}
                         readOnly
                         autoComplete="off"
                       />
                     </Box>
                   </InlineStack>
 
-                  {project.mapCoordinates && (
+                  {project.googleMapCoordinates && (
                     <TextField
                       label="Google Map Coordinates"
-                      value={project.mapCoordinates}
+                      value={`${project.googleMapCoordinates.latitude ?? ''}, ${project.googleMapCoordinates.longitude ?? ''}`}
                       readOnly
                       autoComplete="off"
                     />
@@ -350,19 +412,16 @@ export default function ProjectViewPage({ projectId }) {
               </Card>
 
               {/* Amenities Details card */}
-              {project.amenities && (
+              {project.amenitiesArray && project.amenitiesArray.length > 0 && (
                 <Card>
                   <BlockStack gap="400">
                     <Text variant="headingMd" as="h2">
                       Amenities details
                     </Text>
                     <BlockStack gap="200">
-                      {project.amenities.park && <Text variant="bodyMd" as="span">✓ Park</Text>}
-                      {project.amenities.gym && <Text variant="bodyMd" as="span">✓ Gym</Text>}
-                      {project.amenities.pool && <Text variant="bodyMd" as="span">✓ Pool</Text>}
-                      {project.amenities.security && <Text variant="bodyMd" as="span">✓ Security</Text>}
-                      {project.amenities.parking && <Text variant="bodyMd" as="span">✓ Parking</Text>}
-                      {project.amenities.etc && <Text variant="bodyMd" as="span">✓ Etc</Text>}
+                      {project.amenitiesArray.map((amenity, idx) => (
+                        <Text key={idx} variant="bodyMd" as="span">✓ {amenity}</Text>
+                      ))}
                     </BlockStack>
                   </BlockStack>
                 </Card>
@@ -375,12 +434,18 @@ export default function ProjectViewPage({ projectId }) {
                     Developer incentives
                   </Text>
                   {project.dldWaiver && (
-                    <Text variant="bodyMd" as="span">✓ DLD Waiver</Text>
+                    <TextField
+                      label="DLD Waiver"
+                      value={project.dldWaiver != null ? String(project.dldWaiver) : ''}
+                      multiline={2}
+                      readOnly
+                      autoComplete="off"
+                    />
                   )}
                   {project.postHandoverPlan && (
                     <TextField
                       label="Post-handover plan"
-                      value={project.postHandoverPlan}
+                      value={project.postHandoverPlan != null ? String(project.postHandoverPlan) : ''}
                       multiline={3}
                       readOnly
                       autoComplete="off"
@@ -396,12 +461,12 @@ export default function ProjectViewPage({ projectId }) {
                     Financial details
                   </Text>
 
-                  {(project.priceMin || project.priceMax) && (
+                  {(project.priceRangeMin || project.priceRangeMax) && (
                     <InlineStack gap="400" wrap={false}>
                       <Box width="50%">
                         <TextField
                           label="Price Range (Min)"
-                          value={project.priceMin ? `$${project.priceMin}` : ''}
+                          value={project.priceRangeMin ? `$${parseFloat(project.priceRangeMin).toLocaleString()}` : ''}
                           readOnly
                           autoComplete="off"
                         />
@@ -409,7 +474,7 @@ export default function ProjectViewPage({ projectId }) {
                       <Box width="50%">
                         <TextField
                           label="Price Range (Max)"
-                          value={project.priceMax ? `$${project.priceMax}` : ''}
+                          value={project.priceRangeMax ? `$${parseFloat(project.priceRangeMax).toLocaleString()}` : ''}
                           readOnly
                           autoComplete="off"
                         />
@@ -420,31 +485,39 @@ export default function ProjectViewPage({ projectId }) {
                   {project.serviceChargePerSqft && (
                     <TextField
                       label="Service Charge Per Sqft"
-                      value={`$${project.serviceChargePerSqft}/sqft`}
+                      value={project.serviceChargePerSqft != null ? `$${parseFloat(project.serviceChargePerSqft).toFixed(2)}/sqft` : ''}
                       readOnly
                       autoComplete="off"
                     />
                   )}
 
-                  {project.estimatedROI && (
+                  {project.estimatedRoi && (
                     <TextField
                       label="Estimated ROI"
-                      value={`${project.estimatedROI}%`}
+                      value={project.estimatedRoi != null ? `${parseFloat(project.estimatedRoi).toFixed(2)}%` : ''}
                       readOnly
                       autoComplete="off"
                     />
                   )}
 
-                  {project.paymentPlanPdfUrl && (
+                  {project.paymentPlans && project.paymentPlans.length > 0 && (
                     <BlockStack gap="200">
                       <Text variant="bodyMd" as="span">
-                        Payment Plan
+                        Payment Plans
                       </Text>
                       <Card>
-                        <LegacyStack alignment="center">
-                          <Icon source={NoteIcon} tone="base" />
-                          <Text variant="bodyMd" as="p">Payment Plan PDF</Text>
-                        </LegacyStack>
+                        <BlockStack gap="300">
+                          {project.paymentPlans.map((plan, idx) => (
+                            <div key={idx}>
+                              <Text variant="bodyMd" as="p" fontWeight="semibold">
+                                {plan.name}
+                              </Text>
+                              <Text variant="bodySm" as="p" tone="subdued">
+                                {plan.installments} installments over {plan.duration_months} months
+                              </Text>
+                            </div>
+                          ))}
+                        </BlockStack>
                       </Card>
                     </BlockStack>
                   )}
@@ -464,9 +537,11 @@ export default function ProjectViewPage({ projectId }) {
                   </Text>
                   <Box paddingBlockStart="200">
                     <Badge 
-                      tone={project.status === 'active' ? 'success' : project.status === 'completed' ? 'info' : 'subdued'}
+                      tone={project.status === 'Completed' ? 'info' : 
+                            project.status === 'Under Construction' ? 'success' : 
+                            project.status === 'Near Completion' ? 'attention' : 'subdued'}
                     >
-                      {project.status === 'active' ? 'Active' : project.status === 'completed' ? 'Completed' : 'Inactive'}
+                      {project.status || 'N/A'}
                     </Badge>
                   </Box>
                 </BlockStack>

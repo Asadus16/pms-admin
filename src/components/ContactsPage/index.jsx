@@ -44,7 +44,7 @@ import {
   selectContactsLoading,
   selectContactsError,
   selectContactsPagination,
-} from '@/store/slices/contactsSlice';
+} from '@/store/slices/property-manager/contacts/slice';
 
 // All available columns for contacts
 const allColumns = [

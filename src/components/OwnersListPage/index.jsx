@@ -43,7 +43,7 @@ import {
   selectOwnersPagination,
   selectOwnersLoading,
   selectOwnersError,
-} from '@/store/slices/ownersSlice';
+} from '@/store/slices/property-manager/owners/slice';
 import '../PropertyOwnersPage/CustomersPage.css';
 
 // All available columns for owners

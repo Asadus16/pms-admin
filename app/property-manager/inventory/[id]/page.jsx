@@ -8,7 +8,7 @@ import {
   selectCurrentInventory,
   selectInventoryLoading,
   selectInventoryDeleting,
-} from '@/store/slices/inventorySlice';
+} from '@/store/slices/property-manager/inventory/slice';
 import {
   Page,
   Card,

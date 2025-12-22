@@ -37,7 +37,7 @@ import {
   selectInventoryError,
   selectInventoryValidationErrors,
   clearError,
-} from '@/store/slices/inventorySlice';
+} from '@/store/slices/property-manager/inventory/slice';
 import '../AddDeveloper/AddDeveloper.css';
 
 // Inventory type options

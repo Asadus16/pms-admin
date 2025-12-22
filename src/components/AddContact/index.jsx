@@ -39,7 +39,7 @@ import {
   selectContactsLoading,
   clearError,
   clearCurrentContact,
-} from '@/store/slices/contactsSlice';
+} from '@/store/slices/property-manager/contacts/slice';
 
 // Generate a unique contact ID
 const generateContactId = () => {
