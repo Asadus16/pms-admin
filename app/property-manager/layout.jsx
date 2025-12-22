@@ -4,7 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState, useMemo } from 'react';
 import { useAppSelector } from '@/store';
 import { selectIsAuthenticated, selectIsLoading, selectCurrentRole } from '@/store/slices/authSlice';
-import Dashboard from '@/views/Dashboard';
+import DashboardLayout from '@/components/DashboardLayout';
 
 export default function PropertyManagerLayout({ children }) {
     const router = useRouter();
@@ -49,7 +49,7 @@ export default function PropertyManagerLayout({ children }) {
         }
     }, [isMounted, isAuthenticated, isLoading, currentRole, router, isAuthPage, hasCheckedAuth]);
 
-    // For auth pages (login, signup), just render children without Dashboard
+    // For auth pages (login, signup), just render children without DashboardLayout
     if (isAuthPage) {
         return <>{children}</>;
     }
@@ -69,8 +69,8 @@ export default function PropertyManagerLayout({ children }) {
         return null;
     }
 
-    // For all other pages, wrap with Dashboard
-    // Dashboard component handles all routing internally
-    return <Dashboard userType="property-manager" />;
+    // For all other pages, wrap with DashboardLayout
+    // Pages will render their specific content as children
+    return <DashboardLayout userType="property-manager">{children}</DashboardLayout>;
 }
 
