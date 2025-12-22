@@ -42,7 +42,7 @@ import SalesAttributedToMarketing from './Analytics/cards/SalesAttributedToMarke
 import SessionsByReferrer from './Analytics/cards/SessionsByReferrer';
 import ProductsBySellThroughRate from './Analytics/cards/ProductsBySellThroughRate';
 import NoDataPlaceholder from './Analytics/cards/NoDataPlaceholder';
-import '../pages/Analytics/analytics.css';
+import '../views/Analytics/analytics.css';
 
 function AnalyticsPage() {
     const [dateModalOpen, setDateModalOpen] = useState(false);

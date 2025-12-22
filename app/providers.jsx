@@ -1,14 +1,17 @@
 'use client';
 
 import { AppProvider } from '@shopify/polaris';
-import { AuthProvider } from '@/contexts/AuthContext';
+import { StoreProvider } from '@/store/StoreProvider';
+import { AuthSync } from '@/components/auth/AuthSync';
 
 export default function Providers({ children }) {
     return (
         <AppProvider i18n={{}}>
-            <AuthProvider>
-                {children}
-            </AuthProvider>
+            <StoreProvider>
+                <AuthSync>
+                    {children}
+                </AuthSync>
+            </StoreProvider>
         </AppProvider>
     );
 }

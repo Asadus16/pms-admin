@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
-    AppProvider,
     Card,
     TextField,
     BlockStack,
@@ -14,10 +13,14 @@ import {
     Banner,
 } from '@shopify/polaris';
 import { ChevronRightIcon, ViewIcon, HideIcon } from '@shopify/polaris-icons';
-import { ROLE_DASHBOARD_PATHS } from '@/composables/roles';
+import { ROLE_DASHBOARD_PATHS } from '@/lib/constants/roles';
+import { useAppDispatch } from '@/store';
+import { setAuthenticated } from '@/store/slices/authSlice';
+import { login as loginThunk, verifyOtp as verifyOtpThunk } from '@/store/thunks';
 import '@/styles/login-component.css';
 
-export default function LoginComponent({ userType, auth }) {
+export default function LoginComponent({ userType }) {
+    const dispatch = useAppDispatch();
     const router = useRouter();
     const searchParams = useSearchParams();
     const [email, setEmail] = useState('');
@@ -58,10 +61,16 @@ export default function LoginComponent({ userType, auth }) {
         setError('');
 
         try {
-            const response = await auth.login({
-                email,
-                password,
-            });
+            const result = await dispatch(loginThunk({
+                role: userType,
+                credentials: { email, password }
+            }));
+
+            if (!loginThunk.fulfilled.match(result)) {
+                throw result.error || new Error('Login failed');
+            }
+
+            const { response } = result.payload;
 
             console.log('Login response received:', response);
             console.log('Response type:', typeof response);
@@ -91,7 +100,12 @@ export default function LoginComponent({ userType, auth }) {
             console.log('Extracted values:', { token, user, otpSent });
 
             if (token) {
-                // Login successful, redirect to dashboard
+                // Login successful, set auth state and redirect to dashboard
+                dispatch(setAuthenticated({
+                    userData: user || {},
+                    token,
+                    role: userType
+                }));
                 const redirect = searchParams.get('redirect') ||
                     ROLE_DASHBOARD_PATHS[userType] ||
                     '/dashboard';
@@ -218,44 +232,56 @@ export default function LoginComponent({ userType, auth }) {
                     `,
                     filter: 'blur(40px)',
                 }} />
-                <AppProvider i18n={{}}>
-                    <Card style={{ width: '476px', position: 'relative', zIndex: 1 }}>
-                        <BlockStack gap="400">
-                            <Text variant="headingXl" as="h1">Verify OTP</Text>
-                            {error && (
-                                <Banner status="critical" onDismiss={() => setError('')}>
-                                    {error}
-                                </Banner>
-                            )}
-                            <Text as="p" tone="subdued">
-                                Enter the 4-digit code sent to {loginMethod === 'email' ? email : phone}
-                            </Text>
-                            <TextField
-                                label="Enter OTP"
-                                type="text"
-                                value={otp}
-                                onChange={setOtp}
-                                maxLength={4}
-                                autoComplete="one-time-code"
-                            />
-                            <Button
-                                onClick={async () => {
-                                    if (!otp || otp.length !== 4) {
-                                        setError('Please enter a valid 4-digit OTP');
-                                        return;
+                <Card style={{ width: '476px', position: 'relative', zIndex: 1 }}>
+                    <BlockStack gap="400">
+                        <Text variant="headingXl" as="h1">Verify OTP</Text>
+                        {error && (
+                            <Banner status="critical" onDismiss={() => setError('')}>
+                                {error}
+                            </Banner>
+                        )}
+                        <Text as="p" tone="subdued">
+                            Enter the 4-digit code sent to {loginMethod === 'email' ? email : phone}
+                        </Text>
+                        <TextField
+                            label="Enter OTP"
+                            type="text"
+                            value={otp}
+                            onChange={setOtp}
+                            maxLength={4}
+                            autoComplete="one-time-code"
+                        />
+                        <Button
+                            onClick={async () => {
+                                if (!otp || otp.length !== 4) {
+                                    setError('Please enter a valid 4-digit OTP');
+                                    return;
+                                }
+                                setIsLoading(true);
+                                setError('');
+                                try {
+                                    const otpData = { otp };
+                                    if (loginMethod === 'email') {
+                                        otpData.email = email;
+                                    } else {
+                                        otpData.phone = phone;
                                     }
-                                    setIsLoading(true);
-                                    setError('');
-                                    try {
-                                        const otpData = { otp };
-                                        if (loginMethod === 'email') {
-                                            otpData.email = email;
-                                        } else {
-                                            otpData.phone = phone;
-                                        }
-                                        const response = await auth.verifyOtp(otpData);
+                                    const result = await dispatch(verifyOtpThunk({
+                                        role: userType,
+                                        otpData
+                                    }));
+
+                                    if (verifyOtpThunk.fulfilled.match(result)) {
+                                        const { response } = result.payload;
                                         const token = response?.token || response?.data?.token;
+                                        const user = response?.user || response?.data?.user;
+
                                         if (token) {
+                                            dispatch(setAuthenticated({
+                                                userData: user || {},
+                                                token,
+                                                role: userType
+                                            }));
                                             const redirect = searchParams.get('redirect') ||
                                                 ROLE_DASHBOARD_PATHS[userType] ||
                                                 '/dashboard';
@@ -263,25 +289,27 @@ export default function LoginComponent({ userType, auth }) {
                                         } else {
                                             setError('OTP verification failed');
                                         }
-                                    } catch (err) {
-                                        if (err?.validationErrors?.otp) {
-                                            setError(err.validationErrors.otp[0]);
-                                        } else {
-                                            setError(err?.message || 'Invalid OTP. Please try again.');
-                                        }
-                                    } finally {
-                                        setIsLoading(false);
+                                    } else {
+                                        throw result.error || new Error('OTP verification failed');
                                     }
-                                }}
-                                loading={isLoading}
-                                fullWidth
-                                variant="primary"
-                            >
-                                Verify OTP
-                            </Button>
-                        </BlockStack>
-                    </Card>
-                </AppProvider>
+                                } catch (err) {
+                                    if (err?.validationErrors?.otp) {
+                                        setError(err.validationErrors.otp[0]);
+                                    } else {
+                                        setError(err?.message || 'Invalid OTP. Please try again.');
+                                    }
+                                } finally {
+                                    setIsLoading(false);
+                                }
+                            }}
+                            loading={isLoading}
+                            fullWidth
+                            variant="primary"
+                        >
+                            Verify OTP
+                        </Button>
+                    </BlockStack>
+                </Card>
             </div>
         );
     }
@@ -366,348 +394,346 @@ export default function LoginComponent({ userType, auth }) {
                     backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
                 }} />
 
-                <AppProvider i18n={{}}>
-                    <div className={`login-card-container ${step === 'email' ? 'email-step' : 'password-step'}`} style={{
-                        width: '476px',
-                        height: step === 'email' ? '588px' : '500px',
-                        position: 'relative',
-                        zIndex: 1
-                    }}>
-                        <Card padding="1000" style={{ height: step === 'email' ? '588px' : '500px', minHeight: step === 'email' ? '588px' : '500px', maxHeight: step === 'email' ? '588px' : '500px' }}>
-                            {step === 'email' ? (
-                                // EMAIL STEP
-                                <BlockStack gap="500">
-                                    {/* Logo */}
-                                    <div style={{
-                                        display: 'block',
-                                        width: '100%',
-                                        marginBottom: '8px',
-                                        paddingTop: '0px'
-                                    }}>
-                                        <img
-                                            src="/logos/nest-quest-black.svg"
-                                            alt="Nest Quest"
-                                            style={{
-                                                height: '24px',
-                                                width: 'auto',
-                                                display: 'block'
-                                            }}
-                                        />
+                <div className={`login-card-container ${step === 'email' ? 'email-step' : 'password-step'}`} style={{
+                    width: '476px',
+                    height: step === 'email' ? '588px' : '500px',
+                    position: 'relative',
+                    zIndex: 1
+                }}>
+                    <Card padding="1000" style={{ height: step === 'email' ? '588px' : '500px', minHeight: step === 'email' ? '588px' : '500px', maxHeight: step === 'email' ? '588px' : '500px' }}>
+                        {step === 'email' ? (
+                            // EMAIL STEP
+                            <BlockStack gap="500">
+                                {/* Logo */}
+                                <div style={{
+                                    display: 'block',
+                                    width: '100%',
+                                    marginBottom: '8px',
+                                    paddingTop: '0px'
+                                }}>
+                                    <img
+                                        src="/logos/nest-quest-black.svg"
+                                        alt="Nest Quest"
+                                        style={{
+                                            height: '24px',
+                                            width: 'auto',
+                                            display: 'block'
+                                        }}
+                                    />
+                                </div>
+
+                                {/* Header */}
+                                <BlockStack gap="100">
+                                    <Text variant="headingXl" as="h1" fontWeight="bold">
+                                        Log in
+                                    </Text>
+                                    <p style={{ fontSize: '14px', color: '#6d7175', margin: 0 }}>
+                                        Continue to Shopify
+                                    </p>
+                                </BlockStack>
+
+                                {/* Error Banner */}
+                                {error && (
+                                    <Banner status="critical" onDismiss={() => setError('')}>
+                                        {error}
+                                    </Banner>
+                                )}
+
+                                {/* Email Input */}
+                                <BlockStack gap="300">
+                                    <TextField
+                                        label="Email"
+                                        type="email"
+                                        value={email}
+                                        onChange={setEmail}
+                                        autoComplete="email"
+                                    />
+
+                                    {/* Continue with email button */}
+                                    <div style={{ position: 'relative' }} className="continue-email-button">
+                                        <Button
+                                            onClick={handleEmailLogin}
+                                            fullWidth
+                                            variant="primary"
+                                        >
+                                            <span>Continue with email</span>
+                                        </Button>
+                                        <span className="button-arrow">
+                                            <Icon source={ChevronRightIcon} />
+                                        </span>
                                     </div>
+                                </BlockStack>
 
-                                    {/* Header */}
-                                    <BlockStack gap="100">
-                                        <Text variant="headingXl" as="h1" fontWeight="bold">
-                                            Log in
-                                        </Text>
-                                        <p style={{ fontSize: '14px', color: '#6d7175', margin: 0 }}>
-                                            Continue to Shopify
-                                        </p>
-                                    </BlockStack>
+                                {/* Divider */}
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    color: '#616161',
+                                    fontSize: '14px'
+                                }}>
+                                    <div style={{ flex: 1, height: '1px', background: '#e1e1e1' }} />
+                                    <span>or</span>
+                                    <div style={{ flex: 1, height: '1px', background: '#e1e1e1' }} />
+                                </div>
 
-                                    {/* Error Banner */}
-                                    {error && (
-                                        <Banner status="critical" onDismiss={() => setError('')}>
-                                            {error}
-                                        </Banner>
-                                    )}
+                                {/* Passkey and Social Buttons */}
+                                <BlockStack gap="200">
+                                    {/* Passkey Button */}
+                                    <button
+                                        onClick={handlePasskeyLogin}
+                                        className="passkey-button"
+                                        style={{
+                                            width: '100%',
+                                            padding: '10px 20px',
+                                            backgroundColor: '#f1f1f1',
+                                            color: '#303030',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            fontSize: '14px',
+                                            fontWeight: '400',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '8px',
+                                            transition: 'background-color 0.2s ease',
+                                        }}
+                                    >
+                                        <PasskeyIcon />
+                                        <span>Sign in with passkey</span>
+                                    </button>
 
-                                    {/* Email Input */}
-                                    <BlockStack gap="300">
-                                        <TextField
-                                            label="Email"
-                                            type="email"
-                                            value={email}
-                                            onChange={setEmail}
-                                            autoComplete="email"
-                                        />
-
-                                        {/* Continue with email button */}
-                                        <div style={{ position: 'relative' }} className="continue-email-button">
-                                            <Button
-                                                onClick={handleEmailLogin}
-                                                fullWidth
-                                                variant="primary"
-                                            >
-                                                <span>Continue with email</span>
-                                            </Button>
-                                            <span className="button-arrow">
-                                                <Icon source={ChevronRightIcon} />
-                                            </span>
-                                        </div>
-                                    </BlockStack>
-
-                                    {/* Divider */}
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '12px',
-                                        color: '#616161',
-                                        fontSize: '14px'
-                                    }}>
-                                        <div style={{ flex: 1, height: '1px', background: '#e1e1e1' }} />
-                                        <span>or</span>
-                                        <div style={{ flex: 1, height: '1px', background: '#e1e1e1' }} />
-                                    </div>
-
-                                    {/* Passkey and Social Buttons */}
-                                    <BlockStack gap="200">
-                                        {/* Passkey Button */}
+                                    {/* Social Login Buttons */}
+                                    <InlineStack gap="200" align="center">
                                         <button
-                                            onClick={handlePasskeyLogin}
-                                            className="passkey-button"
+                                            onClick={() => handleSocialLogin('apple')}
+                                            className="social-button"
                                             style={{
-                                                width: '100%',
-                                                padding: '10px 20px',
-                                                backgroundColor: '#f1f1f1',
-                                                color: '#303030',
+                                                flex: 1,
+                                                padding: '8px',
                                                 border: 'none',
                                                 borderRadius: '8px',
-                                                fontSize: '14px',
-                                                fontWeight: '400',
+                                                background: '#f1f1f1',
                                                 cursor: 'pointer',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                gap: '8px',
                                                 transition: 'background-color 0.2s ease',
                                             }}
                                         >
-                                            <PasskeyIcon />
-                                            <span>Sign in with passkey</span>
+                                            <AppleIcon />
                                         </button>
-
-                                        {/* Social Login Buttons */}
-                                        <InlineStack gap="200" align="center">
-                                            <button
-                                                onClick={() => handleSocialLogin('apple')}
-                                                className="social-button"
-                                                style={{
-                                                    flex: 1,
-                                                    padding: '8px',
-                                                    border: 'none',
-                                                    borderRadius: '8px',
-                                                    background: '#f1f1f1',
-                                                    cursor: 'pointer',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    transition: 'background-color 0.2s ease',
-                                                }}
-                                            >
-                                                <AppleIcon />
-                                            </button>
-                                            <button
-                                                onClick={() => handleSocialLogin('facebook')}
-                                                className="social-button"
-                                                style={{
-                                                    flex: 1,
-                                                    padding: '8px',
-                                                    border: 'none',
-                                                    borderRadius: '8px',
-                                                    background: '#f1f1f1',
-                                                    cursor: 'pointer',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    transition: 'background-color 0.2s ease',
-                                                }}
-                                            >
-                                                <FacebookIcon />
-                                            </button>
-                                            <button
-                                                onClick={() => handleSocialLogin('google')}
-                                                className="social-button"
-                                                style={{
-                                                    flex: 1,
-                                                    padding: '8px',
-                                                    border: 'none',
-                                                    borderRadius: '8px',
-                                                    background: '#f1f1f1',
-                                                    cursor: 'pointer',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    transition: 'background-color 0.2s ease',
-                                                }}
-                                            >
-                                                <GoogleIcon />
-                                            </button>
-                                        </InlineStack>
-                                    </BlockStack>
-
-                                    {/* Get Started Link */}
-                                    <div style={{ paddingTop: '16px' }}>
-                                        <Text as="span" variant="bodyMd">
-                                            New to Nest Quest?{' '}
-                                            <button
-                                                onClick={handleGetStarted}
-                                                style={{
-                                                    color: '#005bd3',
-                                                    textDecoration: 'none',
-                                                    fontWeight: '500',
-                                                    background: 'none',
-                                                    border: 'none',
-                                                    cursor: 'pointer',
-                                                    padding: 0,
-                                                    font: 'inherit'
-                                                }}
-                                            >
-                                                Get started →
-                                            </button>
-                                        </Text>
-                                    </div>
-
-                                    {/* Footer Links */}
-                                    <div className="footer-links-container" style={{ paddingTop: '16px', marginTop: '16px', marginBottom: '16px', display: 'block' }}>
-                                        <InlineStack gap="200" align="start" style={{ marginBottom: '16px' }}>
-                                            <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
-                                                Help
-                                            </a>
-                                            <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
-                                                Privacy
-                                            </a>
-                                            <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
-                                                Terms
-                                            </a>
-                                        </InlineStack>
-                                    </div>
-                                </BlockStack>
-                            ) : (
-                                // PASSWORD STEP
-                                <BlockStack gap="500">
-                                    {/* Logo */}
-                                    <div style={{
-                                        display: 'block',
-                                        width: '100%',
-                                        marginBottom: '8px',
-                                        paddingTop: '0px'
-                                    }}>
-                                        <img
-                                            src="/logos/nest-quest-black.svg"
-                                            alt="Nest Quest"
-                                            style={{
-                                                height: '24px',
-                                                width: 'auto',
-                                                display: 'block'
-                                            }}
-                                        />
-                                    </div>
-
-                                    {/* Header */}
-                                    <BlockStack gap="100">
-                                        <Text variant="headingXl" as="h1" fontWeight="bold">
-                                            Log in
-                                        </Text>
-                                        <Text as="p" tone="subdued" fontWeight="regular" className="continue-to-shopify-text" style={{ fontSize: '14px' }}>
-                                            Continue to Shopify
-                                        </Text>
-                                    </BlockStack>
-
-                                    {/* Error Banner */}
-                                    {error && (
-                                        <Banner status="critical" onDismiss={() => setError('')}>
-                                            {error}
-                                        </Banner>
-                                    )}
-
-                                    {/* Email Display */}
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        padding: '14px 16px',
-                                        border: '1px solid #f1f1f1',
-                                        borderRadius: '8px',
-                                        backgroundColor: '#f7f7f7',
-                                    }}>
-                                        <span style={{ color: '#303030', fontSize: '14px' }}>{email}</span>
                                         <button
-                                            onClick={handleChangeEmail}
+                                            onClick={() => handleSocialLogin('facebook')}
+                                            className="social-button"
                                             style={{
-                                                background: 'none',
+                                                flex: 1,
+                                                padding: '8px',
                                                 border: 'none',
-                                                color: '#005bd3',
-                                                fontSize: '14px',
-                                                fontWeight: '500',
+                                                borderRadius: '8px',
+                                                background: '#f1f1f1',
                                                 cursor: 'pointer',
-                                                padding: 0,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                transition: 'background-color 0.2s ease',
                                             }}
                                         >
-                                            Change email
+                                            <FacebookIcon />
                                         </button>
-                                    </div>
+                                        <button
+                                            onClick={() => handleSocialLogin('google')}
+                                            className="social-button"
+                                            style={{
+                                                flex: 1,
+                                                padding: '8px',
+                                                border: 'none',
+                                                borderRadius: '8px',
+                                                background: '#f1f1f1',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                transition: 'background-color 0.2s ease',
+                                            }}
+                                        >
+                                            <GoogleIcon />
+                                        </button>
+                                    </InlineStack>
+                                </BlockStack>
 
-                                    {/* Password Input */}
-                                    <BlockStack gap="200">
-                                        <TextField
-                                            label="Password"
-                                            type={showPassword ? 'text' : 'password'}
-                                            value={password}
-                                            onChange={setPassword}
-                                            autoComplete="current-password"
-                                            suffix={
-                                                <button
-                                                    onClick={() => setShowPassword(!showPassword)}
-                                                    type="button"
-                                                    style={{
-                                                        background: 'none',
-                                                        border: 'none',
-                                                        cursor: 'pointer',
-                                                        padding: '0',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                    }}
-                                                >
-                                                    {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-                                                </button>
-                                            }
-                                        />
-                                        <a
-                                            href="#"
+                                {/* Get Started Link */}
+                                <div style={{ paddingTop: '16px' }}>
+                                    <Text as="span" variant="bodyMd">
+                                        New to Nest Quest?{' '}
+                                        <button
+                                            onClick={handleGetStarted}
                                             style={{
                                                 color: '#005bd3',
                                                 textDecoration: 'none',
-                                                fontSize: '14px',
-                                                fontWeight: '400',
+                                                fontWeight: '500',
+                                                background: 'none',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                padding: 0,
+                                                font: 'inherit'
                                             }}
                                         >
-                                            Forgot password?
+                                            Get started →
+                                        </button>
+                                    </Text>
+                                </div>
+
+                                {/* Footer Links */}
+                                <div className="footer-links-container" style={{ paddingTop: '16px', marginTop: '16px', marginBottom: '16px', display: 'block' }}>
+                                    <InlineStack gap="200" align="start" style={{ marginBottom: '16px' }}>
+                                        <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
+                                            Help
                                         </a>
-                                    </BlockStack>
+                                        <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
+                                            Privacy
+                                        </a>
+                                        <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
+                                            Terms
+                                        </a>
+                                    </InlineStack>
+                                </div>
+                            </BlockStack>
+                        ) : (
+                            // PASSWORD STEP
+                            <BlockStack gap="500">
+                                {/* Logo */}
+                                <div style={{
+                                    display: 'block',
+                                    width: '100%',
+                                    marginBottom: '8px',
+                                    paddingTop: '0px'
+                                }}>
+                                    <img
+                                        src="/logos/nest-quest-black.svg"
+                                        alt="Nest Quest"
+                                        style={{
+                                            height: '24px',
+                                            width: 'auto',
+                                            display: 'block'
+                                        }}
+                                    />
+                                </div>
 
-                                    {/* Log in Button */}
-                                    <div className="login-button-wrapper">
-                                        <Button
-                                            onClick={handlePasswordLogin}
-                                            loading={isLoading}
-                                            fullWidth
-                                            variant="primary"
-                                        >
-                                            Log in
-                                        </Button>
-                                    </div>
-
-                                    {/* Footer Links */}
-                                    <div className="footer-links-container" style={{ paddingTop: '16px', marginTop: '16px', marginBottom: '16px', display: 'block' }}>
-                                        <InlineStack gap="200" align="start" style={{ marginBottom: '16px' }}>
-                                            <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
-                                                Help
-                                            </a>
-                                            <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
-                                                Privacy
-                                            </a>
-                                            <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
-                                                Terms
-                                            </a>
-                                        </InlineStack>
-                                    </div>
+                                {/* Header */}
+                                <BlockStack gap="100">
+                                    <Text variant="headingXl" as="h1" fontWeight="bold">
+                                        Log in
+                                    </Text>
+                                    <Text as="p" tone="subdued" fontWeight="regular" className="continue-to-shopify-text" style={{ fontSize: '14px' }}>
+                                        Continue to Shopify
+                                    </Text>
                                 </BlockStack>
-                            )}
-                        </Card>
-                    </div>
-                </AppProvider>
+
+                                {/* Error Banner */}
+                                {error && (
+                                    <Banner status="critical" onDismiss={() => setError('')}>
+                                        {error}
+                                    </Banner>
+                                )}
+
+                                {/* Email Display */}
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    padding: '14px 16px',
+                                    border: '1px solid #f1f1f1',
+                                    borderRadius: '8px',
+                                    backgroundColor: '#f7f7f7',
+                                }}>
+                                    <span style={{ color: '#303030', fontSize: '14px' }}>{email}</span>
+                                    <button
+                                        onClick={handleChangeEmail}
+                                        style={{
+                                            background: 'none',
+                                            border: 'none',
+                                            color: '#005bd3',
+                                            fontSize: '14px',
+                                            fontWeight: '500',
+                                            cursor: 'pointer',
+                                            padding: 0,
+                                        }}
+                                    >
+                                        Change email
+                                    </button>
+                                </div>
+
+                                {/* Password Input */}
+                                <BlockStack gap="200">
+                                    <TextField
+                                        label="Password"
+                                        type={showPassword ? 'text' : 'password'}
+                                        value={password}
+                                        onChange={setPassword}
+                                        autoComplete="current-password"
+                                        suffix={
+                                            <button
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                type="button"
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    cursor: 'pointer',
+                                                    padding: '0',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
+                                                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                                            </button>
+                                        }
+                                    />
+                                    <a
+                                        href="#"
+                                        style={{
+                                            color: '#005bd3',
+                                            textDecoration: 'none',
+                                            fontSize: '14px',
+                                            fontWeight: '400',
+                                        }}
+                                    >
+                                        Forgot password?
+                                    </a>
+                                </BlockStack>
+
+                                {/* Log in Button */}
+                                <div className="login-button-wrapper">
+                                    <Button
+                                        onClick={handlePasswordLogin}
+                                        loading={isLoading}
+                                        fullWidth
+                                        variant="primary"
+                                    >
+                                        Log in
+                                    </Button>
+                                </div>
+
+                                {/* Footer Links */}
+                                <div className="footer-links-container" style={{ paddingTop: '16px', marginTop: '16px', marginBottom: '16px', display: 'block' }}>
+                                    <InlineStack gap="200" align="start" style={{ marginBottom: '16px' }}>
+                                        <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
+                                            Help
+                                        </a>
+                                        <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
+                                            Privacy
+                                        </a>
+                                        <a href="#" className="footer-link" style={{ color: '#616161', textDecoration: 'none', fontSize: '12px' }}>
+                                            Terms
+                                        </a>
+                                    </InlineStack>
+                                </div>
+                            </BlockStack>
+                        )}
+                    </Card>
+                </div>
             </div>
         </>
     );

@@ -3,11 +3,21 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
-      "@pages/*": ["src/pages/*"],
+      "@pages/*": ["src/views/*"],
       "@styles/*": ["src/styles/*"],
       "@/*": ["src/*"]
-    }
+    },
+    "jsx": "preserve",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "isolatedModules": true
   },
+  "include": [
+    "**/*.js",
+    "**/*.jsx"
+  ],
   "exclude": ["node_modules", ".next"]
 }
-

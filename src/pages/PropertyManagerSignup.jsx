@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/composables/useAuth';
-import { useAuthContext } from '@/contexts/AuthContext';
+import { useAppSelector } from '@/store';
+import { selectIsAuthenticated, selectCurrentRole } from '@/store/slices/authSlice';
 import { ROLE_DASHBOARD_PATHS } from '@/composables/roles';
 import {
   AppProvider,
@@ -129,7 +130,8 @@ const steps = [
 
 function PropertyManagerSignup() {
   const router = useRouter();
-  const { isAuthenticated, currentRole } = useAuthContext();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const currentRole = useAppSelector(selectCurrentRole);
   const { sendSignupOtp, verifySignupOtp } = useAuth('property-manager');
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
