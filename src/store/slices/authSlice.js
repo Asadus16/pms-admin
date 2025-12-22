@@ -99,13 +99,30 @@ const getCurrentRoleFromState = (state) => {
   return null;
 };
 
-const initialState = {
-  isAuthenticated: initializeAuthState(),
-  user: initializeUser(),
-  isLoading: false,
-  error: null,
-  token: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) : null,
+// Initialize state safely for SSR
+const getInitialState = () => {
+  if (typeof window === 'undefined') {
+    // Server-side: return safe defaults
+    return {
+      isAuthenticated: false,
+      user: null,
+      isLoading: false,
+      error: null,
+      token: null,
+    };
+  }
+  
+  // Client-side: initialize from localStorage
+  return {
+    isAuthenticated: initializeAuthState(),
+    user: initializeUser(),
+    isLoading: false,
+    error: null,
+    token: localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN),
+  };
 };
+
+const initialState = getInitialState();
 
 const authSlice = createSlice({
   name: 'auth',
