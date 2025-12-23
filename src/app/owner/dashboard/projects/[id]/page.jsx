@@ -6,7 +6,7 @@ import ProjectViewPage from '@/components/ProjectViewPage';
 
 export default function ProjectViewPageRoute() {
   const params = useParams();
-  const projectId = params?.id as string;
+  const projectId = params?.id;
 
   return (
     <AppProvider i18n={{}}>
