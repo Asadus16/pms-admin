@@ -8,5 +8,6 @@ export default function NewDeveloperPage() {
   const basePath = '/property-manager';
   
   return <AddDeveloper onClose={() => router.push(`${basePath}/developers`)} />;
+  
 }
 
