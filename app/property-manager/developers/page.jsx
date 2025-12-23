@@ -1,8 +1,8 @@
 'use client';
 
-import PropertyOwnersPage from '@/components/PropertyOwnersPage';
+import DevelopersPage from '@/components/DevelopersPage';
 
-export default function DevelopersPage() {
-  return <PropertyOwnersPage />;
+export default function DevelopersPageRoute() {
+  return <DevelopersPage />;
 }
 
