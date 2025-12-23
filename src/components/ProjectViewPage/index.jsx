@@ -500,7 +500,7 @@ export default function ProjectViewPage({ projectId }) {
                     />
                   )}
 
-                  {project.paymentPlans && project.paymentPlans.length > 0 && (
+                  {Array.isArray(project.paymentPlans) && project.paymentPlans.length > 0 && (
                     <BlockStack gap="200">
                       <Text variant="bodyMd" as="span">
                         Payment Plans

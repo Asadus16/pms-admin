@@ -6,7 +6,7 @@ import PropertyViewPage from '@/components/PropertyViewPage';
 
 export default function PropertyViewPageRoute() {
   const params = useParams();
-  const propertyId = params?.id as string;
+  const propertyId = params?.id;
 
   return (
     <AppProvider i18n={{}}>

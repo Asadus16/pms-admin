@@ -55,6 +55,7 @@ export default function DeveloperViewPage({ developerId }) {
 
   // Fetch developer from API
   useEffect(() => {
+    alert('kkkk')
     if (!developerId) return;
     dispatch(fetchPropertyManagerDeveloperById(developerId));
   }, [developerId, dispatch]);
@@ -561,5 +562,3 @@ export default function DeveloperViewPage({ developerId }) {
     </div>
   );
 }
-
-
