@@ -1,6 +1,6 @@
 import '@shopify/polaris/build/esm/styles.css';
-import '../src/styles/globals.css';
-import '../src/index.css';
+import '@/styles/globals.css';
+import '@/index.css';
 import Providers from './providers';
 
 export const metadata = {
