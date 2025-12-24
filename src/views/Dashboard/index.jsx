@@ -112,17 +112,17 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     if (typeof window === 'undefined' || !pathname) {
       return 'dashboard'
     }
-    
+
     // Remove the basePath prefix from pathname to get the page
     // pathname is like /property-manager or /property-manager/bookings
     // Also handle /property-manager/dashboard for backward compatibility
     let path = pathname.replace(basePath, '').replace(/^\//, '') || 'dashboard'
-    
+
     // Remove /dashboard if present (for backward compatibility)
     if (path.startsWith('dashboard')) {
       path = path.replace(/^dashboard\/?/, '') || 'dashboard'
     }
-    
+
     if (path === '' || path === 'dashboard') return 'dashboard'
     if (path === 'customers/new' || path.startsWith('customers/new')) return 'customers/new'
     if (path === 'bookings/new' || path.startsWith('bookings/new')) return 'bookings/new'
@@ -135,6 +135,8 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     // Properties view route
     if (path.startsWith('properties/') && !path.startsWith('properties/new')) return path
     if (path === 'customers/segments' || path.startsWith('customers/segments')) return 'segments'
+    // Handle reports route - check for both /reports and /analytics/reports
+    if (path === 'reports' || path.startsWith('reports/')) return 'reports'
     if (path === 'analytics/reports' || path.startsWith('analytics/reports')) return 'reports'
     if (path === 'analytics/live-view' || path.startsWith('analytics/live-view')) return 'live-view'
     return path
@@ -190,7 +192,7 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     } else {
       router.push(`${basePath}/${page}`)
     }
-  }, [router, basePath])
+  }, [router, basePath, userType])
 
   // Check if analytics section is selected (including sub-items)
   const isAnalyticsSelected = selected === 'analytics' || selected === 'reports' || selected === 'live-view'

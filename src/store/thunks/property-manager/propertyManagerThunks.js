@@ -647,3 +647,88 @@ export const fetchPropertyManagerDashboardProperty = createAsyncThunk(
   }
 );
 
+// Leads
+export const fetchPropertyManagerLeads = createAsyncThunk(
+  'propertyManager/fetchLeads',
+  async (params) => {
+    const response = await api.get('/property-manager/leads', {
+      params,
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const fetchPropertyManagerLeadById = createAsyncThunk(
+  'propertyManager/fetchLeadById',
+  async (id) => {
+    const response = await api.get(`/property-manager/leads/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const createPropertyManagerLead = createAsyncThunk(
+  'propertyManager/createLead',
+  async (data) => {
+    const response = await api.post('/property-manager/leads', data, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const updatePropertyManagerLead = createAsyncThunk(
+  'propertyManager/updateLead',
+  async ({ id, data }) => {
+    const response = await api.post(`/property-manager/leads/${id}`, data, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const deletePropertyManagerLead = createAsyncThunk(
+  'propertyManager/deleteLead',
+  async (id) => {
+    const response = await api.delete(`/property-manager/leads/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+// Owner Connection Requests
+export const sendOwnerConnectionRequest = createAsyncThunk(
+  'propertyManager/sendOwnerConnectionRequest',
+  async (data) => {
+    const response = await api.post('/property-manager/owner-requests', data, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const fetchOwnerConnectionRequests = createAsyncThunk(
+  'propertyManager/fetchOwnerConnectionRequests',
+  async () => {
+    const response = await api.get('/property-manager/owner-requests', {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const updateConnectionRequestStatus = createAsyncThunk(
+  'propertyManager/updateConnectionRequestStatus',
+  async ({ id, status }) => {
+    const response = await api.patch(`/connection-requests/${id}/status`, {
+      status,
+    }, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+

@@ -55,8 +55,8 @@ const RobotIcon = () => (
  * DashboardLayout - Provides the shell (header, navigation, sidekick) for dashboard pages
  * Accepts children which will be rendered inside the Frame
  */
-export default function DashboardLayout({ 
-  userType: rawUserType = 'owners', 
+export default function DashboardLayout({
+  userType: rawUserType = 'owners',
   children,
   showUnsavedChanges = false,
   onDiscard,
@@ -80,14 +80,22 @@ export default function DashboardLayout({
   // Determine selected route from pathname
   const getSelectedFromPath = () => {
     if (!pathname) return 'dashboard';
-    
+
     let path = pathname.replace(basePath, '').replace(/^\//, '') || 'dashboard';
-    
+
     // Remove /dashboard if present (for backward compatibility)
     if (path.startsWith('dashboard')) {
       path = path.replace(/^dashboard\/?/, '') || 'dashboard';
     }
-    
+
+    // Handle reports route - check for both /reports and /analytics/reports
+    if (path === 'reports' || path.startsWith('reports/')) {
+      return 'reports';
+    }
+    if (path === 'analytics/reports' || path.startsWith('analytics/reports')) {
+      return 'reports';
+    }
+
     return path || 'dashboard';
   };
 
@@ -123,7 +131,7 @@ export default function DashboardLayout({
     } else {
       router.push(`${basePath}/${page}`);
     }
-  }, [router, basePath]);
+  }, [router, basePath, userType]);
 
   // Navigation for Property Developers / Real Estate Company
   const developerNavigation = (

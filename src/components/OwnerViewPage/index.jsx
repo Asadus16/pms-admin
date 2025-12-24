@@ -18,12 +18,16 @@ import {
   LegacyStack,
   Banner,
   Spinner,
+  Badge,
 } from '@shopify/polaris';
 import { PersonIcon, ChevronRightIcon, ArrowLeftIcon, NoteIcon } from '@shopify/polaris-icons';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   fetchPropertyManagerOwnerById,
   updatePropertyManagerOwnerStatus,
+  fetchOwnerConnectionRequests,
+  sendOwnerConnectionRequest,
+  updateConnectionRequestStatus,
 } from '@/store/thunks';
 import {
   selectCurrentOwner,
@@ -32,6 +36,12 @@ import {
   selectOwnersError,
   clearCurrentOwner,
 } from '@/store/slices/property-manager/owners/slice';
+import {
+  selectConnectionRequests,
+  selectConnectionRequestsSending,
+  selectConnectionRequestsUpdating,
+} from '@/store/slices/property-manager/connection-requests/slice';
+import SendConnectionRequest from '@/components/SendConnectionRequest';
 import '../AddDeveloper/AddDeveloper.css';
 
 // Country labels mapping
@@ -80,12 +90,16 @@ export default function OwnerViewPage({ ownerId }) {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
   const [actionsPopoverActive, setActionsPopoverActive] = useState(false);
+  const [sendRequestModalOpen, setSendRequestModalOpen] = useState(false);
 
   // Redux state
   const owner = useAppSelector(selectCurrentOwner);
   const isLoading = useAppSelector(selectOwnersLoading);
   const isUpdating = useAppSelector(selectOwnersUpdating);
   const error = useAppSelector(selectOwnersError);
+  const connectionRequests = useAppSelector(selectConnectionRequests);
+  const isSendingRequest = useAppSelector(selectConnectionRequestsSending);
+  const isUpdatingRequest = useAppSelector(selectConnectionRequestsUpdating);
 
   const basePath = useMemo(() => {
     const seg = pathname?.split('/')?.[1];
@@ -102,6 +116,11 @@ export default function OwnerViewPage({ ownerId }) {
       dispatch(clearCurrentOwner());
     };
   }, [dispatch, ownerId]);
+
+  // Fetch connection requests on mount
+  useEffect(() => {
+    dispatch(fetchOwnerConnectionRequests());
+  }, [dispatch]);
 
   const handleBack = useCallback(() => {
     router.push(`${basePath}/owners`);
@@ -125,6 +144,67 @@ export default function OwnerViewPage({ ownerId }) {
       console.error('Error updating status:', err);
     }
   }, [dispatch, owner]);
+
+  // Get connection status for this owner
+  const getConnectionStatus = useCallback(() => {
+    if (!connectionRequests || !owner) return null;
+    
+    // Try to match by user_id first, then fall back to owner id
+    const ownerUserId = owner.user_id || owner.userId || owner.id;
+    
+    // Check approved requests
+    const approved = connectionRequests.approved?.find(
+      req => (req.receiver?.id === ownerUserId || req.sender?.id === ownerUserId)
+    );
+    if (approved) return { status: 'accepted', request: approved };
+
+    // Check sent requests
+    const sent = connectionRequests.sent?.find(req => req.receiver?.id === ownerUserId);
+    if (sent) return { status: sent.status, request: sent };
+
+    // Check received requests
+    const received = connectionRequests.received?.find(req => req.sender?.id === ownerUserId);
+    if (received) return { status: received.status, request: received };
+
+    return null;
+  }, [connectionRequests, owner]);
+
+  const connectionStatus = getConnectionStatus();
+
+  const handleSendRequest = useCallback(() => {
+    setSendRequestModalOpen(true);
+  }, []);
+
+  const handleCloseSendRequestModal = useCallback(() => {
+    setSendRequestModalOpen(false);
+    dispatch(fetchOwnerConnectionRequests());
+  }, [dispatch]);
+
+  const handleAcceptRequest = useCallback(async () => {
+    if (!connectionStatus?.request) return;
+    try {
+      await dispatch(updateConnectionRequestStatus({
+        id: connectionStatus.request.id,
+        status: 'accepted',
+      })).unwrap();
+      dispatch(fetchOwnerConnectionRequests());
+    } catch (err) {
+      console.error('Error accepting request:', err);
+    }
+  }, [dispatch, connectionStatus]);
+
+  const handleDenyRequest = useCallback(async () => {
+    if (!connectionStatus?.request) return;
+    try {
+      await dispatch(updateConnectionRequestStatus({
+        id: connectionStatus.request.id,
+        status: 'denied',
+      })).unwrap();
+      dispatch(fetchOwnerConnectionRequests());
+    } catch (err) {
+      console.error('Error denying request:', err);
+    }
+  }, [dispatch, connectionStatus]);
 
   // Loading state
   if (isLoading) {
@@ -202,6 +282,9 @@ export default function OwnerViewPage({ ownerId }) {
   const bankName = safeString(owner.bank_name || owner.bankName);
   const dateAdded = owner.created_at || owner.dateAdded;
   const ownerDisplayId = safeString(owner.owner_id || owner.ownerId) || `OWN-${String(owner.id).padStart(4, '0')}`;
+  const ownerName = safeString(owner.name);
+  const ownerEmail = safeString(owner.email);
+  const propertiesCount = owner.properties_count || owner.propertiesCount || owner.properties?.length || 0;
 
   const actionItems = [
     {
@@ -276,176 +359,52 @@ export default function OwnerViewPage({ ownerId }) {
           </Box>
         )}
 
+        {/* Owner Basic Information Summary */}
+        <Box paddingBlockEnd="400">
+          <Card>
+            <BlockStack gap="400">
+              <InlineStack align="space-between" blockAlign="center">
+                <BlockStack gap="200">
+                  <Text variant="headingLg" as="h1">
+                    {ownerName || 'Owner'}
+                  </Text>
+                  <InlineStack gap="400" blockAlign="center">
+                    {ownerEmail && (
+                      <InlineStack gap="100" blockAlign="center">
+                        <Text variant="bodyMd" as="span" tone="subdued">
+                          Email:
+                        </Text>
+                        <Text variant="bodyMd" as="span" fontWeight="medium">
+                          {ownerEmail}
+                        </Text>
+                      </InlineStack>
+                    )}
+                    <Text variant="bodyMd" as="span" tone="subdued">
+                      |
+                    </Text>
+                    <InlineStack gap="100" blockAlign="center">
+                      <Text variant="bodyMd" as="span" tone="subdued">
+                        Properties Owned:
+                      </Text>
+                      <Text variant="bodyMd" as="span" fontWeight="semibold">
+                        {propertiesCount}
+                      </Text>
+                    </InlineStack>
+                  </InlineStack>
+                </BlockStack>
+                <Badge tone={owner.status === 'active' ? 'success' : 'subdued'}>
+                  {owner.status === 'active' ? 'Active' : 'Inactive'}
+                </Badge>
+              </InlineStack>
+            </BlockStack>
+          </Card>
+        </Box>
+
         <Layout>
           {/* Main content - Left column */}
           <Layout.Section>
             <BlockStack gap="400">
-              {/* Owner Details card */}
-              <Card>
-                <BlockStack gap="400">
-                  <Text variant="headingMd" as="h2">
-                    Owner Details
-                  </Text>
-
-                  <TextField
-                    label="Owner ID"
-                    value={ownerDisplayId}
-                    readOnly
-                    autoComplete="off"
-                    helpText="Auto Generated"
-                  />
-
-                  <TextField
-                    label="Owner Type"
-                    value={ownerTypeLabels[ownerType] || ownerType}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Owner Name"
-                    value={safeString(owner.name)}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Nationality"
-                    value={countryLabels[owner.nationality] || safeString(owner.nationality)}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Country of Residence"
-                    value={countryLabels[countryOfResidence] || countryOfResidence}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Email"
-                    value={safeString(owner.email)}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Phone / Whatsapp"
-                    value={safeString(owner.phone)}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Address"
-                    value={safeString(owner.address)}
-                    multiline={2}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Preferred Contact Channel"
-                    value={contactChannelLabels[preferredContactChannel] || preferredContactChannel}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Notes & Instructions"
-                    value={notesInstructions}
-                    multiline={3}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  {/* Quick meta field */}
-                  <TextField
-                    label="Date added"
-                    value={formatDate(dateAdded)}
-                    readOnly
-                    autoComplete="off"
-                  />
-                </BlockStack>
-              </Card>
-
-              {/* KYC Details card */}
-              <Card>
-                <BlockStack gap="400">
-                  <Text variant="headingMd" as="h2">
-                    KYC Details
-                  </Text>
-
-                  {/* Passport Copy */}
-                  <BlockStack gap="200">
-                    <Text variant="bodyMd" as="span">
-                      Passport Copy
-                    </Text>
-                    {renderFileInfo(passportCopy, 'Passport copy')}
-                  </BlockStack>
-
-                  {/* ID Card Copy */}
-                  <BlockStack gap="200">
-                    <Text variant="bodyMd" as="span">
-                      ID Card Copy
-                    </Text>
-                    {renderFileInfo(idCardCopy, 'ID card copy')}
-                  </BlockStack>
-
-                  {/* Trade License */}
-                  <BlockStack gap="200">
-                    <Text variant="bodyMd" as="span">
-                      Trade License
-                    </Text>
-                    {renderFileInfo(tradeLicense, 'Trade license')}
-                  </BlockStack>
-
-                  <TextField
-                    label="Tax / VAT ID"
-                    value={taxVatId}
-                    readOnly
-                    autoComplete="off"
-                  />
-                </BlockStack>
-              </Card>
-
-              {/* Bank Details card */}
-              <Card>
-                <BlockStack gap="400">
-                  <Text variant="headingMd" as="h2">
-                    Bank Details
-                  </Text>
-
-                  <TextField
-                    label="IBAN"
-                    value={safeString(owner.iban)}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Bank Number"
-                    value={bankNumber}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Branch"
-                    value={bankBranch}
-                    readOnly
-                    autoComplete="off"
-                  />
-
-                  <TextField
-                    label="Bank Name"
-                    value={bankName}
-                    readOnly
-                    autoComplete="off"
-                  />
-                </BlockStack>
-              </Card>
+              {/* Content can be added here if needed */}
             </BlockStack>
           </Layout.Section>
 
@@ -471,6 +430,14 @@ export default function OwnerViewPage({ ownerId }) {
           </Layout.Section>
         </Layout>
       </Page>
+
+      {/* Send Connection Request Modal */}
+      <SendConnectionRequest
+        open={sendRequestModalOpen}
+        onClose={handleCloseSendRequestModal}
+        ownerId={owner?.id}
+        ownerName={owner?.name}
+      />
     </div>
   );
 }
