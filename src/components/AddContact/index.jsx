@@ -37,7 +37,7 @@ import {
   selectContactsValidationErrors,
   selectCurrentContact,
   selectContactsLoading,
-  clearError,
+  clearContactsError,
   clearCurrentContact,
 } from '@/store/slices/property-manager/contacts/slice';
 
@@ -84,7 +84,7 @@ function AddContact({ onClose, mode = 'create', contactId: editContactId = null 
     }
     return () => {
       dispatch(clearCurrentContact());
-      dispatch(clearError());
+      dispatch(clearContactsError());
     };
   }, [dispatch, mode, editContactId]);
 
@@ -394,7 +394,7 @@ function AddContact({ onClose, mode = 'create', contactId: editContactId = null 
         {/* Error Banner */}
         {error && (
           <Box paddingBlockEnd="400">
-            <Banner tone="critical" onDismiss={() => dispatch(clearError())}>
+            <Banner tone="critical" onDismiss={() => dispatch(clearContactsError())}>
               <p>{error}</p>
             </Banner>
           </Box>
@@ -403,7 +403,7 @@ function AddContact({ onClose, mode = 'create', contactId: editContactId = null 
         {/* Validation Errors */}
         {validationErrors && Object.keys(validationErrors).length > 0 && (
           <Box paddingBlockEnd="400">
-            <Banner tone="warning" onDismiss={() => dispatch(clearError())}>
+            <Banner tone="warning" onDismiss={() => dispatch(clearContactsError())}>
               <BlockStack gap="100">
                 {Object.entries(validationErrors).map(([field, messages]) => (
                   <p key={field}><strong>{field}:</strong> {Array.isArray(messages) ? messages.join(', ') : messages}</p>

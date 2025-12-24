@@ -21,8 +21,6 @@ import {
   TransactionIcon,
   InventoryIcon,
   ChartLineIcon,
-  AppsFilledIcon,
-  AppsIcon,
   TeamIcon,
   HomeIcon,
   ProductIcon,
@@ -32,6 +30,7 @@ import {
   SettingsIcon,
   EmailIcon,
   ChatIcon,
+  ChevronRightIcon,
 } from '@shopify/polaris-icons';
 import ShopifyHeader from '../ShopifyHeader';
 import SidekickPanel from '../SidekickPanel';
@@ -118,7 +117,7 @@ export default function DashboardLayout({
     } else if (page === 'segments') {
       router.push(`${basePath}/customers/segments`);
     } else if (page === 'reports') {
-      router.push(`${basePath}/analytics/reports`);
+      router.push(`${basePath}/reports`);
     } else if (page === 'live-view') {
       router.push(`${basePath}/analytics/live-view`);
     } else {
@@ -168,6 +167,22 @@ export default function DashboardLayout({
             selected: selected === 'owners',
           },
           {
+            label: 'Reports',
+            icon: ChartLineIcon,
+            onClick: () => handleNavigation('reports'),
+            selected: selected === 'reports',
+          },
+        ]}
+      />
+      <Navigation.Section
+        title={
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+            CRM
+            <Icon source={ChevronRightIcon} />
+          </span>
+        }
+        items={[
+          {
             label: 'Contacts',
             icon: ChatIcon,
             onClick: () => handleNavigation('contacts'),
@@ -180,16 +195,10 @@ export default function DashboardLayout({
             selected: selected === 'leads',
           },
           {
-            label: 'Reports',
-            icon: ChartLineIcon,
-            onClick: () => handleNavigation('reports'),
-            selected: selected === 'reports',
-          },
-          {
-            label: 'Integrations',
-            icon: selected === 'integrations' ? AppsIcon : AppsFilledIcon,
-            onClick: () => handleNavigation('integrations'),
-            selected: selected === 'integrations',
+            label: 'Analytics',
+            icon: ChartVerticalIcon,
+            onClick: () => handleNavigation('analytics'),
+            selected: selected === 'analytics',
           },
         ]}
       />

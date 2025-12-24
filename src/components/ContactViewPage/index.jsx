@@ -32,7 +32,7 @@ import {
   selectContactsError,
   selectContactsUpdating,
   clearCurrentContact,
-  clearError,
+  clearContactsError,
 } from '@/store/slices/property-manager/contacts/slice';
 
 function formatDate(dateStr) {
@@ -107,7 +107,7 @@ export default function ContactViewPage({ contactId }) {
     }
     return () => {
       dispatch(clearCurrentContact());
-      dispatch(clearError());
+      dispatch(clearContactsError());
     };
   }, [dispatch, contactId]);
 
@@ -317,7 +317,7 @@ export default function ContactViewPage({ contactId }) {
         {/* Error Banner */}
         {error && (
           <Box paddingBlockEnd="400">
-            <Banner tone="critical" onDismiss={() => dispatch(clearError())}>
+            <Banner tone="critical" onDismiss={() => dispatch(clearContactsError())}>
               <p>{error}</p>
             </Banner>
           </Box>

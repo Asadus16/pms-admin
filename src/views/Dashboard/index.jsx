@@ -184,7 +184,7 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     } else if (page === 'segments') {
       router.push(`${basePath}/customers/segments`)
     } else if (page === 'reports') {
-      router.push(`${basePath}/analytics/reports`)
+      router.push(`${basePath}/reports`)
     } else if (page === 'live-view') {
       router.push(`${basePath}/analytics/live-view`)
     } else {

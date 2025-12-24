@@ -33,14 +33,14 @@ const propertiesSlice = createSlice({
   name: 'properties',
   initialState,
   reducers: {
-    clearError: (state) => {
+    clearPropertiesError: (state) => {
       state.error = null;
       state.validationErrors = null;
     },
     clearCurrentProperty: (state) => {
       state.currentProperty = null;
     },
-    setCurrentPage: (state, action) => {
+    setPropertiesPage: (state, action) => {
       state.pagination.currentPage = action.payload;
     },
   },
@@ -188,7 +188,7 @@ const propertiesSlice = createSlice({
   },
 });
 
-export const { clearError, clearCurrentProperty, setCurrentPage } = propertiesSlice.actions;
+export const { clearPropertiesError, clearCurrentProperty, setPropertiesPage } = propertiesSlice.actions;
 
 // Selectors
 export const selectProperties = (state) => state.propertyManager.properties.properties;

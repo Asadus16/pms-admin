@@ -34,14 +34,14 @@ const ownersSlice = createSlice({
   name: 'owners',
   initialState,
   reducers: {
-    clearError: (state) => {
+    clearOwnersError: (state) => {
       state.error = null;
       state.validationErrors = null;
     },
     clearCurrentOwner: (state) => {
       state.currentOwner = null;
     },
-    setCurrentPage: (state, action) => {
+    setOwnersPage: (state, action) => {
       state.pagination.currentPage = action.payload;
     },
   },
@@ -194,7 +194,7 @@ const ownersSlice = createSlice({
   },
 });
 
-export const { clearError, clearCurrentOwner, setCurrentPage } = ownersSlice.actions;
+export const { clearOwnersError, clearCurrentOwner, setOwnersPage } = ownersSlice.actions;
 
 // Selectors - Updated to use propertyManager namespace
 export const selectOwners = (state) => state.propertyManager.owners.owners;

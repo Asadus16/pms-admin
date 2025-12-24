@@ -130,6 +130,24 @@
   padding-top: 0 !important;
 }
 
+/* Navigation section title styling (e.g., "CRM", "Sales channels") */
+.dashboard-main .Polaris-Navigation__SectionHeading {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 550 !important;
+  line-height: 16px !important;
+  color: rgb(97, 97, 97) !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+/* Style the inline chevron icon in section titles */
+.dashboard-main .Polaris-Navigation__SectionHeading .Polaris-Icon {
+  width: 16px !important;
+  height: 16px !important;
+  color: rgb(97, 97, 97) !important;
+}
+
 /* Remove background from navigation badges (dots) */
 .dashboard-main .Polaris-Navigation__Item .Polaris-Badge {
   background: transparent !important;

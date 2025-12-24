@@ -614,3 +614,36 @@ export const deletePropertyManagerDeveloper = createAsyncThunk(
   }
 );
 
+// Reports / Dashboard
+export const fetchPropertyManagerDashboardStats = createAsyncThunk(
+  'propertyManager/fetchDashboardStats',
+  async (params) => {
+    const response = await api.get('/property-manager/main-dashboard/stats', {
+      params,
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const fetchPropertyManagerPropertyView = createAsyncThunk(
+  'propertyManager/fetchPropertyView',
+  async (params) => {
+    const response = await api.get('/property-manager/dashboard/property-view', {
+      params,
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const fetchPropertyManagerDashboardProperty = createAsyncThunk(
+  'propertyManager/fetchDashboardProperty',
+  async (id) => {
+    const response = await api.get(`/property-manager/dashboard/property/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
