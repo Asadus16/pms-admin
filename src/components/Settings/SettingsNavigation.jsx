@@ -20,6 +20,7 @@ import {
   PaymentFilledIcon,
   ChevronRightIcon,
   LockIcon,
+  ConnectIcon,
 } from '@shopify/polaris-icons';
 
 // Settings navigation items (simplified)
@@ -83,7 +84,7 @@ function SettingsNavigation({
   onMobileItemClick,
   showRolesPermissions = false
 }) {
-  // For property-manager, only show Roles & Permissions
+  // For property-manager, show Roles & Permissions and Integrations
   // For other user types, show all settings nav items
   const navItems = showRolesPermissions
     ? [
@@ -92,6 +93,12 @@ function SettingsNavigation({
           label: 'Roles & Permissions',
           icon: LockIcon,
           iconFilled: LockIcon
+        },
+        {
+          id: 'integrations',
+          label: 'Integrations',
+          icon: ConnectIcon,
+          iconFilled: ConnectIcon
         }
       ]
     : settingsNavItems;

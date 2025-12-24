@@ -34,14 +34,14 @@ const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    clearError: (state) => {
+    clearContactsError: (state) => {
       state.error = null;
       state.validationErrors = null;
     },
     clearCurrentContact: (state) => {
       state.currentContact = null;
     },
-    setCurrentPage: (state, action) => {
+    setContactsPage: (state, action) => {
       state.pagination.currentPage = action.payload;
     },
   },
@@ -193,7 +193,7 @@ const contactsSlice = createSlice({
   },
 });
 
-export const { clearError, clearCurrentContact, setCurrentPage } = contactsSlice.actions;
+export const { clearContactsError, clearCurrentContact, setContactsPage } = contactsSlice.actions;
 
 // Selectors - Updated to use propertyManager namespace
 export const selectContacts = (state) => state.propertyManager.contacts.contacts;

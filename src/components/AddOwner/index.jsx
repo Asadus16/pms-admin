@@ -33,7 +33,7 @@ import {
   selectOwnersUpdating,
   selectOwnersError,
   selectOwnersValidationErrors,
-  clearError,
+  clearOwnersError,
 } from '@/store/slices/property-manager/owners/slice';
 import '../AddDeveloper/AddDeveloper.css';
 
@@ -100,7 +100,7 @@ function AddOwner({ onClose, mode = 'create', initialOwner = null }) {
   // Clear errors on unmount
   useEffect(() => {
     return () => {
-      dispatch(clearError());
+      dispatch(clearOwnersError());
     };
   }, [dispatch]);
 
@@ -282,7 +282,7 @@ function AddOwner({ onClose, mode = 'create', initialOwner = null }) {
   // Save handler
   const handleSave = useCallback(async () => {
     setLocalError(null);
-    dispatch(clearError());
+    dispatch(clearOwnersError());
 
     // Basic validation
     if (!ownerName.trim()) {
@@ -429,7 +429,7 @@ function AddOwner({ onClose, mode = 'create', initialOwner = null }) {
         {/* Error Banner */}
         {displayError && (
           <Box paddingBlockEnd="400">
-            <Banner tone="critical" onDismiss={() => { setLocalError(null); dispatch(clearError()); }}>
+            <Banner tone="critical" onDismiss={() => { setLocalError(null); dispatch(clearOwnersError()); }}>
               <p>{displayError}</p>
             </Banner>
           </Box>

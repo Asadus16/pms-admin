@@ -11,6 +11,8 @@ import {
   AppsIcon,
   NotificationIcon,
   ArrowLeftIcon,
+  LockIcon,
+  ConnectIcon,
 } from '@shopify/polaris-icons';
 import ShopifyHeader from '@components/ShopifyHeader';
 import SettingsNavigation, { settingsNavItems } from '@components/Settings/SettingsNavigation';
@@ -110,18 +112,22 @@ function SettingsPageContent({ userType = 'owners', initialPage }) {
     setShowMobileNav(true);
   }, []);
 
-  // Get current section icon
-  const getSectionIcon = () => {
-    const item = settingsNavItems.find(item => item.id === activeSection);
-    return item?.icon || SettingsIcon;
-  };
-
   const handleInputChange = useCallback((field, value) => {
     setFormState(prev => ({ ...prev, [field]: value }));
   }, []);
 
+  // Property-manager specific nav items
+  const propertyManagerNavItems = [
+    { id: 'roles-permissions', label: 'Roles & Permissions', icon: LockIcon },
+    { id: 'integrations', label: 'Integrations', icon: ConnectIcon }
+  ];
+
   // Helper to find label for any section (including sub-items)
   const getSectionLabel = (sectionId) => {
+    // Check property-manager items first
+    const pmItem = propertyManagerNavItems.find(item => item.id === sectionId);
+    if (pmItem) return pmItem.label;
+
     for (const item of settingsNavItems) {
       if (item.id === sectionId) return item.label;
       if (item.subItems) {
@@ -130,6 +136,17 @@ function SettingsPageContent({ userType = 'owners', initialPage }) {
       }
     }
     return 'Settings';
+  };
+
+  // Get icon for section
+  const getSectionTitleIcon = () => {
+    if (activeSection === 'roles-permissions') return LockIcon;
+    if (activeSection === 'integrations') return ConnectIcon;
+    if (activeSection === 'billing') return CreditCardIcon;
+    if (activeSection === 'users') return PersonIcon;
+    if (activeSection === 'apps') return AppsIcon;
+    if (activeSection === 'notifications') return NotificationIcon;
+    return SettingsIcon;
   };
 
   const renderContent = () => {
@@ -170,6 +187,24 @@ function SettingsPageContent({ userType = 'owners', initialPage }) {
                 <div className="settings-row-description">
                   Manage user roles and access permissions for your organization.
                 </div>
+              </div>
+            </div>
+          </div>
+        );
+      case 'integrations':
+        return (
+          <div className="settings-card">
+            <div className="settings-card-header">
+              <h2 className="settings-card-title">Integrations</h2>
+            </div>
+            <div className="settings-card-content">
+              <div className="settings-row">
+                <div className="settings-row-description">
+                  Connect with third-party services and manage your integrations.
+                </div>
+              </div>
+              <div className="settings-row" style={{ marginTop: '16px' }}>
+                <Button variant="primary">Browse Integrations</Button>
               </div>
             </div>
           </div>
@@ -260,10 +295,10 @@ function SettingsPageContent({ userType = 'owners', initialPage }) {
                   {isMobile && (
                     <div className="settings-mobile-page-header">
                       <span className="settings-mobile-page-icon">
-                        <Icon source={getSectionIcon()} />
+                        <Icon source={getSectionTitleIcon()} />
                       </span>
                       <h1 className="settings-mobile-page-title">
-                        {settingsNavItems.find(item => item.id === activeSection)?.label || 'General'}
+                        {getSectionLabel(activeSection)}
                       </h1>
                     </div>
                   )}
@@ -272,9 +307,9 @@ function SettingsPageContent({ userType = 'owners', initialPage }) {
                   <div className="settings-page-title-row">
                     <div className="settings-page-title">
                       <span className="settings-page-title-icon">
-                        <Icon source={activeSection === 'billing' ? CreditCardIcon : activeSection === 'users' ? PersonIcon : activeSection === 'apps' ? AppsIcon : activeSection === 'notifications' ? NotificationIcon : SettingsIcon} />
+                        <Icon source={getSectionTitleIcon()} />
                       </span>
-                      <h1>{settingsNavItems.find(item => item.id === activeSection)?.label || 'General'}</h1>
+                      <h1>{getSectionLabel(activeSection)}</h1>
                     </div>
                     {activeSection === 'billing' && (
                       <Button icon={CreditCardIcon} onClick={() => router.push('/settings/billing/profile?invoiceStatus=paid')}>Billing profile</Button>

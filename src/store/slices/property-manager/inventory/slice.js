@@ -33,14 +33,14 @@ const inventorySlice = createSlice({
   name: 'inventory',
   initialState,
   reducers: {
-    clearError: (state) => {
+    clearInventoryError: (state) => {
       state.error = null;
       state.validationErrors = null;
     },
     clearCurrentInventory: (state) => {
       state.currentInventory = null;
     },
-    setCurrentPage: (state, action) => {
+    setInventoryPage: (state, action) => {
       state.pagination.currentPage = action.payload;
     },
   },
@@ -169,7 +169,7 @@ const inventorySlice = createSlice({
   },
 });
 
-export const { clearError, clearCurrentInventory, setCurrentPage } = inventorySlice.actions;
+export const { clearInventoryError, clearCurrentInventory, setInventoryPage } = inventorySlice.actions;
 
 // Selectors - Updated to use propertyManager namespace
 export const selectInventories = (state) => state.propertyManager.inventory.inventories;

@@ -36,7 +36,7 @@ import {
   selectInventoryUpdating,
   selectInventoryError,
   selectInventoryValidationErrors,
-  clearError,
+  clearInventoryError,
 } from '@/store/slices/property-manager/inventory/slice';
 import '../AddDeveloper/AddDeveloper.css';
 
@@ -190,7 +190,7 @@ function AddInventory({ mode = 'add', initialInventory = null, onClose }) {
   // Clear errors on unmount
   useEffect(() => {
     return () => {
-      dispatch(clearError());
+      dispatch(clearInventoryError());
     };
   }, [dispatch]);
 
@@ -361,7 +361,7 @@ function AddInventory({ mode = 'add', initialInventory = null, onClose }) {
         {/* Error Banner */}
         {error && (
           <Box paddingBlockEnd="400">
-            <Banner tone="critical" onDismiss={() => dispatch(clearError())}>
+            <Banner tone="critical" onDismiss={() => dispatch(clearInventoryError())}>
               <p>{error}</p>
             </Banner>
           </Box>
@@ -370,7 +370,7 @@ function AddInventory({ mode = 'add', initialInventory = null, onClose }) {
         {/* Validation Errors Banner */}
         {validationErrors && Object.keys(validationErrors).length > 0 && (
           <Box paddingBlockEnd="400">
-            <Banner tone="critical" onDismiss={() => dispatch(clearError())}>
+            <Banner tone="critical" onDismiss={() => dispatch(clearInventoryError())}>
               <BlockStack gap="100">
                 {Object.entries(validationErrors).map(([field, messages]) => (
                   <Text key={field} variant="bodyMd" as="p">

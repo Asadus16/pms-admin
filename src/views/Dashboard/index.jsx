@@ -112,17 +112,17 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     if (typeof window === 'undefined' || !pathname) {
       return 'dashboard'
     }
-    
+
     // Remove the basePath prefix from pathname to get the page
     // pathname is like /property-manager or /property-manager/bookings
     // Also handle /property-manager/dashboard for backward compatibility
     let path = pathname.replace(basePath, '').replace(/^\//, '') || 'dashboard'
-    
+
     // Remove /dashboard if present (for backward compatibility)
     if (path.startsWith('dashboard')) {
       path = path.replace(/^dashboard\/?/, '') || 'dashboard'
     }
-    
+
     if (path === '' || path === 'dashboard') return 'dashboard'
     if (path === 'customers/new' || path.startsWith('customers/new')) return 'customers/new'
     if (path === 'bookings/new' || path.startsWith('bookings/new')) return 'bookings/new'
@@ -186,12 +186,7 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     } else if (page === 'segments') {
       router.push(`${basePath}/customers/segments`)
     } else if (page === 'reports') {
-      // For property-manager, route to /reports instead of /analytics/reports
-      if (userType === 'property-manager') {
-        router.push(`${basePath}/reports`)
-      } else {
-        router.push(`${basePath}/analytics/reports`)
-      }
+      router.push(`${basePath}/reports`)
     } else if (page === 'live-view') {
       router.push(`${basePath}/analytics/live-view`)
     } else {
