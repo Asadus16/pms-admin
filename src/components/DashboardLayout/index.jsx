@@ -31,6 +31,7 @@ import {
   EmailIcon,
   ChatIcon,
   ChevronRightIcon,
+  FileIcon,
 } from '@shopify/polaris-icons';
 import ShopifyHeader from '../ShopifyHeader';
 import SidekickPanel from '../SidekickPanel';
@@ -95,7 +96,12 @@ export default function DashboardLayout({
     if (path === 'analytics/reports' || path.startsWith('analytics/reports')) {
       return 'reports';
     }
-
+    
+    // Handle tenancy-contracts route
+    if (path === 'tenancy-contracts' || path.startsWith('tenancy-contracts/')) {
+      return path;
+    }
+    
     return path || 'dashboard';
   };
 
@@ -179,6 +185,12 @@ export default function DashboardLayout({
             icon: ChartLineIcon,
             onClick: () => handleNavigation('reports'),
             selected: selected === 'reports',
+          },
+          {
+            label: 'Tenancy Contracts',
+            icon: FileIcon,
+            onClick: () => handleNavigation('tenancy-contracts'),
+            selected: selected === 'tenancy-contracts' || selected.startsWith('tenancy-contracts/'),
           },
         ]}
       />
