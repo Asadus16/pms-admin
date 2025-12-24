@@ -113,7 +113,9 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
   const isOnOwnerEdit = pathname.includes('/owners/') && pathname.includes('/edit');
   const isOnInventoryNew = pathname.includes('/inventory/new');
   const isOnInventoryEdit = pathname.includes('/inventory/') && pathname.includes('/edit');
-  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew || isOnDeveloperNew || isOnDeveloperEdit || isOnProjectNew || isOnProjectEdit || isOnContactNew || isOnContactEdit || isOnOwnerNew || isOnOwnerEdit || isOnInventoryNew || isOnInventoryEdit;
+  const isOnLeadNew = pathname.includes('/leads/new');
+  const isOnLeadEdit = pathname.includes('/leads/') && pathname.includes('/edit');
+  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew || isOnDeveloperNew || isOnDeveloperEdit || isOnProjectNew || isOnProjectEdit || isOnContactNew || isOnContactEdit || isOnOwnerNew || isOnOwnerEdit || isOnInventoryNew || isOnInventoryEdit || isOnLeadNew || isOnLeadEdit;
 
   // Get the appropriate text based on the current page
   const getUnsavedChangesText = () => {
@@ -129,6 +131,8 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     if (isOnInventoryEdit) return 'Unsaved changes';
     if (isOnProjectNew) return 'Unsaved changes';
     if (isOnProjectEdit) return 'Unsaved changes';
+    if (isOnLeadNew) return 'Unsaved changes';
+    if (isOnLeadEdit) return 'Unsaved changes';
     return 'Unsaved changes';
   };
 
@@ -179,12 +183,20 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
       // Dispatch custom event to close EditProject
       window.dispatchEvent(new CustomEvent('closeEditProject'));
       router.push(`${basePath}/projects`);
+    } else if (isOnLeadNew) {
+      // Dispatch custom event to close AddLead
+      window.dispatchEvent(new CustomEvent('closeAddLead'));
+      router.push(`${basePath}/leads`);
+    } else if (isOnLeadEdit) {
+      // Dispatch custom event to close EditLead
+      window.dispatchEvent(new CustomEvent('closeEditLead'));
+      router.push(`${basePath}/leads`);
     } else {
       // Dispatch custom event to close AddCustomer
       window.dispatchEvent(new CustomEvent('closeAddCustomer'));
       router.push(`${basePath}/customers`);
     }
-  }, [onDiscard, router, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, isOnContactNew, isOnContactEdit, isOnOwnerNew, isOnOwnerEdit, isOnInventoryNew, isOnInventoryEdit, isOnProjectNew, isOnProjectEdit, basePath]);
+  }, [onDiscard, router, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, isOnContactNew, isOnContactEdit, isOnOwnerNew, isOnOwnerEdit, isOnInventoryNew, isOnInventoryEdit, isOnProjectNew, isOnProjectEdit, isOnLeadNew, isOnLeadEdit, basePath]);
 
   const handleSave = useCallback(() => {
     if (onSave) {
@@ -222,11 +234,17 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     } else if (isOnProjectEdit) {
       // Dispatch custom event to save project edits
       window.dispatchEvent(new CustomEvent('saveEditProject'));
+    } else if (isOnLeadNew) {
+      // Dispatch custom event to save lead
+      window.dispatchEvent(new CustomEvent('saveAddLead'));
+    } else if (isOnLeadEdit) {
+      // Dispatch custom event to save lead edits
+      window.dispatchEvent(new CustomEvent('saveEditLead'));
     } else {
       // Dispatch custom event to save customer
       window.dispatchEvent(new CustomEvent('saveAddCustomer'));
     }
-  }, [onSave, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, isOnContactNew, isOnContactEdit, isOnOwnerNew, isOnOwnerEdit, isOnInventoryNew, isOnInventoryEdit, isOnProjectNew, isOnProjectEdit]);
+  }, [onSave, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, isOnContactNew, isOnContactEdit, isOnOwnerNew, isOnOwnerEdit, isOnInventoryNew, isOnInventoryEdit, isOnProjectNew, isOnProjectEdit, isOnLeadNew, isOnLeadEdit]);
 
 
   const toggleProfilePopover = useCallback(

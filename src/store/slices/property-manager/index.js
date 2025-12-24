@@ -9,6 +9,8 @@ import projectsReducer from './projects/slice';
 import ownersReducer from './owners/slice';
 import inventoryReducer from './inventory/slice';
 import contactsReducer from './contacts/slice';
+import connectionRequestsReducer from './connection-requests/slice';
+import leadsReducer from './leads/slice';
 
 const propertyManagerReducer = combineReducers({
   developers: developersReducer,
@@ -16,6 +18,8 @@ const propertyManagerReducer = combineReducers({
   owners: ownersReducer,
   inventory: inventoryReducer,
   contacts: contactsReducer,
+  connectionRequests: connectionRequestsReducer,
+  leads: leadsReducer,
   // Add other modules here as they are created:
   // properties: propertiesReducer,
   // bookings: bookingsReducer,
@@ -30,4 +34,6 @@ export * from './projects/slice';
 export * from './owners/slice';
 export * from './inventory/slice';
 export * from './contacts/slice';
+export * from './connection-requests/slice';
+export * from './leads/slice';
 
