@@ -113,9 +113,9 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
   const isOnOwnerEdit = pathname.includes('/owners/') && pathname.includes('/edit');
   const isOnInventoryNew = pathname.includes('/inventory/new');
   const isOnInventoryEdit = pathname.includes('/inventory/') && pathname.includes('/edit');
-  const isOnLeadNew = pathname.includes('/leads/new');
-  const isOnLeadEdit = pathname.includes('/leads/') && pathname.includes('/edit');
-  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew || isOnDeveloperNew || isOnDeveloperEdit || isOnProjectNew || isOnProjectEdit || isOnContactNew || isOnContactEdit || isOnOwnerNew || isOnOwnerEdit || isOnInventoryNew || isOnInventoryEdit || isOnLeadNew || isOnLeadEdit;
+  const isOnPropertyNew = pathname.includes('/properties/new');
+  const isOnPropertyEdit = pathname.includes('/properties/') && pathname.includes('/edit');
+  const shouldShowUnsavedChanges = showUnsavedChanges || isOnCustomerNew || isOnBookingsNew || isOnDeveloperNew || isOnDeveloperEdit || isOnProjectNew || isOnProjectEdit || isOnContactNew || isOnContactEdit || isOnOwnerNew || isOnOwnerEdit || isOnInventoryNew || isOnInventoryEdit || isOnPropertyNew || isOnPropertyEdit;
 
   // Get the appropriate text based on the current page
   const getUnsavedChangesText = () => {
@@ -131,8 +131,8 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     if (isOnInventoryEdit) return 'Unsaved changes';
     if (isOnProjectNew) return 'Unsaved changes';
     if (isOnProjectEdit) return 'Unsaved changes';
-    if (isOnLeadNew) return 'Unsaved changes';
-    if (isOnLeadEdit) return 'Unsaved changes';
+    if (isOnPropertyNew) return 'Unsaved changes';
+    if (isOnPropertyEdit) return 'Unsaved changes';
     return 'Unsaved changes';
   };
 
@@ -183,20 +183,20 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
       // Dispatch custom event to close EditProject
       window.dispatchEvent(new CustomEvent('closeEditProject'));
       router.push(`${basePath}/projects`);
-    } else if (isOnLeadNew) {
-      // Dispatch custom event to close AddLead
-      window.dispatchEvent(new CustomEvent('closeAddLead'));
-      router.push(`${basePath}/leads`);
-    } else if (isOnLeadEdit) {
-      // Dispatch custom event to close EditLead
-      window.dispatchEvent(new CustomEvent('closeEditLead'));
-      router.push(`${basePath}/leads`);
+    } else if (isOnPropertyNew) {
+      // Dispatch custom event to close AddProperty
+      window.dispatchEvent(new CustomEvent('closeAddProperty'));
+      router.push(`${basePath}/properties`);
+    } else if (isOnPropertyEdit) {
+      // Dispatch custom event to close EditProperty
+      window.dispatchEvent(new CustomEvent('closeEditProperty'));
+      router.push(`${basePath}/properties`);
     } else {
       // Dispatch custom event to close AddCustomer
       window.dispatchEvent(new CustomEvent('closeAddCustomer'));
       router.push(`${basePath}/customers`);
     }
-  }, [onDiscard, router, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, isOnContactNew, isOnContactEdit, isOnOwnerNew, isOnOwnerEdit, isOnInventoryNew, isOnInventoryEdit, isOnProjectNew, isOnProjectEdit, isOnLeadNew, isOnLeadEdit, basePath]);
+  }, [onDiscard, router, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, isOnContactNew, isOnContactEdit, isOnOwnerNew, isOnOwnerEdit, isOnInventoryNew, isOnInventoryEdit, isOnProjectNew, isOnProjectEdit, isOnPropertyNew, isOnPropertyEdit, basePath]);
 
   const handleSave = useCallback(() => {
     if (onSave) {
@@ -234,17 +234,17 @@ function ShopifyHeader({ onMobileNavigationToggle, onSidekickToggle, isSidekickO
     } else if (isOnProjectEdit) {
       // Dispatch custom event to save project edits
       window.dispatchEvent(new CustomEvent('saveEditProject'));
-    } else if (isOnLeadNew) {
-      // Dispatch custom event to save lead
-      window.dispatchEvent(new CustomEvent('saveAddLead'));
-    } else if (isOnLeadEdit) {
-      // Dispatch custom event to save lead edits
-      window.dispatchEvent(new CustomEvent('saveEditLead'));
+    } else if (isOnPropertyNew) {
+      // Dispatch custom event to save property
+      window.dispatchEvent(new CustomEvent('saveAddProperty'));
+    } else if (isOnPropertyEdit) {
+      // Dispatch custom event to save property edits
+      window.dispatchEvent(new CustomEvent('saveEditProperty'));
     } else {
       // Dispatch custom event to save customer
       window.dispatchEvent(new CustomEvent('saveAddCustomer'));
     }
-  }, [onSave, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, isOnContactNew, isOnContactEdit, isOnOwnerNew, isOnOwnerEdit, isOnInventoryNew, isOnInventoryEdit, isOnProjectNew, isOnProjectEdit, isOnLeadNew, isOnLeadEdit]);
+  }, [onSave, isOnBookingsNew, isOnDeveloperNew, isOnDeveloperEdit, isOnContactNew, isOnContactEdit, isOnOwnerNew, isOnOwnerEdit, isOnInventoryNew, isOnInventoryEdit, isOnProjectNew, isOnProjectEdit, isOnPropertyNew, isOnPropertyEdit]);
 
 
   const toggleProfilePopover = useCallback(

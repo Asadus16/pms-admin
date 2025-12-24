@@ -24,6 +24,7 @@ import {
   DropZone,
   Checkbox,
   Link,
+  Spinner,
 } from '@shopify/polaris';
 import {
   SearchIcon,
@@ -35,9 +36,13 @@ import {
   PlusIcon,
 } from '@shopify/polaris-icons';
 import './CustomersPage.css';
-import { propertiesData } from '../../data/properties';
-import { projectsData } from '../../data/projects';
-import { developersData } from '../../data/developers';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { fetchPropertyManagerProperties } from '@/store/thunks';
+import {
+  selectProperties,
+  selectPropertiesLoading,
+  selectPropertiesPagination,
+} from '@/store/slices/property-manager';
 
 // All available columns for properties
 const allColumns = [
@@ -105,9 +110,33 @@ const getStoredSort = () => {
 function PropertiesPage() {
   const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
 
   // Get the base path (userType) from the current pathname
   const basePath = pathname.split('/')[1] ? `/${pathname.split('/')[1]}` : '/property-manager';
+
+  // Redux state
+  const propertiesFromStore = useAppSelector(selectProperties);
+  const loading = useAppSelector(selectPropertiesLoading);
+  const pagination = useAppSelector(selectPropertiesPagination);
+
+  // Map properties from store to expected format
+  const properties = (propertiesFromStore || []).map((property) => ({
+    id: property.id,
+    propertyId: property.unique_id || `PRP-${property.id}`,
+    project: property.project?.project_name || '-',
+    projectData: property.project,
+    developer: property.developer?.developer_name || '-',
+    developerData: property.developer,
+    owner: property.owner?.name || '-',
+    ownerData: property.owner,
+    propertyType: property.type || '-',
+    status: property.status || 'draft',
+    dateAdded: property.created_at,
+  }));
+
+  const totalProperties = pagination?.totalItems || properties.length;
+  const availableCount = properties.filter((p) => p.status === 'available').length;
 
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -137,13 +166,18 @@ function PropertiesPage() {
     const storedSort = getStoredSort();
     setSelectedSort(storedSort.sortBy);
     setSortDirection(storedSort.sortDirection);
-    
+
     const stored = getStoredColumns();
     if (stored) {
       setVisibleColumns(stored);
       setTempVisibleColumns(stored);
     }
   }, []);
+
+  // Fetch properties from API
+  useEffect(() => {
+    dispatch(fetchPropertyManagerProperties({ per_page: 100 }));
+  }, [dispatch]);
 
   const itemsPerPage = 50;
 
@@ -153,7 +187,7 @@ function PropertiesPage() {
   };
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(propertiesData);
+    useIndexResourceState(properties);
 
   const handleSearchChange = useCallback((value) => {
     setSearchValue(value);
@@ -265,12 +299,12 @@ function PropertiesPage() {
   }, [importFile]);
 
   // Filter properties based on search
-  const filteredProperties = propertiesData.filter((property) =>
-    property.propertyId.toLowerCase().includes(searchValue.toLowerCase()) ||
-    property.project.toLowerCase().includes(searchValue.toLowerCase()) ||
-    property.developer.toLowerCase().includes(searchValue.toLowerCase()) ||
-    property.owner.toLowerCase().includes(searchValue.toLowerCase()) ||
-    property.propertyType.toLowerCase().includes(searchValue.toLowerCase())
+  const filteredProperties = properties.filter((property) =>
+    (property.propertyId || '').toLowerCase().includes(searchValue.toLowerCase()) ||
+    (property.project || '').toLowerCase().includes(searchValue.toLowerCase()) ||
+    (property.developer || '').toLowerCase().includes(searchValue.toLowerCase()) ||
+    (property.owner || '').toLowerCase().includes(searchValue.toLowerCase()) ||
+    (property.propertyType || '').toLowerCase().includes(searchValue.toLowerCase())
   );
 
   const formatDate = (dateStr) => {
@@ -302,8 +336,6 @@ function PropertiesPage() {
     return sortDirection === 'desc' ? -comparison : comparison;
   });
 
-  const totalProperties = propertiesData.length;
-
   // Get current visible columns for normal view
   const currentVisibleColumns = allColumns.filter(col => visibleColumns.includes(col.id));
 
@@ -317,19 +349,15 @@ function PropertiesPage() {
           </Text>
         );
       case 'project':
-        const project = projectsData.find((p) => String(p.id) === String(property.project)) ||
-                       projectsData.find((p) => p.projectName === property.project);
         return (
           <Text variant="bodyMd" as="span">
-            {project?.projectName || property.project}
+            {property.projectData?.project_name || property.project}
           </Text>
         );
       case 'developer':
-        const developer = developersData.find((d) => String(d.id) === String(property.developer)) ||
-                          developersData.find((d) => d.name === property.developer);
         return (
           <Text variant="bodyMd" as="span">
-            {developer?.name || property.developer}
+            {property.developerData?.developer_name || property.developer}
           </Text>
         );
       case 'owner':
@@ -470,15 +498,24 @@ function PropertiesPage() {
           <Box paddingBlockEnd="600" className="customer-stats-box">
             <Card padding="400" className="customer-stats-card">
               <InlineStack gap="200" align="start">
-                <Text variant="bodyMd" as="span" fontWeight="semibold">
-                  {totalProperties} properties
-                </Text>
-                <Text variant="bodyMd" as="span" tone="subdued">
-                  |
-                </Text>
-                <Text variant="bodyMd" as="span" tone="subdued">
-                  {propertiesData.filter(p => p.status === 'available').length} available
-                </Text>
+                {loading ? (
+                  <InlineStack gap="200" blockAlign="center">
+                    <Spinner size="small" />
+                    <Text variant="bodyMd" as="span" tone="subdued">Loading properties...</Text>
+                  </InlineStack>
+                ) : (
+                  <>
+                    <Text variant="bodyMd" as="span" fontWeight="semibold">
+                      {totalProperties} properties
+                    </Text>
+                    <Text variant="bodyMd" as="span" tone="subdued">
+                      |
+                    </Text>
+                    <Text variant="bodyMd" as="span" tone="subdued">
+                      {availableCount} available
+                    </Text>
+                  </>
+                )}
               </InlineStack>
             </Card>
           </Box>
@@ -571,6 +608,13 @@ function PropertiesPage() {
               <div className="edit-columns-container">
                 {allColumns.map((column) => renderColumnBlock(column))}
               </div>
+            ) : loading ? (
+              <Box padding="800">
+                <BlockStack gap="400" inlineAlign="center">
+                  <Spinner size="large" />
+                  <Text variant="bodyMd" as="p" tone="subdued">Loading properties...</Text>
+                </BlockStack>
+              </Box>
             ) : (
               <div className="table-scroll-container">
                 <IndexTable
@@ -592,7 +636,7 @@ function PropertiesPage() {
             )}
 
             {/* Pagination */}
-            {!editColumnsMode && (
+            {!editColumnsMode && !loading && totalProperties > 0 && (
               <Box padding="400" borderBlockStartWidth="025" borderColor="border">
                 <InlineStack align="space-between" blockAlign="center">
                   <Pagination
