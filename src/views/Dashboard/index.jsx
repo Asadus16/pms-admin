@@ -135,6 +135,8 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     // Properties view route
     if (path.startsWith('properties/') && !path.startsWith('properties/new')) return path
     if (path === 'customers/segments' || path.startsWith('customers/segments')) return 'segments'
+    // Handle reports route - check for both /reports and /analytics/reports
+    if (path === 'reports' || path.startsWith('reports/')) return 'reports'
     if (path === 'analytics/reports' || path.startsWith('analytics/reports')) return 'reports'
     if (path === 'analytics/live-view' || path.startsWith('analytics/live-view')) return 'live-view'
     return path
@@ -184,13 +186,18 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     } else if (page === 'segments') {
       router.push(`${basePath}/customers/segments`)
     } else if (page === 'reports') {
-      router.push(`${basePath}/analytics/reports`)
+      // For property-manager, route to /reports instead of /analytics/reports
+      if (userType === 'property-manager') {
+        router.push(`${basePath}/reports`)
+      } else {
+        router.push(`${basePath}/analytics/reports`)
+      }
     } else if (page === 'live-view') {
       router.push(`${basePath}/analytics/live-view`)
     } else {
       router.push(`${basePath}/${page}`)
     }
-  }, [router, basePath])
+  }, [router, basePath, userType])
 
   // Check if analytics section is selected (including sub-items)
   const isAnalyticsSelected = selected === 'analytics' || selected === 'reports' || selected === 'live-view'

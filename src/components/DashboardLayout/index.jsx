@@ -89,6 +89,14 @@ export default function DashboardLayout({
       path = path.replace(/^dashboard\/?/, '') || 'dashboard';
     }
     
+    // Handle reports route - check for both /reports and /analytics/reports
+    if (path === 'reports' || path.startsWith('reports/')) {
+      return 'reports';
+    }
+    if (path === 'analytics/reports' || path.startsWith('analytics/reports')) {
+      return 'reports';
+    }
+    
     return path || 'dashboard';
   };
 
@@ -118,13 +126,18 @@ export default function DashboardLayout({
     } else if (page === 'segments') {
       router.push(`${basePath}/customers/segments`);
     } else if (page === 'reports') {
-      router.push(`${basePath}/analytics/reports`);
+      // For property-manager, route to /reports instead of /analytics/reports
+      if (userType === 'property-manager') {
+        router.push(`${basePath}/reports`);
+      } else {
+        router.push(`${basePath}/analytics/reports`);
+      }
     } else if (page === 'live-view') {
       router.push(`${basePath}/analytics/live-view`);
     } else {
       router.push(`${basePath}/${page}`);
     }
-  }, [router, basePath]);
+  }, [router, basePath, userType]);
 
   // Navigation for Property Developers / Real Estate Company
   const developerNavigation = (

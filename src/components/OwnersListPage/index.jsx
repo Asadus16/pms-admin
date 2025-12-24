@@ -37,13 +37,17 @@ import {
   PlusIcon,
 } from '@shopify/polaris-icons';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { fetchPropertyManagerOwners } from '@/store/thunks';
+import { fetchPropertyManagerOwners, fetchOwnerConnectionRequests } from '@/store/thunks';
 import {
   selectOwners,
   selectOwnersPagination,
   selectOwnersLoading,
   selectOwnersError,
 } from '@/store/slices/property-manager/owners/slice';
+import {
+  selectConnectionRequests,
+} from '@/store/slices/property-manager/connection-requests/slice';
+import SendConnectionRequest from '@/components/SendConnectionRequest';
 import '../PropertyOwnersPage/CustomersPage.css';
 
 // All available columns for owners
@@ -143,6 +147,7 @@ function OwnersListPage() {
   const pagination = useAppSelector(selectOwnersPagination);
   const isLoading = useAppSelector(selectOwnersLoading);
   const error = useAppSelector(selectOwnersError);
+  const connectionRequests = useAppSelector(selectConnectionRequests);
 
   // Get the base path (userType) from the current pathname
   const basePath = pathname.split('/')[1] ? `/${pathname.split('/')[1]}` : '/property-manager';
@@ -160,6 +165,8 @@ function OwnersListPage() {
   const [importFile, setImportFile] = useState(null);
   const [includeKycDetails, setIncludeKycDetails] = useState(true);
   const [includeBankDetails, setIncludeBankDetails] = useState(true);
+  const [sendRequestModalOpen, setSendRequestModalOpen] = useState(false);
+  const [selectedOwnerForRequest, setSelectedOwnerForRequest] = useState(null);
 
   // Default visible columns
   const defaultColumns = allColumns.filter(col => col.default).map(col => col.id);
@@ -193,6 +200,11 @@ function OwnersListPage() {
       sort_direction: sortDirection,
     }));
   }, [dispatch, currentPage, selectedSort, sortDirection]);
+
+  // Fetch connection requests on mount
+  useEffect(() => {
+    dispatch(fetchOwnerConnectionRequests());
+  }, [dispatch]);
 
   // Debounced search
   useEffect(() => {
@@ -352,6 +364,44 @@ function OwnersListPage() {
   // Get current visible columns for normal view
   const currentVisibleColumns = allColumns.filter(col => visibleColumns.includes(col.id));
 
+  // Helper to get connection status for an owner
+  const getConnectionStatus = useCallback((owner) => {
+    if (!connectionRequests || !owner) return null;
+    
+    // Try to match by user_id first, then fall back to owner id
+    const ownerUserId = owner.user_id || owner.userId || owner.id;
+    
+    // Check approved requests
+    const approved = connectionRequests.approved?.find(
+      req => (req.receiver?.id === ownerUserId || req.sender?.id === ownerUserId)
+    );
+    if (approved) return { status: 'accepted', request: approved };
+
+    // Check sent requests
+    const sent = connectionRequests.sent?.find(req => req.receiver?.id === ownerUserId);
+    if (sent) return { status: sent.status, request: sent };
+
+    // Check received requests
+    const received = connectionRequests.received?.find(req => req.sender?.id === ownerUserId);
+    if (received) return { status: received.status, request: received };
+
+    return null;
+  }, [connectionRequests]);
+
+  // Handle send request
+  const handleSendRequest = useCallback((owner, e) => {
+    e?.stopPropagation();
+    setSelectedOwnerForRequest({ id: owner.id, name: owner.name });
+    setSendRequestModalOpen(true);
+  }, []);
+
+  const handleCloseSendRequestModal = useCallback(() => {
+    setSendRequestModalOpen(false);
+    setSelectedOwnerForRequest(null);
+    // Refresh connection requests
+    dispatch(fetchOwnerConnectionRequests());
+  }, [dispatch]);
+
   // Render cell content based on column id
   const renderCellContent = (owner, columnId) => {
     switch (columnId) {
@@ -396,21 +446,41 @@ function OwnersListPage() {
     }
   };
 
-  const rowMarkup = ownersArray.map((owner, index) => (
-    <IndexTable.Row
-      id={String(owner.id)}
-      key={owner.id}
-      selected={selectedResources.includes(String(owner.id))}
-      position={index}
-      onClick={() => router.push(`${basePath}/owners/${owner.id}`)}
-    >
-      {currentVisibleColumns.map((column) => (
-        <IndexTable.Cell key={column.id}>
-          {renderCellContent(owner, column.id)}
+  const rowMarkup = ownersArray.map((owner, index) => {
+    const connectionStatus = getConnectionStatus(owner);
+    const isConnected = connectionStatus?.status === 'accepted';
+    const hasPendingRequest = connectionStatus?.status === 'pending';
+
+    return (
+      <IndexTable.Row
+        id={String(owner.id)}
+        key={owner.id}
+        selected={selectedResources.includes(String(owner.id))}
+        position={index}
+        onClick={() => router.push(`${basePath}/owners/${owner.id}`)}
+      >
+        {currentVisibleColumns.map((column) => (
+          <IndexTable.Cell key={column.id}>
+            {renderCellContent(owner, column.id)}
+          </IndexTable.Cell>
+        ))}
+        <IndexTable.Cell>
+          {connectionStatus ? (
+            <Badge tone={connectionStatus.status === 'accepted' ? 'success' : connectionStatus.status === 'pending' ? 'attention' : 'critical'}>
+              {connectionStatus.status === 'accepted' ? 'Connected' : connectionStatus.status === 'pending' ? 'Pending' : 'Denied'}
+            </Badge>
+          ) : (
+            <Button
+              size="slim"
+              onClick={(e) => handleSendRequest(owner, e)}
+            >
+              Send Request
+            </Button>
+          )}
         </IndexTable.Cell>
-      ))}
-    </IndexTable.Row>
-  ));
+      </IndexTable.Row>
+    );
+  });
 
   // Render a single column as a mini table for edit mode
   const renderColumnBlock = (column) => {
@@ -473,11 +543,12 @@ function OwnersListPage() {
               <span className="customers-page-title">Owners</span>
             </InlineStack>
           }
-          primaryAction={{
-            content: 'Add owner',
-            onAction: () => router.push(`${basePath}/owners/new`),
-          }}
+        
           secondaryActions={[
+            {
+              content: 'View Requests',
+              onAction: () => router.push(`${basePath}/owners/connection-requests`),
+            },
             {
               content: 'Export',
               onAction: handleExportModalOpen,
@@ -636,10 +707,13 @@ function OwnersListPage() {
                     allResourcesSelected ? 'All' : selectedResources.length
                   }
                   onSelectionChange={handleSelectionChange}
-                  headings={currentVisibleColumns.map((column) => ({
-                    title: column.title,
-                    alignment: column.alignment || 'start',
-                  }))}
+                  headings={[
+                    ...currentVisibleColumns.map((column) => ({
+                      title: column.title,
+                      alignment: column.alignment || 'start',
+                    })),
+                    { title: 'Connection', alignment: 'start' },
+                  ]}
                   selectable
                 >
                   {rowMarkup}
@@ -794,6 +868,14 @@ function OwnersListPage() {
             </DropZone>
           </Modal.Section>
         </Modal>
+
+        {/* Send Connection Request Modal */}
+        <SendConnectionRequest
+          open={sendRequestModalOpen}
+          onClose={handleCloseSendRequestModal}
+          ownerId={selectedOwnerForRequest?.id}
+          ownerName={selectedOwnerForRequest?.name}
+        />
       </div>
     </>
   );
