@@ -49,6 +49,7 @@ import {
   EmailIcon,
   LockIcon,
   ChatIcon,
+  FileIcon,
 } from '@shopify/polaris-icons'
 import ShopifyHeader from '../../components/ShopifyHeader'
 import CustomersPage from '../../components/CustomersPage'
@@ -71,6 +72,7 @@ import { projectsData } from '../../data/projects'
 import { propertiesData } from '../../data/properties'
 import SettingsPage from '../Settings/SettingsPage'
 import PropertyDeveloperDashboard from './PropertyDeveloperDashboard'
+import TenancyContractsPage from '../../components/TenancyContractsPage'
 import './dashboard.css'
 
 // Valid user types
@@ -139,6 +141,8 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     if (path === 'reports' || path.startsWith('reports/')) return 'reports'
     if (path === 'analytics/reports' || path.startsWith('analytics/reports')) return 'reports'
     if (path === 'analytics/live-view' || path.startsWith('analytics/live-view')) return 'live-view'
+    // Handle tenancy-contracts route
+    if (path === 'tenancy-contracts' || path.startsWith('tenancy-contracts/')) return path
     return path
   }, [pathname, basePath])
 
@@ -255,6 +259,12 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
             icon: ChartLineIcon,
             onClick: () => handleNavigation('reports'),
             selected: selected === 'reports',
+          },
+          {
+            label: 'Tenancy Contracts',
+            icon: FileIcon,
+            onClick: () => handleNavigation('tenancy-contracts'),
+            selected: selected === 'tenancy-contracts' || selected.startsWith('tenancy-contracts/'),
           },
           {
             label: 'Integrations',
@@ -527,6 +537,24 @@ function Dashboard({ userType: rawUserType = 'owners' }) {
     // Bookings shows OrdersPage
     if (selected === 'bookings') {
       return <OrdersPage />
+    }
+
+    // Check for tenancy-contracts/new route
+    if (selected === 'tenancy-contracts/new' || pathname.includes('/tenancy-contracts/new')) {
+      const AddTenancyContract = require('../../components/AddTenancyContract').default;
+      return <AddTenancyContract onClose={() => router.push(`${basePath}/tenancy-contracts`)} />
+    }
+
+    // Tenancy Contract view page: /:userType/tenancy-contracts/:id (but not /edit)
+    if (selected.startsWith('tenancy-contracts/') && selected !== 'tenancy-contracts/new' && !selected.endsWith('/edit')) {
+      const contractId = selected.split('/')[1];
+      const TenancyContractViewPage = require('../../components/TenancyContractViewPage').default;
+      return <TenancyContractViewPage contractId={contractId} />;
+    }
+
+    // Tenancy Contracts page
+    if (selected === 'tenancy-contracts') {
+      return <TenancyContractsPage />
     }
 
     // Render AnalyticsPage for analytics and its sub-pages

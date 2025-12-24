@@ -1,0 +1,122 @@
+/* Tenancy Contracts Page Styles */
+/* Reusing the same styles as other list pages */
+
+.customers-page-wrapper {
+  width: 100%;
+}
+
+.customers-page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.customer-stats-box {
+  margin-bottom: 1.5rem;
+}
+
+.customer-stats-card {
+  background: var(--p-color-bg-surface);
+  border: 1px solid var(--p-color-border);
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.max-width-93 {
+  max-width: 93%;
+}
+
+.table-scroll-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.edit-columns-container {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.edit-column-item {
+  min-width: 200px;
+  border: 1px solid var(--p-color-border);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  background: var(--p-color-bg-surface);
+}
+
+.edit-column-item.hidden {
+  opacity: 0.3;
+}
+
+.edit-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--p-color-border);
+}
+
+.edit-column-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  color: var(--p-color-text-subdued);
+}
+
+.edit-column-toggle-btn:hover {
+  color: var(--p-color-text);
+}
+
+.edit-column-data {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-column-data.hidden {
+  display: none;
+}
+
+.edit-column-row {
+  padding: 0.5rem 0;
+}
+
+.sort-popover-content {
+  min-width: 220px;
+}
+
+.width-220 {
+  width: 220px;
+}
+
+.padding-bottom-8 {
+  padding-bottom: 0.5rem;
+}
+
+.sort-direction-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+}
+
+.sort-direction-item:hover {
+  background-color: var(--p-color-bg-surface-hover);
+}
+
+.sort-direction-item.selected {
+  background-color: var(--p-color-bg-surface-selected);
+  font-weight: 600;
+}
+
+.width-full {
+  width: 100%;
+}
+

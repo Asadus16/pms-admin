@@ -13,6 +13,7 @@ import connectionRequestsReducer from './connection-requests/slice';
 import leadsReducer from './leads/slice';
 import propertiesReducer from './properties/slice';
 import reportsReducer from './reports/slice';
+import tenancyContractsReducer from './tenancy-contracts/slice';
 
 const propertyManagerReducer = combineReducers({
   developers: developersReducer,
@@ -24,6 +25,7 @@ const propertyManagerReducer = combineReducers({
   leads: leadsReducer,
   properties: propertiesReducer,
   reports: reportsReducer,
+  tenancyContracts: tenancyContractsReducer,
   // Add other modules here as they are created:
   // bookings: bookingsReducer,
   // etc.
@@ -41,4 +43,5 @@ export * from './connection-requests/slice';
 export * from './leads/slice';
 export * from './properties/slice';
 export * from './reports/slice';
+export * from './tenancy-contracts/slice';
 

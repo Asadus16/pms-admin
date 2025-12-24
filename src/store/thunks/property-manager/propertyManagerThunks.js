@@ -732,3 +732,66 @@ export const updateConnectionRequestStatus = createAsyncThunk(
   }
 );
 
+// Tenancy Contracts
+export const fetchPropertyManagerTenancyContracts = createAsyncThunk(
+  'propertyManager/fetchTenancyContracts',
+  async (params) => {
+    const response = await api.get('/property-manager/tenancy-contracts', {
+      params: {
+        per_page: params?.per_page || 15,
+        ...(params?.search && { search: params.search }),
+        ...(params?.property_id && { property_id: params.property_id }),
+        ...(params?.tenant_id && { tenant_id: params.tenant_id }),
+        ...(params?.owner_id && { owner_id: params.owner_id }),
+        ...(params?.status && { status: params.status }),
+        ...(params?.rent_payment_frequency && { rent_payment_frequency: params.rent_payment_frequency }),
+        ...(params?.page && { page: params.page }),
+      },
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const fetchPropertyManagerTenancyContractById = createAsyncThunk(
+  'propertyManager/fetchTenancyContractById',
+  async (id) => {
+    const response = await api.get(`/property-manager/tenancy-contracts/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const createPropertyManagerTenancyContract = createAsyncThunk(
+  'propertyManager/createTenancyContract',
+  async (formData) => {
+    const response = await api.post('/property-manager/tenancy-contracts', formData, {
+      showProgress: true,
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const updatePropertyManagerTenancyContract = createAsyncThunk(
+  'propertyManager/updateTenancyContract',
+  async ({ id, formData }) => {
+    const response = await api.post(`/property-manager/tenancy-contracts/${id}`, formData, {
+      showProgress: true,
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+
+export const deletePropertyManagerTenancyContract = createAsyncThunk(
+  'propertyManager/deleteTenancyContract',
+  async (id) => {
+    const response = await api.delete(`/property-manager/tenancy-contracts/${id}`, {
+      returnRaw: true,
+    });
+    return response;
+  }
+);
+

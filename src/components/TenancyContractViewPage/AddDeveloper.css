@@ -1,0 +1,50 @@
+/**
+ * AddDeveloper Component Styles
+ */
+
+.add-developer-wrapper {
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.add-developer-wrapper .Polaris-Page {
+  max-width: 100% !important;
+}
+
+.add-developer-wrapper .new-developer-title {
+  font-family: Inter, -apple-system, "system-ui", "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  line-height: 24px !important;
+  color: var(--color-text-primary) !important;
+}
+
+.add-developer-wrapper .Polaris-Page__Header {
+  padding-bottom: var(--spacing-lg) !important;
+  margin-bottom: 0 !important;
+}
+
+/* Custom header for ViewDeveloper - aligns with content (copied from buildit-fe AddUser.css) */
+.add-developer-wrapper .view-user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg, 20px) 56px var(--spacing-lg, 20px) 20px;
+  margin-bottom: 0;
+}
+
+/* Hide empty Page header when using custom header */
+.add-developer-wrapper .view-user-header + .Polaris-Page .Polaris-Page__Header {
+  display: none;
+}
+
+.add-developer-wrapper .Polaris-Page__Content {
+  padding-top: 0 !important;
+  padding-bottom: var(--spacing-xl) !important;
+  margin-top: 0 !important;
+}
+
+.add-developer-wrapper .Polaris-Layout {
+  display: flex;
+  gap: var(--spacing-md) !important;
+}
