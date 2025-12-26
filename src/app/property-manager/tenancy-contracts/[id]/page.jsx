@@ -10,3 +10,4 @@ export default function TenancyContractViewPageRoute() {
   return <TenancyContractViewPage contractId={contractId} />;
 }
 
+

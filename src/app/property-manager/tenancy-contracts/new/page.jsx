@@ -10,3 +10,4 @@ export default function NewTenancyContractPage() {
   return <AddTenancyContract onClose={() => router.push(`${basePath}/tenancy-contracts`)} />;
 }
 
+
