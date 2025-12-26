@@ -21,14 +21,11 @@ import {
   Divider,
   Spinner,
   Banner,
-  Select,
-  ButtonGroup,
 } from '@shopify/polaris';
 import {
   SearchIcon,
   PersonIcon,
   SortIcon,
-  PlusIcon,
 } from '@shopify/polaris-icons';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { fetchPropertyManagerLeads } from '@/store/thunks';
@@ -40,47 +37,12 @@ import {
 } from '@/store/slices/property-manager/leads/slice';
 import '../PropertyOwnersPage/CustomersPage.css';
 
-// Lead type options
-const leadTypeOptions = [
-  { label: 'All Types', value: '' },
-  { label: 'Monthly Rental', value: 'Monthly Rental' },
-  { label: 'Short-Term Rental', value: 'Short-Term Rental' },
-  { label: 'Sale', value: 'Sale' },
-  { label: 'Multiple', value: 'Multiple' },
-];
-
-// Lead role options
-const leadRoleOptions = [
-  { label: 'All Roles', value: '' },
-  { label: 'Buyer', value: 'Buyer' },
-  { label: 'Tenant', value: 'Tenant' },
-  { label: 'Seller', value: 'Seller' },
-  { label: 'Landlord', value: 'Landlord' },
-  { label: 'Guest', value: 'Guest' },
-  { label: 'Agent', value: 'Agent' },
-];
-
-// Lead status options
-const leadStatusOptions = [
-  { label: 'All Statuses', value: '' },
-  { label: 'New', value: 'New' },
-  { label: 'Contacted', value: 'Contacted' },
-  { label: 'Qualified', value: 'Qualified' },
-  { label: 'Viewing Scheduled', value: 'Viewing Scheduled' },
-  { label: 'Offer', value: 'Offer' },
-  { label: 'Negotiation', value: 'Negotiation' },
-  { label: 'Agreement Sent', value: 'Agreement Sent' },
-  { label: 'Closed–Won', value: 'Closed–Won' },
-  { label: 'Closed–Lost', value: 'Closed–Lost' },
-];
-
-// Priority options
-const priorityOptions = [
-  { label: 'All Priorities', value: '' },
-  { label: 'Low', value: 'Low' },
-  { label: 'Normal', value: 'Normal' },
-  { label: 'High', value: 'High' },
-  { label: 'Hot', value: 'Hot' },
+// Sort options for leads
+const sortOptions = [
+  { value: 'created_at', label: 'Date created' },
+  { value: 'lead_status', label: 'Status' },
+  { value: 'priority', label: 'Priority' },
+  { value: 'lead_type', label: 'Lead type' },
 ];
 
 // Priority badge tones
@@ -118,14 +80,12 @@ function LeadsListPage() {
 
   const basePath = pathname?.split('/')[1] ? `/${pathname.split('/')[1]}` : '/property-manager';
 
-  // Filter states
+  // State
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [leadTypeFilter, setLeadTypeFilter] = useState('');
-  const [leadRoleFilter, setLeadRoleFilter] = useState('');
-  const [leadStatusFilter, setLeadStatusFilter] = useState('');
-  const [priorityFilter, setPriorityFilter] = useState('');
   const [sortPopoverActive, setSortPopoverActive] = useState(false);
+  const [selectedSort, setSelectedSort] = useState('created_at');
+  const [sortDirection, setSortDirection] = useState('desc');
 
   // Memoize leads array
   const leadsArray = useMemo(() => {
@@ -137,43 +97,22 @@ function LeadsListPage() {
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(leadsArray);
 
-  // Fetch leads when filters or pagination change
+  // Fetch leads when pagination changes
   useEffect(() => {
-    const params = {
-      page: currentPage,
-      per_page: 15,
-      ...(searchValue && { search: searchValue }),
-      ...(leadTypeFilter && { lead_type: leadTypeFilter }),
-      ...(leadRoleFilter && { lead_role: leadRoleFilter }),
-      ...(leadStatusFilter && { lead_status: leadStatusFilter }),
-      ...(priorityFilter && { priority: priorityFilter }),
-    };
+    const timeoutId = setTimeout(() => {
+      dispatch(fetchPropertyManagerLeads({
+        per_page: 15,
+        page: currentPage,
+        search: searchValue || undefined,
+      }));
+    }, searchValue ? 500 : 0);
 
-    dispatch(fetchPropertyManagerLeads(params));
-  }, [dispatch, currentPage, searchValue, leadTypeFilter, leadRoleFilter, leadStatusFilter, priorityFilter]);
-
-  // Debounced search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchValue !== '') {
-        setCurrentPage(1);
-        dispatch(fetchPropertyManagerLeads({
-          page: 1,
-          per_page: 15,
-          search: searchValue,
-          ...(leadTypeFilter && { lead_type: leadTypeFilter }),
-          ...(leadRoleFilter && { lead_role: leadRoleFilter }),
-          ...(leadStatusFilter && { lead_status: leadStatusFilter }),
-          ...(priorityFilter && { priority: priorityFilter }),
-        }));
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [searchValue, dispatch, leadTypeFilter, leadRoleFilter, leadStatusFilter, priorityFilter]);
+    return () => clearTimeout(timeoutId);
+  }, [dispatch, currentPage, searchValue]);
 
   const handleSearchChange = useCallback((value) => {
     setSearchValue(value);
+    setCurrentPage(1);
   }, []);
 
   const handleSearchClear = useCallback(() => {
@@ -185,31 +124,12 @@ function LeadsListPage() {
     setSortPopoverActive((active) => !active);
   }, []);
 
-  const handleFilterChange = useCallback((filterType, value) => {
-    setCurrentPage(1);
-    switch (filterType) {
-      case 'lead_type':
-        setLeadTypeFilter(value);
-        break;
-      case 'lead_role':
-        setLeadRoleFilter(value);
-        break;
-      case 'lead_status':
-        setLeadStatusFilter(value);
-        break;
-      case 'priority':
-        setPriorityFilter(value);
-        break;
-    }
+  const handleSortChange = useCallback((value) => {
+    setSelectedSort(value[0]);
   }, []);
 
-  const clearFilters = useCallback(() => {
-    setLeadTypeFilter('');
-    setLeadRoleFilter('');
-    setLeadStatusFilter('');
-    setPriorityFilter('');
-    setSearchValue('');
-    setCurrentPage(1);
+  const handleSortDirectionChange = useCallback((value) => {
+    setSortDirection(value[0]);
   }, []);
 
   const resourceName = {
@@ -219,7 +139,33 @@ function LeadsListPage() {
 
   const totalLeads = pagination.totalItems || leadsArray.length;
 
-  const rowMarkup = leadsArray.map((lead, index) => {
+  // Sort leads locally
+  const sortedLeads = useMemo(() => {
+    return [...leadsArray].sort((a, b) => {
+      let comparison = 0;
+      switch (selectedSort) {
+        case 'created_at':
+          comparison = new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
+          break;
+        case 'lead_status':
+          comparison = (a.lead_status || '').localeCompare(b.lead_status || '');
+          break;
+        case 'priority': {
+          const priorityOrder = { Hot: 4, High: 3, Normal: 2, Low: 1 };
+          comparison = (priorityOrder[a.priority] || 0) - (priorityOrder[b.priority] || 0);
+          break;
+        }
+        case 'lead_type':
+          comparison = (a.lead_type || '').localeCompare(b.lead_type || '');
+          break;
+        default:
+          comparison = 0;
+      }
+      return sortDirection === 'desc' ? -comparison : comparison;
+    });
+  }, [leadsArray, selectedSort, sortDirection]);
+
+  const rowMarkup = sortedLeads.map((lead, index) => {
     const contactName = lead.contact?.full_name || lead.contact?.name || 'No Contact';
     const contactEmail = lead.contact?.email || '';
     const contactPhone = lead.contact?.phone || '';
@@ -294,8 +240,6 @@ function LeadsListPage() {
     />
   );
 
-  const hasActiveFilters = leadTypeFilter || leadRoleFilter || leadStatusFilter || priorityFilter || searchValue;
-
   return (
     <div className="customers-page-wrapper width-full">
       <Page
@@ -332,63 +276,68 @@ function LeadsListPage() {
 
         {/* Main table card */}
         <Card padding="0">
-          {/* Filters and Search bar */}
-          <Box padding="400" paddingBlockEnd="200">
-            <BlockStack gap="400">
-              {/* Search bar */}
-              <TextField
-                placeholder="Search leads by ID, message, or contact details"
-                value={searchValue}
-                onChange={handleSearchChange}
-                clearButton
-                onClearButtonClick={handleSearchClear}
-                prefix={<Icon source={SearchIcon} tone="subdued" />}
-                autoComplete="off"
-              />
+          {/* Search bar with Sort button */}
+          <Box padding="200" paddingBlockEnd="200">
+            <InlineStack align="space-between" blockAlign="center">
+              <div className="flex-1 max-width-93">
+                <TextField
+                  placeholder="Search leads"
+                  value={searchValue}
+                  onChange={handleSearchChange}
+                  clearButton
+                  onClearButtonClick={handleSearchClear}
+                  prefix={<Icon source={SearchIcon} tone="subdued" />}
+                  autoComplete="off"
+                />
+              </div>
 
-              {/* Filter row */}
-              <InlineStack gap="200" wrap>
-                <Box minWidth="200px">
-                  <Select
-                    label="Lead Type"
-                    options={leadTypeOptions}
-                    value={leadTypeFilter}
-                    onChange={(value) => handleFilterChange('lead_type', value)}
-                  />
-                </Box>
-                <Box minWidth="200px">
-                  <Select
-                    label="Lead Role"
-                    options={leadRoleOptions}
-                    value={leadRoleFilter}
-                    onChange={(value) => handleFilterChange('lead_role', value)}
-                  />
-                </Box>
-                <Box minWidth="200px">
-                  <Select
-                    label="Status"
-                    options={leadStatusOptions}
-                    value={leadStatusFilter}
-                    onChange={(value) => handleFilterChange('lead_status', value)}
-                  />
-                </Box>
-                <Box minWidth="200px">
-                  <Select
-                    label="Priority"
-                    options={priorityOptions}
-                    value={priorityFilter}
-                    onChange={(value) => handleFilterChange('priority', value)}
-                  />
-                </Box>
-                {hasActiveFilters && (
-                  <Box>
-                    <Button onClick={clearFilters} size="slim">
-                      Clear Filters
-                    </Button>
+              <Popover
+                active={sortPopoverActive}
+                activator={sortActivator}
+                onClose={toggleSortPopover}
+                preferredAlignment="right"
+                preferredPosition="below"
+              >
+                <div className="sort-popover-content width-220">
+                  <Box padding="300" paddingBlockEnd="100">
+                    <Text variant="headingSm" as="h3">
+                      Sort by
+                    </Text>
                   </Box>
-                )}
-              </InlineStack>
-            </BlockStack>
+
+                  <Box paddingInline="100">
+                    <ChoiceList
+                      choices={sortOptions}
+                      selected={[selectedSort]}
+                      onChange={handleSortChange}
+                    />
+                  </Box>
+
+                  <Box paddingInline="300" paddingBlock="150">
+                    <Divider />
+                  </Box>
+
+                  <div className="padding-bottom-8">
+                    <div
+                      className={`sort-direction-item ${sortDirection === 'asc' ? 'selected' : ''}`}
+                      onClick={() => handleSortDirectionChange(['asc'])}
+                    >
+                      <Text variant="bodyMd" as="span">
+                        ↑ Lowest to highest
+                      </Text>
+                    </div>
+                    <div
+                      className={`sort-direction-item ${sortDirection === 'desc' ? 'selected' : ''}`}
+                      onClick={() => handleSortDirectionChange(['desc'])}
+                    >
+                      <Text variant="bodyMd" as="span">
+                        ↓ Highest to lowest
+                      </Text>
+                    </div>
+                  </div>
+                </div>
+              </Popover>
+            </InlineStack>
           </Box>
 
           {/* Loading State */}
@@ -401,18 +350,18 @@ function LeadsListPage() {
                 </Text>
               </BlockStack>
             </Box>
-          ) : leadsArray.length === 0 ? (
+          ) : sortedLeads.length === 0 ? (
             <Box padding="1000">
               <BlockStack gap="400" inlineAlign="center">
                 <Text variant="headingMd" as="h3">
                   No leads found
                 </Text>
                 <Text variant="bodyMd" as="p" tone="subdued">
-                  {hasActiveFilters 
-                    ? 'Try adjusting your filters' 
+                  {searchValue
+                    ? 'Try adjusting your search'
                     : 'Add your first lead to get started'}
                 </Text>
-                {!hasActiveFilters && (
+                {!searchValue && (
                   <Button variant="primary" onClick={() => router.push(`${basePath}/leads/new`)}>
                     Add lead
                   </Button>
@@ -423,7 +372,7 @@ function LeadsListPage() {
             <div className="table-scroll-container">
               <IndexTable
                 resourceName={resourceName}
-                itemCount={leadsArray.length}
+                itemCount={sortedLeads.length}
                 selectedItemsCount={
                   allResourcesSelected ? 'All' : selectedResources.length
                 }
@@ -446,7 +395,7 @@ function LeadsListPage() {
           )}
 
           {/* Pagination */}
-          {!isLoading && leadsArray.length > 0 && (
+          {!isLoading && sortedLeads.length > 0 && (
             <Box padding="400" borderBlockStartWidth="025" borderColor="border">
               <InlineStack align="space-between" blockAlign="center">
                 <Pagination

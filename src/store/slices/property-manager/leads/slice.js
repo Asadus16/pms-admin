@@ -33,14 +33,14 @@ const leadsSlice = createSlice({
   name: 'leads',
   initialState,
   reducers: {
-    clearError: (state) => {
+    clearLeadsError: (state) => {
       state.error = null;
       state.validationErrors = null;
     },
     clearCurrentLead: (state) => {
       state.currentLead = null;
     },
-    setCurrentPage: (state, action) => {
+    setLeadsPage: (state, action) => {
       state.pagination.currentPage = action.payload;
     },
   },
@@ -167,7 +167,7 @@ const leadsSlice = createSlice({
   },
 });
 
-export const { clearError, clearCurrentLead, setCurrentPage } = leadsSlice.actions;
+export const { clearLeadsError, clearCurrentLead, setLeadsPage } = leadsSlice.actions;
 
 // Selectors
 export const selectLeads = (state) => state.propertyManager.leads.leads;
