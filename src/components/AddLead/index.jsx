@@ -36,11 +36,12 @@ import {
   selectLeadsError,
   selectLeadsValidationErrors,
   selectCurrentLead,
-  clearError,
+  clearLeadsError,
 } from '@/store/slices/property-manager/leads/slice';
 import {
   selectContacts,
 } from '@/store/slices/property-manager/contacts/slice';
+import '../AddDeveloper/AddDeveloper.css';
 
 function AddLead({ mode = 'create', leadId = null, onClose = null }) {
   const router = useRouter();
@@ -188,7 +189,7 @@ function AddLead({ mode = 'create', leadId = null, onClose = null }) {
   }, [router, basePath]);
 
   const handleSave = useCallback(async () => {
-    dispatch(clearError());
+    dispatch(clearLeadsError());
 
     // Build lead data object
     const leadData = {
@@ -492,20 +493,22 @@ function AddLead({ mode = 'create', leadId = null, onClose = null }) {
     );
   }
 
+  const isSubmitting = isCreating || isUpdating;
+
   return (
     <div className="add-developer-wrapper">
-      {/* Custom header row */}
-      <div className="view-user-header">
-        <InlineStack gap="050" blockAlign="center">
-          <Icon source={PersonIcon} tone="base" />
-          <Icon source={ChevronRightIcon} tone="subdued" />
-          <span className="new-developer-title">{mode === 'edit' ? 'Edit Lead' : 'Add New Lead'}</span>
-        </InlineStack>
-      </div>
-      <Page>
+      <Page
+        title={
+          <InlineStack gap="050" blockAlign="center">
+            <Icon source={PersonIcon} tone="base" />
+            <Icon source={ChevronRightIcon} tone="subdued" />
+            <span className="new-developer-title">{mode === 'edit' ? 'Edit Lead' : 'Add New Lead'}</span>
+          </InlineStack>
+        }
+      >
         {error && (
           <Box paddingBlockEnd="400">
-            <Banner tone="critical" onDismiss={() => dispatch(clearError())}>
+            <Banner tone="critical" onDismiss={() => dispatch(clearLeadsError())}>
               <p>{error}</p>
             </Banner>
           </Box>
@@ -925,6 +928,45 @@ function AddLead({ mode = 'create', leadId = null, onClose = null }) {
                   </BlockStack>
                 </Card>
               )}
+            </BlockStack>
+          </Layout.Section>
+
+          {/* Sidebar - Right column */}
+          <Layout.Section variant="oneThird">
+            <BlockStack gap="400">
+              {/* Status card */}
+              <Card>
+                <BlockStack gap="200">
+                  <Text variant="headingMd" as="h2">
+                    Status
+                  </Text>
+                  <Select
+                    label="Lead Status"
+                    labelHidden
+                    options={leadStatusOptions}
+                    value={leadStatus}
+                    onChange={setLeadStatus}
+                    error={getFieldError('lead_status')}
+                  />
+                </BlockStack>
+              </Card>
+
+              {/* Priority card */}
+              <Card>
+                <BlockStack gap="200">
+                  <Text variant="headingMd" as="h2">
+                    Priority
+                  </Text>
+                  <Select
+                    label="Priority"
+                    labelHidden
+                    options={priorityOptions}
+                    value={priority}
+                    onChange={setPriority}
+                    error={getFieldError('priority')}
+                  />
+                </BlockStack>
+              </Card>
             </BlockStack>
           </Layout.Section>
         </Layout>

@@ -1198,29 +1198,64 @@ export default function PropertyViewPage({ propertyId }) {
                 </Card>
               )}
 
-              {/* Photos card */}
+              {/* Photos card - grouped by booking channel type */}
               {photos.length > 0 && (
                 <Card>
                   <BlockStack gap="400">
                     <Text variant="headingMd" as="h2">
                       Photos ({photos.length})
                     </Text>
-                    <InlineStack gap="300" wrap>
-                      {photos.map((photo) => (
-                        <Box key={photo.id} padding="100" background="bg-surface-secondary" borderRadius="200">
-                          <img
-                            src={photo.url}
-                            alt={photo.type || 'Property photo'}
-                            style={{
-                              width: '150px',
-                              height: '100px',
-                              objectFit: 'cover',
-                              borderRadius: '8px',
-                            }}
-                          />
-                        </Box>
-                      ))}
-                    </InlineStack>
+
+                    {/* Group photos by type */}
+                    {(() => {
+                      const photoTypeLabels = {
+                        airbnb: 'Airbnb',
+                        booking_com: 'Booking.com',
+                        direct: 'Direct',
+                        other_ota: 'Other OTA',
+                      };
+
+                      // Group photos by type
+                      const groupedPhotos = photos.reduce((acc, photo) => {
+                        const type = photo.type || 'airbnb';
+                        if (!acc[type]) acc[type] = [];
+                        acc[type].push(photo);
+                        return acc;
+                      }, {});
+
+                      const photoTypes = Object.keys(groupedPhotos);
+
+                      return (
+                        <BlockStack gap="400">
+                          {photoTypes.map((type) => (
+                            <BlockStack key={type} gap="200">
+                              <InlineStack gap="200" blockAlign="center">
+                                <Text variant="headingSm" as="h3">
+                                  {photoTypeLabels[type] || type}
+                                </Text>
+                                <Badge tone="info">{groupedPhotos[type].length}</Badge>
+                              </InlineStack>
+                              <InlineStack gap="300" wrap>
+                                {groupedPhotos[type].map((photo) => (
+                                  <Box key={photo.id} padding="100" background="bg-surface-secondary" borderRadius="200">
+                                    <img
+                                      src={photo.url}
+                                      alt={`${photoTypeLabels[type] || type} photo`}
+                                      style={{
+                                        width: '150px',
+                                        height: '100px',
+                                        objectFit: 'cover',
+                                        borderRadius: '8px',
+                                      }}
+                                    />
+                                  </Box>
+                                ))}
+                              </InlineStack>
+                            </BlockStack>
+                          ))}
+                        </BlockStack>
+                      );
+                    })()}
                   </BlockStack>
                 </Card>
               )}

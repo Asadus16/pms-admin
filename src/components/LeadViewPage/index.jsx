@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback, useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   Page,
@@ -15,6 +15,8 @@ import {
   Banner,
   Spinner,
   Badge,
+  Popover,
+  ActionList,
 } from '@shopify/polaris';
 import { PersonIcon, ChevronRightIcon, ArrowLeftIcon } from '@shopify/polaris-icons';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -29,6 +31,7 @@ import {
   selectLeadsError,
   clearCurrentLead,
 } from '@/store/slices/property-manager/leads/slice';
+import '../AddDeveloper/AddDeveloper.css';
 
 // Priority badge tones
 const getPriorityBadgeTone = (priority) => {
@@ -56,6 +59,7 @@ export default function LeadViewPage({ leadId }) {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useAppDispatch();
+  const [actionsPopoverActive, setActionsPopoverActive] = useState(false);
 
   const lead = useAppSelector(selectCurrentLead);
   const isLoading = useAppSelector(selectLeadsLoading);
@@ -81,13 +85,19 @@ export default function LeadViewPage({ leadId }) {
     router.push(`${basePath}/leads`);
   }, [router, basePath]);
 
+  const toggleActionsPopover = useCallback(() => {
+    setActionsPopoverActive((active) => !active);
+  }, []);
+
   const handleEdit = useCallback(() => {
+    setActionsPopoverActive(false);
     router.push(`${basePath}/leads/${leadId}/edit`);
   }, [router, basePath, leadId]);
 
   const handleDelete = useCallback(async () => {
     if (!lead || !confirm('Are you sure you want to delete this lead?')) return;
 
+    setActionsPopoverActive(false);
     try {
       await dispatch(deletePropertyManagerLead(leadId)).unwrap();
       router.push(`${basePath}/leads`);
@@ -151,6 +161,24 @@ export default function LeadViewPage({ leadId }) {
   const contact = lead.contact || {};
   const assignedTo = lead.assigned_to_user || {};
 
+  const actionsPopoverActivator = (
+    <Button onClick={toggleActionsPopover} disclosure="down" loading={isDeleting}>
+      More actions
+    </Button>
+  );
+
+  const actionItems = [
+    {
+      content: 'Edit',
+      onAction: handleEdit,
+    },
+    {
+      content: 'Delete lead',
+      destructive: true,
+      onAction: handleDelete,
+    },
+  ];
+
   return (
     <div className="add-developer-wrapper">
       <div className="view-user-header">
@@ -159,12 +187,14 @@ export default function LeadViewPage({ leadId }) {
           <Icon source={ChevronRightIcon} tone="subdued" />
           <span className="new-developer-title">Lead details</span>
         </InlineStack>
-        <InlineStack gap="200">
-          <Button onClick={handleEdit}>Edit</Button>
-          <Button onClick={handleDelete} tone="critical" loading={isDeleting}>
-            Delete
-          </Button>
-        </InlineStack>
+        <Popover
+          active={actionsPopoverActive}
+          activator={actionsPopoverActivator}
+          onClose={toggleActionsPopover}
+          preferredAlignment="right"
+        >
+          <ActionList items={actionItems} />
+        </Popover>
       </div>
       <Page>
         {error && (

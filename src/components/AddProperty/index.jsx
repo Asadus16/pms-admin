@@ -140,7 +140,21 @@ function AddProperty({ onClose, mode = 'create', initialProperty = null }) {
   const [houseManual, setHouseManual] = useState('');
 
   // ========== PHOTOS STATE ==========
-  const [photos, setPhotos] = useState([]);
+  // Photo types based on booking channels
+  const [photos, setPhotos] = useState({
+    airbnb: [],
+    booking_com: [],
+    direct: [],
+    other_ota: [],
+  });
+  const [activePhotoType, setActivePhotoType] = useState('airbnb');
+
+  const photoTypeOptions = [
+    { label: 'Airbnb', value: 'airbnb' },
+    { label: 'Booking.com', value: 'booking_com' },
+    { label: 'Direct', value: 'direct' },
+    { label: 'Other OTA', value: 'other_ota' },
+  ];
 
   // ========== AMENITIES STATE ==========
   const [amenitiesPopular, setAmenitiesPopular] = useState([]);
@@ -364,14 +378,31 @@ function AddProperty({ onClose, mode = 'create', initialProperty = null }) {
       setTransit(desc.transit || '');
       setHouseManual(desc.house_manual || '');
 
-      // Photos
+      // Photos - group by type (booking channel)
       if (initialProperty.photos && Array.isArray(initialProperty.photos)) {
-        setPhotos(initialProperty.photos.map(photo => ({
-          id: photo.id,
-          url: photo.url,
-          type: photo.type || 'gallery',
-          file: null,
-        })));
+        const groupedPhotos = {
+          airbnb: [],
+          booking_com: [],
+          direct: [],
+          other_ota: [],
+        };
+        initialProperty.photos.forEach(photo => {
+          const photoType = photo.type || 'airbnb';
+          const photoData = {
+            id: photo.id,
+            url: photo.url,
+            type: photoType,
+            file: null,
+            name: photo.url?.split('/').pop() || `Photo ${photo.id}`,
+          };
+          if (groupedPhotos[photoType]) {
+            groupedPhotos[photoType].push(photoData);
+          } else {
+            // Default to airbnb if type doesn't match
+            groupedPhotos.airbnb.push(photoData);
+          }
+        });
+        setPhotos(groupedPhotos);
       }
 
       // Amenities - match by value (lowercase)
@@ -810,7 +841,7 @@ function AddProperty({ onClose, mode = 'create', initialProperty = null }) {
     }
   }, [onClose, router]);
 
-  // Photo handlers
+  // Photo handlers - add photos to the active type
   const handlePhotosDrop = useCallback((_dropFiles, acceptedFiles) => {
     const validFiles = acceptedFiles.filter((file) => {
       if (file.size > 2 * 1024 * 1024) {
@@ -824,9 +855,27 @@ function AddProperty({ onClose, mode = 'create', initialProperty = null }) {
       url: URL.createObjectURL(file),
       name: file.name,
       size: `${(file.size / 1024).toFixed(2)} KB`,
+      type: activePhotoType,
     }));
-    setPhotos((prev) => [...prev, ...newPhotos]);
+
+    setPhotos((prev) => ({
+      ...prev,
+      [activePhotoType]: [...prev[activePhotoType], ...newPhotos],
+    }));
+  }, [activePhotoType]);
+
+  // Remove photo from a specific type
+  const handleRemovePhoto = useCallback((photoType, index) => {
+    setPhotos((prev) => ({
+      ...prev,
+      [photoType]: prev[photoType].filter((_, i) => i !== index),
+    }));
   }, []);
+
+  // Get total photo count across all types
+  const getTotalPhotoCount = useCallback(() => {
+    return Object.values(photos).reduce((total, typePhotos) => total + typePhotos.length, 0);
+  }, [photos]);
 
 
   // Policy handlers
@@ -935,11 +984,22 @@ function AddProperty({ onClose, mode = 'create', initialProperty = null }) {
       if (transit) formData.append('transit', transit);
       if (houseManual) formData.append('house_manual', houseManual);
 
-      // Photos - upload actual files
-      photos.forEach((photo, index) => {
-        if (photo.file) {
-          formData.append(`photos[${index}]`, photo.file);
-        }
+      // Photos - upload actual files with type information
+      let photoIndex = 0;
+      Object.entries(photos).forEach(([photoType, typePhotos]) => {
+        typePhotos.forEach((photo) => {
+          if (photo.file) {
+            // New file upload
+            formData.append(`photos[${photoIndex}][file]`, photo.file);
+            formData.append(`photos[${photoIndex}][type]`, photoType);
+          } else if (photo.id) {
+            // Existing photo (for edit mode)
+            formData.append(`photos[${photoIndex}][id]`, photo.id);
+            formData.append(`photos[${photoIndex}][type]`, photoType);
+            formData.append(`photos[${photoIndex}][url]`, photo.url);
+          }
+          photoIndex++;
+        });
       });
 
       // Amenities - combine all amenity arrays
@@ -1710,37 +1770,65 @@ function AddProperty({ onClose, mode = 'create', initialProperty = null }) {
               {/* ========== PHOTOS CARD ========== */}
               <Card>
                 <BlockStack gap="400">
-                  <Text variant="headingMd" as="h2">Photos</Text>
+                  <InlineStack align="space-between" blockAlign="center">
+                    <Text variant="headingMd" as="h2">Photos</Text>
+                    <Text variant="bodySm" as="span" tone="subdued">
+                      Total: {getTotalPhotoCount()} photo{getTotalPhotoCount() !== 1 ? 's' : ''}
+                    </Text>
+                  </InlineStack>
 
-                  {photos.length > 0 && (
+                  {/* Photo Type Tabs */}
+                  <Box paddingBlockEnd="200">
+                    <InlineStack gap="200" wrap>
+                      {photoTypeOptions.map((option) => (
+                        <Button
+                          key={option.value}
+                          pressed={activePhotoType === option.value}
+                          onClick={() => setActivePhotoType(option.value)}
+                          size="slim"
+                        >
+                          {option.label} ({photos[option.value]?.length || 0})
+                        </Button>
+                      ))}
+                    </InlineStack>
+                  </Box>
+
+                  {/* Photos for active type */}
+                  {photos[activePhotoType]?.length > 0 && (
                     <BlockStack gap="300">
-                      {photos.map((photo, index) => (
-                        <Card key={index}>
-                          <LegacyStack alignment="center">
-                            <Thumbnail
-                              source={photo.url}
-                              alt={photo.name || `Photo ${index + 1}`}
-                              size="small"
-                            />
-                            <LegacyStack.Item fill>
-                              <Text variant="bodyMd" as="p">{photo.name || `Photo ${index + 1}`}</Text>
-                              <Text variant="bodySm" as="p" tone="subdued">
-                                {photo.size || 'Uploaded'}
-                              </Text>
-                            </LegacyStack.Item>
+                      <Text variant="headingSm" as="h3">
+                        {photoTypeOptions.find(o => o.value === activePhotoType)?.label} Photos
+                      </Text>
+                      {photos[activePhotoType].map((photo, index) => (
+                        <Card key={`${activePhotoType}-${index}`}>
+                          <InlineStack align="space-between" blockAlign="center" gap="400">
+                            <InlineStack gap="300" blockAlign="center">
+                              <Thumbnail
+                                source={photo.url}
+                                alt={photo.name || `Photo ${index + 1}`}
+                                size="small"
+                              />
+                              <BlockStack gap="100">
+                                <Text variant="bodyMd" as="p">{photo.name || `Photo ${index + 1}`}</Text>
+                                <Text variant="bodySm" as="p" tone="subdued">
+                                  {photo.size || 'Uploaded'}
+                                </Text>
+                              </BlockStack>
+                            </InlineStack>
                             <Button
                               variant="plain"
                               tone="critical"
-                              onClick={() => setPhotos(photos.filter((_, i) => i !== index))}
+                              onClick={() => handleRemovePhoto(activePhotoType, index)}
                             >
                               Remove
                             </Button>
-                          </LegacyStack>
+                          </InlineStack>
                         </Card>
                       ))}
                     </BlockStack>
                   )}
 
+                  {/* Upload area for active type */}
                   <DropZone
                     accept="image/*"
                     type="image"
@@ -1749,13 +1837,41 @@ function AddProperty({ onClose, mode = 'create', initialProperty = null }) {
                   >
                     <BlockStack gap="200" inlineAlign="center">
                       <InlineStack gap="200" align="center">
-                        <Button onClick={() => {}}>Upload images</Button>
+                        <Button onClick={() => {}}>
+                          Upload {photoTypeOptions.find(o => o.value === activePhotoType)?.label} images
+                        </Button>
                       </InlineStack>
                       <Text variant="bodySm" as="p" tone="subdued">
                         Accepts JPG, PNG. Max 2MB per image
                       </Text>
                     </BlockStack>
                   </DropZone>
+
+                  {/* Summary of all photo types */}
+                  {getTotalPhotoCount() > 0 && (
+                    <Box paddingBlockStart="200">
+                      <Divider />
+                      <Box paddingBlockStart="300">
+                        <Text variant="headingSm" as="h3">Photos Summary</Text>
+                        <Box paddingBlockStart="200">
+                          <BlockStack gap="100">
+                            {photoTypeOptions.map((option) => (
+                              photos[option.value]?.length > 0 && (
+                                <InlineStack key={option.value} gap="200">
+                                  <Text variant="bodySm" as="span" fontWeight="medium">
+                                    {option.label}:
+                                  </Text>
+                                  <Text variant="bodySm" as="span" tone="subdued">
+                                    {photos[option.value].length} photo{photos[option.value].length !== 1 ? 's' : ''}
+                                  </Text>
+                                </InlineStack>
+                              )
+                            ))}
+                          </BlockStack>
+                        </Box>
+                      </Box>
+                    </Box>
+                  )}
                 </BlockStack>
               </Card>
 
